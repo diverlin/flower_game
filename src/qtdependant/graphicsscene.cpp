@@ -1,37 +1,29 @@
 #include "graphicsscene.h"
 #include "pixmapitem.h"
 #include "textinformationitem.h"
+#include "../randutils.h"
 
 #include <QAction>
 #include <QApplication>
-#include <QFile>
-
-#include <QRandomGenerator>
-
-int getRandomInt(int max)
-{
-    return QRandomGenerator::global()->bounded(0, max + 1);
-}
-
-int getRandomInt(int min, int max)
-{
-    return QRandomGenerator::global()->bounded(min, max + 1);
-}
-
-bool getRandomBool()
-{
-    return QRandomGenerator::global()->bounded(0, 100) >= 50;
-}
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
     : QGraphicsScene(x, y, width, height, parent)
+    , m_grid(24, 16)
 {
-    const int rows = 24;
-    const int cols = 16;
+    createScene();
 
+    textInformationItem = new TextInformationItem();
+
+//    textInformationItem->setMessage(QString("Hello world!"), false);
+//    textInformationItem->setPos(backgroundItem->boundingRect().center().x(),
+//                                backgroundItem->boundingRect().height()* 3 / 4);
+}
+
+void GraphicsScene::createScene()
+{
     const int size = 48;
-    for (int i=0; i<rows; ++i) {
-        for (int j=0; j<cols; ++j) {
+    for (int i=0; i<m_grid.rows(); ++i) {
+        for (int j=0; j<m_grid.columns(); ++j) {
             PixmapItem* ground_tile = new PixmapItem(":/tiles/ground.png");
             ground_tile->setZValue(GROUND_LAYER);
             ground_tile->setPos(i*size, j*size);
@@ -41,7 +33,9 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
             const bool is_covered_with_grass = (getRandomInt(10) == 0);
             if (is_covered_with_grass) {
                 const int grass_variant = getRandomInt(1,2);
-                PixmapItem* grass_tile = new PixmapItem(QString(":/tiles/grass%1.png").arg(grass_variant));
+
+                QString pixmapLocation = QString(":/tiles/grass%1.png").arg(grass_variant);
+                PixmapItem* grass_tile = new PixmapItem(pixmapLocation);
                 grass_tile->setZValue(ROCK_LAYER);
                 grass_tile->setPos(i*size, j*size);
                 grass_tile->fit(size);
@@ -51,22 +45,16 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
                 if (is_covered_with_rock) {
                     const int rock_variant = getRandomInt(0,1);
 
-                    PixmapItem* rock_tile = new PixmapItem(QString(":/tiles/rock_%1.png").arg(rock_variant?"big":"middle"));
+                    QString pixmapLocation = QString(":/tiles/rock_%1.png").arg(rock_variant?"big":"middle");
+                    PixmapItem* rock_tile = new PixmapItem(pixmapLocation);
                     rock_tile->setZValue(ROCK_LAYER);
                     rock_tile->setPos(i*size, j*size);
                     rock_tile->fit(size);
                     addItem(rock_tile);
                 }
             }
-
         }
     }
-
-    textInformationItem = new TextInformationItem();
-
-//    textInformationItem->setMessage(QString("Hello world!"), false);
-//    textInformationItem->setPos(backgroundItem->boundingRect().center().x(),
-//                                backgroundItem->boundingRect().height()* 3 / 4);
 }
 
 void GraphicsScene::addItem(QGraphicsItem* item)

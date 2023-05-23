@@ -1,17 +1,21 @@
 QT += statemachine widgets
 HEADERS += \
-    $$PWD/src/mainwindow.h \
-    $$PWD/src/pixmapitem.h \
-    $$PWD/src/graphicsscene.h \
-    $$PWD/src/textinformationitem.h \
-    
+    $$PWD/src/qtdependant/mainwindow.h \
+    $$PWD/src/qtdependant/pixmapitem.h \
+    $$PWD/src/qtdependant/graphicsscene.h \
+    $$PWD/src/qtdependant/textinformationitem.h \
+    $$PWD/src/grid.h \
+    $$PWD/src/randutils.h \
+
 SOURCES += \
-    $$PWD/src/main.cpp \
-    $$PWD/src/mainwindow.cpp \
-    $$PWD/src/pixmapitem.cpp \
-    $$PWD/src/graphicsscene.cpp \
-    $$PWD/src/textinformationitem.cpp \
-    
+    $$PWD/src/qtdependant/main.cpp \
+    $$PWD/src/qtdependant/mainwindow.cpp \
+    $$PWD/src/qtdependant/pixmapitem.cpp \
+    $$PWD/src/qtdependant/graphicsscene.cpp \
+    $$PWD/src/qtdependant/textinformationitem.cpp \
+    $$PWD/src/grid.cpp \
+    $$PWD/src/randutils.cpp \
+
 RESOURCES += $$PWD/data/flower_game.qrc
 
 # install

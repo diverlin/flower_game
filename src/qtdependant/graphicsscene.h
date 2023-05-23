@@ -1,6 +1,8 @@
 #ifndef GRAPHICSSCENE_H
 #define GRAPHICSSCENE_H
 
+#include "../grid.h"
+
 #include <QGraphicsScene>
 #include <QSet>
 
@@ -27,6 +29,10 @@ public:
 
 private:
     TextInformationItem* textInformationItem;
+
+    Grid m_grid;
+    void isTileFree(int i, int j) const;
+    void createScene();
 };
 
 #endif // GRAPHICSSCENE_H
