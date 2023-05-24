@@ -7,7 +7,7 @@
 void GridTest::testGrid1D2DIndexConversion()
 {
     Grid grid(5, 5);
-    QCOMPARE(grid.size(), 25);
+    QCOMPARE(int(grid.size()), 25);
 
     size_t index1d = grid.getIndex1D(2,3);
     Index2D index2d = grid.getIndex2D(index1d);
@@ -19,7 +19,7 @@ void GridTest::testGridAddRemoveLayer()
     const int rows = 5;
     const int columns = 5;
     Grid grid(rows, columns);
-    QCOMPARE(grid.size(), rows*columns);
+    QCOMPARE(int(grid.size()), rows*columns);
 
     for (int i=0; i<rows; ++i) {
         for (int j=0; j<rows; ++j) {
