@@ -3,14 +3,18 @@
 
 #include <vector>
 
+#include "objectlayer.h"
+
 class Grid
 {
 public:
     Grid(int rows, int columns);
     ~Grid();
 
-    bool setTileBusy(int i, int j, int value);
-    bool isTileFree(int i, int j) const;
+    bool hasObject(int i, int j, ObjectLayer object);
+    void addObject(int i, int j, ObjectLayer object);
+    void removeObject(int i, int j, ObjectLayer object);
+    bool isTilePassble(int i, int j) const;
 
     int rows() const { return m_rows; }
     int columns() const { return m_columns; }
@@ -20,7 +24,7 @@ private:
     int m_columns = -1;
     std::vector<int> m_array;
 
-    int getIndex1D(int i, int j) const;
+    std::size_t getIndex1D(int i, int j) const;
 };
 
 #endif // GRID_H

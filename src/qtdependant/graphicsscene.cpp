@@ -1,9 +1,11 @@
 #include "graphicsscene.h"
 #include "pixmapitem.h"
-#include "textinformationitem.h"
-#include "../randutils.h"
+//#include "textinformationitem.h"
 
-#include <QAction>
+#include "../randutils.h"
+#include "../objectlayer.h"
+#include "../gameobject.h"
+
 #include <QApplication>
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
@@ -12,7 +14,7 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 {
     createScene();
 
-    textInformationItem = new TextInformationItem();
+//    textInformationItem = new TextInformationItem();
 
 //    textInformationItem->setMessage(QString("Hello world!"), false);
 //    textInformationItem->setPos(backgroundItem->boundingRect().center().x(),
@@ -24,8 +26,10 @@ void GraphicsScene::createScene()
     const int size = 48;
     for (int i=0; i<m_grid.rows(); ++i) {
         for (int j=0; j<m_grid.columns(); ++j) {
-            PixmapItem* ground_tile = new PixmapItem(":/tiles/ground.png");
-            ground_tile->setZValue(GROUND_LAYER);
+            GameObject ground(":/tiles/ground.png", ObjectLayer::GROUND_LAYER);
+
+            PixmapItem* ground_tile = new PixmapItem();
+            ground_tile->setZValue(static_cast<int>(ground.layer()));
             ground_tile->setPos(i*size, j*size);
             ground_tile->fit(size);
             addItem(ground_tile);
@@ -36,7 +40,7 @@ void GraphicsScene::createScene()
 
                 QString pixmapLocation = QString(":/tiles/grass%1.png").arg(grass_variant);
                 PixmapItem* grass_tile = new PixmapItem(pixmapLocation);
-                grass_tile->setZValue(ROCK_LAYER);
+                grass_tile->setZValue(GRASS_LAYER);
                 grass_tile->setPos(i*size, j*size);
                 grass_tile->fit(size);
                 addItem(grass_tile);
@@ -60,6 +64,7 @@ void GraphicsScene::createScene()
 void GraphicsScene::addItem(QGraphicsItem* item)
 {
     QGraphicsScene::addItem(item);
+    //m_grid->addObject();
 }
 
 void GraphicsScene::clearScene()

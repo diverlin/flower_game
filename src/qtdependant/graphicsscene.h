@@ -8,16 +8,6 @@
 
 class TextInformationItem;
 
-enum {
-    GROUND_LAYER,
-    GRASS_LAYER,
-    ROCK_LAYER,
-    WOOD_LAYER,
-    FLOWER_LAYER,
-    SNAKE_LAYER,
-    TREE_LAYER
-};
-
 class GraphicsScene : public QGraphicsScene
 {
 Q_OBJECT
@@ -28,12 +18,11 @@ public:
     void clearScene();
 
 private:
-    TextInformationItem* textInformationItem;
+//    TextInformationItem* textInformationItem;
 
     Grid m_grid;
-    void isTileFree(int i, int j) const;
+//    void isTileFree(int i, int j) const;
     void createScene();
 };
 
 #endif // GRAPHICSSCENE_H
-

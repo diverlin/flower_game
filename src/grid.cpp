@@ -16,19 +16,40 @@ Grid::~Grid()
 
 }
 
-bool Grid::setTileBusy(int i, int j, int value)
+bool Grid::hasObject(int i, int j, ObjectLayer object)
 {
-    int _1d_index = getIndex1D(i, j);
+    std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_array.size()) {
-        m_array[_1d_index] = value;
+        return static_cast<int>(object) & m_array[_1d_index];
+    } else {
+        std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
+        return false;
+    }
+}
+
+void Grid::addObject(int i, int j, ObjectLayer value)
+{
+    std::size_t _1d_index = getIndex1D(i, j);
+    if (_1d_index < m_array.size()) {
+        m_array[_1d_index] |= static_cast<int>(value);
     } else {
         std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
     }
 }
 
-bool Grid::isTileFree(int i, int j) const
+void Grid::removeObject(int i, int j, ObjectLayer value)
 {
-    int _1d_index = getIndex1D(i, j);
+    std::size_t _1d_index = getIndex1D(i, j);
+    if (_1d_index < m_array.size()) {
+        m_array[_1d_index] ^= static_cast<int>(value);
+    } else {
+        std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
+    }
+}
+
+bool Grid::isTilePassble(int i, int j) const
+{
+    std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_array.size()) {
         int value = m_array.at(_1d_index);
         return (value == 0);
@@ -37,7 +58,7 @@ bool Grid::isTileFree(int i, int j) const
     }
 }
 
-int Grid::getIndex1D(int i, int j) const
+std::size_t Grid::getIndex1D(int i, int j) const
 {
-    return i * m_columns + j;
+    return static_cast<std::size_t>(i * m_columns + j);
 }
