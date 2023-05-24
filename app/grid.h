@@ -18,6 +18,7 @@ public:
     bool isIndexPassble(const Index2D& index2D) const;
     bool isIndexFree(const Index2D& index2D) const;
 
+    bool addLayer(const Index2D& index2d, TileLayer layer);
     bool addLayer(int i, int j, TileLayer layer);
     void removeLayer(int i, int j, TileLayer layer);
 

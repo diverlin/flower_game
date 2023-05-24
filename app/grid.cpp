@@ -28,6 +28,11 @@ bool Grid::hasLayer(int i, int j, TileLayer tileLayer) const
     }
 }
 
+bool Grid::addLayer(const Index2D& index2d, TileLayer layer)
+{
+    return addLayer(index2d.i(), index2d.j(), layer);
+}
+
 bool Grid::addLayer(int i, int j, TileLayer layer)
 {
     std::size_t index1d = getIndex1D(i, j);

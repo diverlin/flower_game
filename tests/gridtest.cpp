@@ -41,3 +41,29 @@ void GridTest::testGridAddRemoveLayer()
     grid.removeLayer(4,4,TileLayer::ROCK_LAYER);
     QVERIFY(grid.isIndexFree(Index2D(4,4)));
 }
+
+void GridTest::testGridFreeRandomIndex()
+{
+    const int rows = 4;
+    const int columns = 4;
+    Grid grid(rows, columns);
+
+    int counter = 0;
+    for (int i=0; i<20; ++i) {
+        Index2D index2d = grid.getFreeRandomIndex();
+        grid.addLayer(index2d, TileLayer::FLOWER_LAYER);
+        qInfo() << index2d.i() << index2d.j();
+        if (counter<16) {
+            QVERIFY(index2d.isValid());
+        } else {
+            QVERIFY(!index2d.isValid());
+        }
+        counter++;
+    }
+
+}
+
+void GridTest::testGridBusyIndex()
+{
+
+}
