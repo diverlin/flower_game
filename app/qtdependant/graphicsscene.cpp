@@ -42,7 +42,12 @@ void GraphicsScene::addTile(const Tile& tile)
     tile_view->fit(size);
     addItem(tile_view);
 
-    //qInfo() << tile.imageFilePath().c_str();
+    // overlay
+    PixmapItem* overlay = new PixmapItem(":/tiles/frame.png");
+    overlay->setZValue(static_cast<int>(TileLayer::OVERLAY_LAYER));
+    overlay->setPos(tile.mapLocation().i()*size, tile.mapLocation().j()*size);
+    overlay->fit(size);
+    addItem(overlay);
 }
 
 void GraphicsScene::createScene()

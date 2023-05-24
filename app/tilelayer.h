@@ -8,7 +8,8 @@ enum class TileLayer: int {
     WOOD_LAYER=1<<2,
     FLOWER_LAYER=1<<3,
     SNAKE_LAYER=1<<4,
-    TREE_LAYER=1<<5
+    TREE_LAYER=1<<5,
+    OVERLAY_LAYER=1<<6
 };
 
 #endif // TILELAYER_H
