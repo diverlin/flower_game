@@ -17,3 +17,7 @@ int getRandomInt(int max)
     return getRandomInt(0, max);
 }
 
+bool getRandomBool()
+{
+    return getRandomInt(0, 1);
+}

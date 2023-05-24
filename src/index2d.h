@@ -6,7 +6,7 @@ public:
     Index2D(int i, int j): m_i(i), m_j(j) {}
     Index2D():Index2D(-1,-1) {}
 
-    bool isValid() const { return (m_i != -1) && (m_j == -1); }
+    bool isValid() const { return (m_i != -1) && (m_j != -1); }
     bool isNull() const { return (m_i == 0) && (m_j == 0); }
     bool isMach(int i, int j) const { return (m_i == i) && (m_j == j); }
 

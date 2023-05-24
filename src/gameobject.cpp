@@ -15,6 +15,9 @@ void GameObject::setMapLocation(int i, int j)
     }
     m_mapLocation.set(i, j);
     for (Tile& tile: m_tiles) {
+        if (!tile.indexOffsetFromLeftTopCorner().isNull()) {
+            m_localOffsets.push_back(tile.indexOffsetFromLeftTopCorner());
+        }
         tile.updateMapLocation(m_mapLocation);
     }
 }

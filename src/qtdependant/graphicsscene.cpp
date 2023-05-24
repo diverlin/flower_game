@@ -2,7 +2,6 @@
 #include "pixmapitem.h"
 //#include "textinformationitem.h"
 
-#include "../randutils.h"
 #include "../tilelayer.h"
 #include "../gameobject.h"
 
@@ -10,18 +9,27 @@
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
     : QGraphicsScene(x, y, width, height, parent)
-    , m_gridMap(24, 16)
+    , m_gridMap(16, 12)
 {
     m_gridMap.create();
-    for (const Tile& tile: m_gridMap.groundTiles()) {
+    for (const Tile& tile: m_gridMap.tiles()) {
         addTile(tile);
     }
-
+    for (const GameObject& object: m_gridMap.objects()) {
+        addObject(object);
+    }
 //    textInformationItem = new TextInformationItem();
 
 //    textInformationItem->setMessage(QString("Hello world!"), false);
 //    textInformationItem->setPos(backgroundItem->boundingRect().center().x(),
 //                                backgroundItem->boundingRect().height()* 3 / 4);
+}
+
+void GraphicsScene::addObject(const GameObject& object)
+{
+    for (const Tile& tile: object.tiles()) {
+        addTile(tile);
+    }
 }
 
 void GraphicsScene::addTile(const Tile& tile)
@@ -34,7 +42,7 @@ void GraphicsScene::addTile(const Tile& tile)
     tile_view->fit(size);
     addItem(tile_view);
 
-    qInfo() << tile.imageFilePath().c_str();
+    //qInfo() << tile.imageFilePath().c_str();
 }
 
 void GraphicsScene::createScene()

@@ -4,7 +4,7 @@
 #include <string>
 
 namespace utils {
-void replace(std::string& src, const std::string& search, const std::string& replace);
+std::string replace(const std::string& src, const std::string& search, const std::string& replace);
 } // namespace utils
 
 #endif // STRINGUTILS_H
