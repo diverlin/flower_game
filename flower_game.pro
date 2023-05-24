@@ -1,34 +1,14 @@
-QT += statemachine widgets
+TEMPLATE = subdirs
 
-HEADERS += \
-    $$PWD/src/qtdependant/mainwindow.h \
-    $$PWD/src/qtdependant/pixmapitem.h \
-    $$PWD/src/qtdependant/graphicsscene.h \
-    $$PWD/src/qtdependant/textinformationitem.h \
-    $$PWD/src/tilelayer.h \
-    $$PWD/src/index2d.h \
-    $$PWD/src/grid.h \
-    $$PWD/src/gridmap.h \
-    $$PWD/src/randutils.h \
-    $$PWD/src/stringutils.h \
-    $$PWD/src/tile.h \
-    $$PWD/src/gameobject.h \
+CONFIG += c++11
 
-SOURCES += \
-    $$PWD/src/qtdependant/main.cpp \
-    $$PWD/src/qtdependant/mainwindow.cpp \
-    $$PWD/src/qtdependant/pixmapitem.cpp \
-    $$PWD/src/qtdependant/graphicsscene.cpp \
-    $$PWD/src/qtdependant/textinformationitem.cpp \
-    $$PWD/src/index2d.cpp \
-    $$PWD/src/grid.cpp \
-    $$PWD/src/gridmap.cpp \
-    $$PWD/src/randutils.cpp \
-    $$PWD/src/stringutils.cpp \
-    $$PWD/src/tile.cpp \
-    $$PWD/src/gameobject.cpp \
+# You can make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-RESOURCES += $$PWD/data/flower_game.qrc
+SUBDIRS += \
+    app \
+    tests
 
-# install
-INSTALLS += target
+tests.depends = app
+tests.subdir = tests
