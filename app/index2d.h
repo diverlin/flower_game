@@ -19,6 +19,9 @@ public:
         m_j += rhs.j();
         return *this;
     }
+    bool operator==(const Index2D& rhs) const {
+        return (m_i == rhs.i()) && (m_j == rhs.j());
+    }
 
 private:
     int m_i = -1;

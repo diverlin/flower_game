@@ -10,7 +10,8 @@ public:
     ~GridTest()=default;
 
 private slots:
-    void testGrid();
+    void testGrid1D2DIndexConversion();
+    void testGridAddRemoveLayer();
 };
 
 #endif // GRIDTEST_H
