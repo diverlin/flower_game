@@ -1,8 +1,8 @@
-#include "grid.h"
+#include "gridmap.h"
 
 #include <iostream>
 
-Grid::Grid(int rows, int columns)
+GridMap::GridMap(int rows, int columns)
     :
     m_rows(rows),
     m_columns(columns),
@@ -11,12 +11,12 @@ Grid::Grid(int rows, int columns)
     std::cout << "m_array.capacity=" << m_array.capacity() << std::endl;
 }
 
-Grid::~Grid()
+GridMap::~GridMap()
 {
 
 }
 
-bool Grid::hasObject(int i, int j, ObjectLayer object)
+bool GridMap::hasObject(int i, int j, ObjectLayer object)
 {
     std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_array.size()) {
@@ -27,7 +27,7 @@ bool Grid::hasObject(int i, int j, ObjectLayer object)
     }
 }
 
-void Grid::addObject(int i, int j, ObjectLayer value)
+void GridMap::addObject(int i, int j, ObjectLayer value)
 {
     std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_array.size()) {
@@ -37,7 +37,7 @@ void Grid::addObject(int i, int j, ObjectLayer value)
     }
 }
 
-void Grid::removeObject(int i, int j, ObjectLayer value)
+void GridMap::removeObject(int i, int j, ObjectLayer value)
 {
     std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_array.size()) {
@@ -47,7 +47,7 @@ void Grid::removeObject(int i, int j, ObjectLayer value)
     }
 }
 
-bool Grid::isTilePassble(int i, int j) const
+bool GridMap::isTilePassble(int i, int j) const
 {
     std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_array.size()) {
@@ -58,7 +58,7 @@ bool Grid::isTilePassble(int i, int j) const
     }
 }
 
-std::size_t Grid::getIndex1D(int i, int j) const
+std::size_t GridMap::getIndex1D(int i, int j) const
 {
     return static_cast<std::size_t>(i * m_columns + j);
 }

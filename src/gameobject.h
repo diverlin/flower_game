@@ -25,8 +25,6 @@ private:
     std::vector<TileDescriptor> m_tiles;
     Index2D m_mapLocation;
     ObjectLayer m_layer;
-
-    std::vector<Index2D> m_occupiedIndexes;
 };
 
 #endif // GAMEOBJECT_H

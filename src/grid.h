@@ -1,15 +1,15 @@
-#ifndef GRID_H
-#define GRID_H
+#ifndef GRIDMAP_H
+#define GRIDMAP_H
 
 #include <vector>
 
 #include "objectlayer.h"
 
-class Grid
+class GridMap
 {
 public:
-    Grid(int rows, int columns);
-    ~Grid();
+    GridMap(int rows, int columns);
+    ~GridMap();
 
     bool hasObject(int i, int j, ObjectLayer object);
     void addObject(int i, int j, ObjectLayer object);
@@ -27,5 +27,5 @@ private:
     std::size_t getIndex1D(int i, int j) const;
 };
 
-#endif // GRID_H
+#endif // GRIDMAP_H
 
