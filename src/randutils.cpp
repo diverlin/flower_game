@@ -1,4 +1,5 @@
-#include <random>
+#include "randutils.h"
+
 #include <iostream>
 
 int getRandomInt(int min, int max)
@@ -15,3 +16,4 @@ int getRandomInt(int max)
 {
     return getRandomInt(0, max);
 }
+

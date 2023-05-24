@@ -2,29 +2,25 @@
 #define GAMEOBJECT_H
 
 #include "index2d.h"
-#include "objectlayer.h"
+#include "tilelayer.h"
 
 #include <string>
 #include <vector>
 
-class TileDescriptor;
+class Tile;
 
 class GameObject
 {
 public:
-    GameObject(const std::vector<TileDescriptor>& tiles, ObjectLayer layer);
-    GameObject(const std::string& imageFilePath, ObjectLayer layer);
+    GameObject(const std::vector<Tile>& tiles);
 
     void setMapLocation(int i, int j);
 
     const Index2D& mapLocation() { return m_mapLocation; }
 
-    ObjectLayer layer() const { return m_layer; }
-
 private:
-    std::vector<TileDescriptor> m_tiles;
+    std::vector<Tile> m_tiles;
     Index2D m_mapLocation;
-    ObjectLayer m_layer;
 };
 
 #endif // GAMEOBJECT_H

@@ -1,7 +1,7 @@
-#ifndef OBJECTLAYER_H
-#define OBJECTLAYER_H
+#ifndef TILELAYER_H
+#define TILELAYER_H
 
-enum class ObjectLayer: int {
+enum class TileLayer: int {
     GROUND_LAYER=0,
     GRASS_LAYER=1<<0,
     ROCK_LAYER=1<<1,
@@ -11,5 +11,5 @@ enum class ObjectLayer: int {
     TREE_LAYER=1<<5
 };
 
-#endif // OBJECTLAYER_H
+#endif // TILELAYER_H
 

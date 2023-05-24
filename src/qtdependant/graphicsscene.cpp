@@ -3,16 +3,19 @@
 //#include "textinformationitem.h"
 
 #include "../randutils.h"
-#include "../objectlayer.h"
+#include "../tilelayer.h"
 #include "../gameobject.h"
 
 #include <QApplication>
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
     : QGraphicsScene(x, y, width, height, parent)
-    , m_grid(24, 16)
+    , m_gridMap(24, 16)
 {
-    createScene();
+    m_gridMap.create();
+    for (const Tile& tile: m_gridMap.groundTiles()) {
+        addTile(tile);
+    }
 
 //    textInformationItem = new TextInformationItem();
 
@@ -21,50 +24,58 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 //                                backgroundItem->boundingRect().height()* 3 / 4);
 }
 
+void GraphicsScene::addTile(const Tile& tile)
+{
+    static int size = 48;
+
+    PixmapItem* tile_view = new PixmapItem(tile.imageFilePath().c_str());
+    tile_view->setZValue(static_cast<int>(tile.layer()));
+    tile_view->setPos(tile.mapLocation().i()*size, tile.mapLocation().j()*size);
+    tile_view->fit(size);
+    addItem(tile_view);
+
+    qInfo() << tile.imageFilePath().c_str();
+}
+
 void GraphicsScene::createScene()
 {
-    const int size = 48;
-    for (int i=0; i<m_grid.rows(); ++i) {
-        for (int j=0; j<m_grid.columns(); ++j) {
-            GameObject ground(":/tiles/ground.png", ObjectLayer::GROUND_LAYER);
+//    for (int i=0; i<m_grid.rows(); ++i) {
+//        for (int j=0; j<m_grid.columns(); ++j) {
+//            GameObject ground(":/tiles/ground.png", ObjectLayer::GROUND_LAYER);
 
-            PixmapItem* ground_tile = new PixmapItem();
-            ground_tile->setZValue(static_cast<int>(ground.layer()));
-            ground_tile->setPos(i*size, j*size);
-            ground_tile->fit(size);
-            addItem(ground_tile);
+//            PixmapItem* ground_tile = new PixmapItem();
 
-            const bool is_covered_with_grass = (getRandomInt(10) == 0);
-            if (is_covered_with_grass) {
-                const int grass_variant = getRandomInt(1,2);
 
-                QString pixmapLocation = QString(":/tiles/grass%1.png").arg(grass_variant);
-                PixmapItem* grass_tile = new PixmapItem(pixmapLocation);
-                grass_tile->setZValue(GRASS_LAYER);
-                grass_tile->setPos(i*size, j*size);
-                grass_tile->fit(size);
-                addItem(grass_tile);
-            } else {
-                const bool is_covered_with_rock = (getRandomInt(30) == 0);
-                if (is_covered_with_rock) {
-                    const int rock_variant = getRandomInt(0,1);
+//            const bool is_covered_with_grass = (getRandomInt(10) == 0);
+//            if (is_covered_with_grass) {
+//                const int grass_variant = getRandomInt(1,2);
 
-                    QString pixmapLocation = QString(":/tiles/rock_%1.png").arg(rock_variant?"big":"middle");
-                    PixmapItem* rock_tile = new PixmapItem(pixmapLocation);
-                    rock_tile->setZValue(ROCK_LAYER);
-                    rock_tile->setPos(i*size, j*size);
-                    rock_tile->fit(size);
-                    addItem(rock_tile);
-                }
-            }
-        }
-    }
+//                QString pixmapLocation = QString(":/tiles/grass%1.png").arg(grass_variant);
+//                PixmapItem* grass_tile = new PixmapItem(pixmapLocation);
+//                grass_tile->setZValue(GRASS_LAYER);
+//                grass_tile->setPos(i*size, j*size);
+//                grass_tile->fit(size);
+//                addItem(grass_tile);
+//            } else {
+//                const bool is_covered_with_rock = (getRandomInt(30) == 0);
+//                if (is_covered_with_rock) {
+//                    const int rock_variant = getRandomInt(0,1);
+
+//                    QString pixmapLocation = QString(":/tiles/rock_%1.png").arg(rock_variant?"big":"middle");
+//                    PixmapItem* rock_tile = new PixmapItem(pixmapLocation);
+//                    rock_tile->setZValue(ROCK_LAYER);
+//                    rock_tile->setPos(i*size, j*size);
+//                    rock_tile->fit(size);
+//                    addItem(rock_tile);
+//                }
+//            }
+//        }
+//    }
 }
 
 void GraphicsScene::addItem(QGraphicsItem* item)
 {
     QGraphicsScene::addItem(item);
-    //m_grid->addObject();
 }
 
 void GraphicsScene::clearScene()
