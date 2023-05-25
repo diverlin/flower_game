@@ -21,7 +21,7 @@ public:
 
     void setMaxLength(std::size_t maxLength) {
         m_maxLength = maxLength;
-        while (m_elements.size() >= m_maxLength) {
+        while (m_elements.size() > m_maxLength) {
             pop();
         }
     }

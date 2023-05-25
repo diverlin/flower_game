@@ -3,6 +3,15 @@
 
 #include <QTest>
 
+QString intQueueToString(const FixedQueue<int>& q)
+{
+    QString buff;
+    for (int el: q) {
+        buff += QString::number(el);
+    }
+    return buff;
+}
+
 void FixedQueueTest::testBase()
 {
     FixedQueue<int> q(5);
@@ -21,20 +30,13 @@ void FixedQueueTest::testBase()
 
     QCOMPARE(q.size(), 5);
 
-    QString buff;
-    for (int el: q) {
-        buff += QString::number(el);
-    }
-
-    QCOMPARE(buff, "65432");
+    QCOMPARE(intQueueToString(q), "65432");
 
     q.push(7);
     QCOMPARE(q.size(), 5);
 
-    buff.clear();
-    for (int el: q) {
-        buff += QString::number(el);
-    }
+    QCOMPARE(intQueueToString(q), "76543");
 
-    QCOMPARE(buff, "76543");
+    q.setMaxLength(2);
+    QCOMPARE(intQueueToString(q), "76");
 }
