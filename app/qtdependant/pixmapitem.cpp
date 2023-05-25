@@ -47,6 +47,15 @@ void PixmapItem::setPixmap(const QPixmap& pixmap, core::PixmapLayer layer)
     update();
 }
 
+void PixmapItem::removePixmap(core::PixmapLayer layer)
+{
+    if (m_pixmaps.contains(layer)) {
+        m_pixmaps[layer] = QPixmap();
+        m_isDirty = true;
+        update();
+    }
+}
+
 void PixmapItem::unitePixmaps()
 {
     QPainter painter(&m_finalPixmap);

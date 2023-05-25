@@ -58,23 +58,25 @@ void GraphicsScene::addTile(const core::Tile& tile)
 
 void GraphicsScene::updateGameLoop()
 {
-    //qInfo() << "---tick";
     const core::Grid& grid = m_gridMap.grid();
     for (std::size_t i=0; i<grid.size(); ++i) {
         core::Index2D index2d = grid.getIndex2D(i);
         PixmapItem* tileView = m_tilesViews[i];
         if (m_index2dUnderCursor.isValid() && (index2d == m_index2dUnderCursor)) {
-            tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_white.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
-        } else {
             if (m_gridMap.grid().isIndexPassable(index2d)) {
-                tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_black.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
+                tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_blue_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
             } else {
-                tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
+                tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
             }
+        } else {
+            tileView->removePixmap(core::PixmapLayer::OVERLAY_LAYER);
+            //if (m_gridMap.grid().isIndexPassable(index2d)) {
+                //tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_black_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
+            //} else {
+                //tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
+            //}
         }
-        //qInfo() << i << index2d.i() << index2d.j() << grid.value(i);
     }
-    //m_index2dUnderCursor.reset();
 }
 
 void GraphicsScene::create()

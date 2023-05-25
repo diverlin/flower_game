@@ -1,6 +1,6 @@
 #include "gridtest.h"
 #include <grid.h>
-#include <PixmapLayer.h>
+#include <pixmaplayer.h>
 #include <index2d.h>
 
 #include <QTest>

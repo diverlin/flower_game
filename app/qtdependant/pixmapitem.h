@@ -15,6 +15,7 @@ public:
     ~PixmapItem()=default;
 
     void setPixmap(const QPixmap& pixmap, core::PixmapLayer layer);
+    void removePixmap(core::PixmapLayer layer);
 
     QSizeF size() const;
     QRectF boundingRect() const override;

@@ -15,6 +15,9 @@
         <file>tiles/wood_vertical_t.png</file>
         <file>tiles/frame_red.png</file>
         <file>tiles/frame_black.png</file>
-        <file>tiles/frame_white.png</file>
+        <file>tiles/frame_black_blurred.png</file>
+        <file>tiles/frame_blue.png</file>
+        <file>tiles/frame_blue_blurred.png</file>
+        <file>tiles/frame_red_blurred.png</file>
     </qresource>
 </RCC>
