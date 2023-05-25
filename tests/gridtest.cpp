@@ -21,7 +21,7 @@ void GridTest::testGrid1D2DIndexConversion()
 void GridTest::testGridAddRemoveLayer()
 {
     const int rows = 5;
-    const int columns = 5;
+    const int columns = 10;
     Grid grid(rows, columns);
     QCOMPARE(int(grid.size()), rows*columns);
 
@@ -56,7 +56,7 @@ void GridTest::testGridFreeRandomIndex()
     for (int i=0; i<20; ++i) {
         Index2D index2d = grid.getFreeRandomIndex();
         grid.addLayer(index2d, TileLayer::FLOWER_LAYER);
-        qInfo() << index2d.i() << index2d.j();
+        //qInfo() << index2d.i() << index2d.j();
         if (counter<16) {
             QVERIFY(index2d.isValid());
         } else {
@@ -67,7 +67,7 @@ void GridTest::testGridFreeRandomIndex()
 
 }
 
-void GridTest::testGridBusyIndex()
-{
+//void GridTest::testGridBusyIndex()
+//{
 
-}
+//}

@@ -13,7 +13,7 @@ private slots:
     void testGrid1D2DIndexConversion();
     void testGridAddRemoveLayer();
     void testGridFreeRandomIndex();
-    void testGridBusyIndex();
+//    void testGridBusyIndex();
 };
 
 #endif // GRIDTEST_H

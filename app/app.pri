@@ -13,6 +13,7 @@ HEADERS += \
     $$PWD/stringutils.h \
     $$PWD/tile.h \
     $$PWD/gameobject.h \
+    $$PWD/fixedqueue.h \
 
 SOURCES += \
     $$PWD/qtdependant/mainwindow.cpp \

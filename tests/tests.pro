@@ -7,10 +7,11 @@ INCLUDEPATH += $$PWD/../app
 SOURCES += \
     $$PWD/main.cpp \
     $$PWD/gridtest.cpp \
+    $$PWD/fixedqueuetest.cpp \
 
 HEADERS += \
     $$PWD/gridtest.h \
-
+    $$PWD/fixedqueuetest.h \
 
 
 
