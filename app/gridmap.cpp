@@ -81,20 +81,20 @@ void GridMap::createWoodLayer(int numMin, int numMax)
         if (wood_variant) {
             Tile tileLeft(":/tiles/wood_horizontal_l.png", TileLayer::WOOD_LAYER);
             Tile tileRight(":/tiles/wood_horizontal_r.png", TileLayer::WOOD_LAYER, Index2D(1,0));
-            GameObject object(std::vector<Tile>{tileLeft, tileRight});
+            StaticObject object(std::vector<Tile>{tileLeft, tileRight});
             Index2D randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
             if (randMapIndex.isValid()) {
-                addObject(object, randMapIndex);
+                addStaticObject(object, randMapIndex);
             } else {
                 std::cout << "no free slots for tile wood" << std::endl;
             }
         } else {
             Tile tileTop(":/tiles/wood_vertical_t.png", TileLayer::WOOD_LAYER);
             Tile tileBottom(":/tiles/wood_vertical_b.png", TileLayer::WOOD_LAYER, Index2D(0,1));
-            GameObject object(std::vector<Tile>{tileTop, tileBottom});
+            StaticObject object(std::vector<Tile>{tileTop, tileBottom});
             Index2D randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
             if (randMapIndex.isValid()) {
-                addObject(object, randMapIndex);
+                addStaticObject(object, randMapIndex);
             } else {
                 std::cout << "no free slots for tile wood" << std::endl;
             }
@@ -110,10 +110,10 @@ void GridMap::createTreeLayer(int numMin, int numMax)
         Tile tileTopRight(":/tiles/tree_0_tr.png", TileLayer::TREE_LAYER, Index2D(1,0));
         Tile tileBottomLeft(":/tiles/tree_0_bl.png", TileLayer::TREE_LAYER, Index2D(0,1));
         Tile tileBottomRight(":/tiles/tree_0_br.png", TileLayer::TREE_LAYER, Index2D(1,1));
-        GameObject object(std::vector<Tile>{tileTopLeft, tileTopRight, tileBottomLeft, tileBottomRight});
+        StaticObject object(std::vector<Tile>{tileTopLeft, tileTopRight, tileBottomLeft, tileBottomRight});
         Index2D randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
         if (randMapIndex.isValid()) {
-            addObject(object, randMapIndex);
+            addStaticObject(object, randMapIndex);
         } else {
             std::cout << "no free slots for tile tree" << std::endl;
         }
@@ -133,20 +133,18 @@ void GridMap::addTile(Tile& tile, int i, int j)
     }
 }
 
-void GridMap::addObject(GameObject& object, const Index2D& indexMap2D)
-{
-    addObject(object, indexMap2D.i(), indexMap2D.j());
-}
-
-void GridMap::addObject(GameObject& object, int i, int j)
+void GridMap::addStaticObject(StaticObject& object, int i, int j)
 {
     object.setMapLocation(i, j);
     for (const Tile& tile: object.tiles()) {
         m_grid.addLayer(tile.mapLocation(), tile.layer());
     }
-    m_objects.push_back(object);
+    m_staticObjects.push_back(object);
 }
 
-
+void GridMap::addStaticObject(StaticObject& object, const Index2D& indexMap2D)
+{
+    addStaticObject(object, indexMap2D.i(), indexMap2D.j());
+}
 
 

@@ -21,8 +21,8 @@ private:
 //    TextInformationItem* textInformationItem;
 
     GridMap m_gridMap;
-
-    void addObject(const GameObject& object);
+    
+    void addObject(const StaticObject& object);
     void addTile(const Tile& tile);
     void addItem(QGraphicsItem* item);
 };

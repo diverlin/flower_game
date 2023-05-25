@@ -8,10 +8,10 @@
 
 class Tile;
 
-class GameObject
+class StaticObject
 {
 public:
-    GameObject(const std::vector<Tile>& tiles);
+    StaticObject(const std::vector<Tile>& tiles);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
     void setMapLocation(int i, int j);

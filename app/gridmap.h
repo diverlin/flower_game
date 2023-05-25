@@ -8,7 +8,7 @@
 
 #include <vector>
 
-class GameObject;
+class StaticObject;
 
 class GridMap
 {
@@ -21,17 +21,17 @@ public:
     void addTile(Tile& tile, int i, int j);
     void addTile(Tile& tile, const Index2D&);
     void removeTile(int i, int j, TileLayer tileLayer);
-
-    void addObject(GameObject&, const Index2D&);
-    void addObject(GameObject&, int i, int j);
+    
+    void addStaticObject(StaticObject&, int i, int j);
+    void addStaticObject(StaticObject&, const Index2D&);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
-    const std::vector<GameObject>& objects() const { return m_objects; }
+    const std::vector<StaticObject>& staticObjects() const { return m_staticObjects; }
 
 private:
     Grid m_grid;
     std::vector<Tile> m_tiles;
-    std::vector<GameObject> m_objects;
+    std::vector<StaticObject> m_staticObjects;
 
     void createGroundLayer();
     void createGrassLayer(int numMin, int numMax);

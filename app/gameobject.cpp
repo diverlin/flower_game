@@ -2,13 +2,13 @@
 
 #include "tile.h"
 
-GameObject::GameObject(const std::vector<Tile>& tiles)
+StaticObject::StaticObject(const std::vector<Tile>& tiles)
     :
     m_tiles(tiles)
 {
 }
 
-void GameObject::setMapLocation(int i, int j)
+void StaticObject::setMapLocation(int i, int j)
 {
     if (m_mapLocation.isMach(i, j)) {
         return;

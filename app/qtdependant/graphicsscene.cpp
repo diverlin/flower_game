@@ -15,7 +15,7 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
     for (const Tile& tile: m_gridMap.tiles()) {
         addTile(tile);
     }
-    for (const GameObject& object: m_gridMap.objects()) {
+    for (const StaticObject& object: m_gridMap.staticObjects()) {
         addObject(object);
     }
 //    textInformationItem = new TextInformationItem();
@@ -25,7 +25,7 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 //                                backgroundItem->boundingRect().height()* 3 / 4);
 }
 
-void GraphicsScene::addObject(const GameObject& object)
+void GraphicsScene::addObject(const StaticObject& object)
 {
     for (const Tile& tile: object.tiles()) {
         addTile(tile);
