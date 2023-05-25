@@ -41,7 +41,6 @@ void GraphicsScene::updateGameLoop()
 {
     qint64 deltaTimeMs = m_elapsedTimer.elapsed();
 
-    qInfo() << "deltaTimeMs=" << deltaTimeMs << static_cast<long long>(deltaTimeMs);
     m_world.update(deltaTimeMs);
     updateTilesViews(m_world.tiles());
     updateOverlay();

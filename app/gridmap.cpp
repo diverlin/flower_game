@@ -148,7 +148,7 @@ void GridMap::createTrees(int numMin, int numMax)
 void GridMap::createSnake()
 {
     Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
-    Image image(":/tiles/snake_segment.png", PixmapLayer::SNAKE_LAYER);
+    Image image(":/tiles/snake_segment_texture.png", PixmapLayer::SNAKE_LAYER);
     Snake* snake = new Snake(image, 2, {randMapIndex, randMapIndex+Index2D(0,1)});
     addSnake(snake);
 }
