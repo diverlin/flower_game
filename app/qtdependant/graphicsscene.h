@@ -26,11 +26,9 @@ private:
     
     void addObject(const core::StaticObject& object);
     void addTile(const core::Tile& tile);
-    void addItem(QGraphicsItem* item);
-    void removeItem(QGraphicsItem* item);
 
     void create();
-    void createTilesOverlays();
+    void createTilesViews();
     void clear();
 
     void updateGameLoop();
