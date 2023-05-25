@@ -55,9 +55,12 @@ void Grid::removeLayer(int i, int j, TileLayer layer)
     }
 }
 
-bool Grid::isIndexFree(const Index2D& index2D) const
+bool Grid::isIndexFree(const Index2D& index2d) const
 {
-    std::size_t index1d = getIndex1D(index2D.i(), index2D.j());
+    if (index2d.i() >= m_columns || index2d.j() >= m_rows) {
+        return false;
+    }
+    std::size_t index1d = getIndex1D(index2d.i(), index2d.j());
     if (index1d < m_array.size()) {
         int value = m_array.at(index1d);
         return (value == 0);
@@ -84,12 +87,12 @@ std::size_t Grid::getIndex1D(int i, int j) const
 
 std::size_t Grid::getIndex1D(const Index2D& index2d) const
 {
-    return static_cast<std::size_t>(index2d.i() * m_columns + index2d.j());
+    return getIndex1D(index2d.i(), index2d.j());
 }
 
 Index2D Grid::getIndex2D(size_t index1D) const
 {
-    return Index2D(index1D / m_rows, index1D % m_rows);
+    return Index2D(index1D / m_columns, index1D % m_columns);
 }
 
 Index2D Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const

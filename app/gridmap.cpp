@@ -23,10 +23,10 @@ void GridMap::create()
 {
     m_tiles.clear();
     createGroundLayer();
-    createGrassLayer(20,40);
+    createGrassLayer(10,20);
     createRockLayer(3,6);
     createWoodLayer(1,1);
-    createTreeLayer(2,4);
+    createTreeLayer(1,2);
 }
 
 void GridMap::createGroundLayer()
@@ -141,6 +141,9 @@ void GridMap::addObject(GameObject& object, const Index2D& indexMap2D)
 void GridMap::addObject(GameObject& object, int i, int j)
 {
     object.setMapLocation(i, j);
+    for (const Tile& tile: object.tiles()) {
+        m_grid.addLayer(tile.mapLocation(), tile.layer());
+    }
     m_objects.push_back(object);
 }
 

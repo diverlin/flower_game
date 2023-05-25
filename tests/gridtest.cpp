@@ -6,12 +6,16 @@
 
 void GridTest::testGrid1D2DIndexConversion()
 {
-    Grid grid(5, 5);
-    QCOMPARE(int(grid.size()), 25);
+    const int rows = 5;
+    const int columns = 10;
+    Grid grid(rows, columns);
+    QCOMPARE(int(grid.size()), rows*columns);
 
-    size_t index1d = grid.getIndex1D(2,3);
+    size_t index1d = grid.getIndex1D(2,9);
     Index2D index2d = grid.getIndex2D(index1d);
-    QCOMPARE(index2d, Index2D(2,3));
+    QCOMPARE(index1d, 29);
+    QCOMPARE(index2d.i(), 2);
+    QCOMPARE(index2d.j(), 9);
 }
 
 void GridTest::testGridAddRemoveLayer()

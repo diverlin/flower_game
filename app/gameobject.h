@@ -2,7 +2,6 @@
 #define GAMEOBJECT_H
 
 #include "index2d.h"
-#include "tilelayer.h"
 
 #include <string>
 #include <vector>
