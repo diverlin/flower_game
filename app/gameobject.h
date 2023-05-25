@@ -8,22 +8,22 @@
 
 namespace core {
 
-class Tile;
+class Image;
 
 class StaticObject
 {
 public:
-    StaticObject(const std::vector<Tile>& tiles);
+    StaticObject(const std::vector<Image>& images);
 
-    const std::vector<Tile>& tiles() const { return m_tiles; }
-    void setMapLocation(int i, int j);
+    const std::vector<Image>& images() const { return m_images; }
+    void setMapLocation(int i);
 
-    const Index2D& mapLocation() { return m_mapLocation; }
+    int mapLocation() { return m_mapLocation; }
     const std::vector<Index2D>& localOffsets() const { return m_localOffsets; }
 
 private:
-    std::vector<Tile> m_tiles;
-    Index2D m_mapLocation;
+    std::vector<Image> m_images;
+    int m_mapLocation;
     std::vector<Index2D> m_localOffsets;
 };
 

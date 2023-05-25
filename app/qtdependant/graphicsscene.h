@@ -30,12 +30,9 @@ private:
     QTimer m_gameLoopTimer;
     QMap<size_t, PixmapItem*> m_tilesViews;
     
-    void addObject(const core::StaticObject& object);
-    void addTile(const core::Tile& tile);
-
-    void create();
     void createTilesViews();
-    void clear();
+    void updateOverlay();
+    void updateTilesViews(const std::vector<core::Tile>&);
 
     void updateGameLoop();
 };

@@ -16,6 +16,7 @@ HEADERS += \
     $$PWD/randutils.h \
     $$PWD/stringutils.h \
     $$PWD/tile.h \
+    $$PWD/image.h \
     $$PWD/gameobject.h \
     $$PWD/fixedqueue.h \
     $$PWD/snake.h \
@@ -32,6 +33,7 @@ SOURCES += \
     $$PWD/randutils.cpp \
     $$PWD/stringutils.cpp \
     $$PWD/tile.cpp \
+    $$PWD/image.cpp \
     $$PWD/gameobject.cpp \
     $$PWD/snake.cpp \
 

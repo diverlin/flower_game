@@ -2,6 +2,8 @@
 #include "randutils.h"
 #include "stringutils.h"
 #include "gameobject.h"
+#include "snake.h"
+#include "image.h"
 
 #include <algorithm>
 #include <iostream>
@@ -13,13 +15,18 @@ GridMap::GridMap(int rows, int columns, const Size& size)
     m_grid(rows, columns)
 {
     m_tileSize = Size(size.width()/rows, size.height()/columns);
+    for (std::size_t i=0; i<m_grid.size(); ++i) {
+        m_tiles.emplace_back(Tile(i));
+    }
+
+    create();
 }
 
 GridMap::~GridMap()
 {
-    for (Snake* snake: m_snakes) {
-        delete snake;
-    }
+//    for (Snake* snake: m_snakes) {
+//        delete snake;
+//    }
 }
 
 vec2 GridMap::worldCoordFromIndex(std::size_t index1d) const
@@ -41,34 +48,36 @@ Index2D GridMap::index2dFromWorldCoord(const vec2& worldCoord) const
 
 void GridMap::create()
 {
-    m_tiles.clear();
-    createGroundLayer();
-    createGrassLayer(10,20);
-    createRockLayer(3,6);
-    createWoodLayer(1,1);
-    createTreeLayer(1,2);
+    createGround();
+    createGrasses(10,20);
+    createRocks(3,6);
+    createWoods(1,1);
+    createTrees(1,2);
+
+//    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
+
+//    Snake* snake = new Snake(2, {randMapIndex, randMapIndex+Index2D(0,1)});
+//    addSnake(snake);
 }
 
-void GridMap::createGroundLayer()
+void GridMap::createGround()
 {
-    for (int i=0; i<m_grid.rows(); ++i) {
-        for (int j=0; j<m_grid.columns(); ++j) {
-            Tile tile(":/tiles/ground.png", PixmapLayer::GROUND_LAYER);
-            addTile(tile, i, j);
-        }
+    for (int i=0; i<m_grid.size(); ++i) {
+        Image image(":/tiles/ground.png", PixmapLayer::GROUND_LAYER);
+        addImageToTile(image, i);
     }
 }
 
-void GridMap::createGrassLayer(int numMin, int numMax)
+void GridMap::createGrasses(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
-        Index2D randMapIndex = m_grid.getFreeRandomIndex();
-        if (randMapIndex.isValid()) {
+        int randMapIndex = m_grid.getFreeRandomIndex();
+        if (randMapIndex != -1) {
             const int grass_variant = getRandomInt(1,2);
             std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/grass%1.png"), "%1", std::to_string(grass_variant));
-            Tile tile(imageFilePath, PixmapLayer::GRASS_LAYER);
-            addTile(tile, randMapIndex);
+            Image image(imageFilePath, PixmapLayer::GRASS_LAYER);
+            addImageToTile(image, randMapIndex);
         } else {
             std::cout << "no free slots for tile grass" << std::endl;
             break;
@@ -76,16 +85,16 @@ void GridMap::createGrassLayer(int numMin, int numMax)
     }
 }
 
-void GridMap::createRockLayer(int numMin, int numMax)
+void GridMap::createRocks(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
-        Index2D randMapIndex = m_grid.getFreeRandomIndex();
-        if (randMapIndex.isValid()) {
+        int randMapIndex = m_grid.getFreeRandomIndex();
+        if (randMapIndex != -1) {
             const bool rock_variant = getRandomBool();
             std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/rock_%1.png"), "%1", rock_variant?"big":"middle");
-            Tile tile(imageFilePath, PixmapLayer::ROCK_LAYER);
-            addTile(tile, randMapIndex);
+            Image image(imageFilePath, PixmapLayer::ROCK_LAYER);
+            addImageToTile(image, randMapIndex);
         } else {
             std::cout << "no free slots for tile rock" << std::endl;
             break;
@@ -93,27 +102,27 @@ void GridMap::createRockLayer(int numMin, int numMax)
     }
 }
 
-void GridMap::createWoodLayer(int numMin, int numMax)
+void GridMap::createWoods(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
         const bool wood_variant = getRandomBool();
         if (wood_variant) {
-            Tile tileLeft(":/tiles/wood_horizontal_l.png", PixmapLayer::WOOD_LAYER);
-            Tile tileRight(":/tiles/wood_horizontal_r.png", PixmapLayer::WOOD_LAYER, Index2D(1,0));
-            StaticObject object(std::vector<Tile>{tileLeft, tileRight});
-            Index2D randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
-            if (randMapIndex.isValid()) {
+            Image imageLeft(":/tiles/wood_horizontal_l.png", PixmapLayer::WOOD_LAYER);
+            Image imageRight(":/tiles/wood_horizontal_r.png", PixmapLayer::WOOD_LAYER, Index2D(1,0));
+            StaticObject object(std::vector<Image>{imageLeft, imageRight});
+            int randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
+            if (randMapIndex != -1) {
                 addStaticObject(object, randMapIndex);
             } else {
                 std::cout << "no free slots for tile wood" << std::endl;
             }
         } else {
-            Tile tileTop(":/tiles/wood_vertical_t.png", PixmapLayer::WOOD_LAYER);
-            Tile tileBottom(":/tiles/wood_vertical_b.png", PixmapLayer::WOOD_LAYER, Index2D(0,1));
-            StaticObject object(std::vector<Tile>{tileTop, tileBottom});
-            Index2D randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
-            if (randMapIndex.isValid()) {
+            Image imageTop(":/tiles/wood_vertical_t.png", PixmapLayer::WOOD_LAYER);
+            Image imageBottom(":/tiles/wood_vertical_b.png", PixmapLayer::WOOD_LAYER, Index2D(0,1));
+            StaticObject object(std::vector<Image>{imageTop, imageBottom});
+            int randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
+            if (randMapIndex != -1) {
                 addStaticObject(object, randMapIndex);
             } else {
                 std::cout << "no free slots for tile wood" << std::endl;
@@ -122,17 +131,17 @@ void GridMap::createWoodLayer(int numMin, int numMax)
     }
 }
 
-void GridMap::createTreeLayer(int numMin, int numMax)
+void GridMap::createTrees(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
-        Tile tileTopLeft(":/tiles/tree_0_tl.png", PixmapLayer::TREE_LAYER);
-        Tile tileTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_LAYER, Index2D(1,0));
-        Tile tileBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_LAYER, Index2D(0,1));
-        Tile tileBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_LAYER, Index2D(1,1));
-        StaticObject object(std::vector<Tile>{tileTopLeft, tileTopRight, tileBottomLeft, tileBottomRight});
-        Index2D randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
-        if (randMapIndex.isValid()) {
+        Image imageTopLeft(":/tiles/tree_0_tl.png", PixmapLayer::TREE_LAYER);
+        Image imageTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_LAYER, Index2D(1,0));
+        Image imageBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_LAYER, Index2D(0,1));
+        Image imageBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_LAYER, Index2D(1,1));
+        StaticObject object(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight});
+        int randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
+        if (randMapIndex != -1) {
             addStaticObject(object, randMapIndex);
         } else {
             std::cout << "no free slots for tile tree" << std::endl;
@@ -140,36 +149,32 @@ void GridMap::createTreeLayer(int numMin, int numMax)
     }
 }
 
-void GridMap::addTile(Tile& tile, const Index2D& mapIndex2D)
+void GridMap::addImageToTile(Image& image, int i)
 {
-    addTile(tile, mapIndex2D.i(), mapIndex2D.j());
-}
-
-void GridMap::addTile(Tile& tile, int i, int j)
-{
-    if (m_grid.addLayer(i, j, tile.layer())) {
-        tile.setMapLocation(i, j);
-        m_tiles.push_back(tile);
+    if (m_grid.addLayer(i, image.layer())) {
+        Tile& tile = m_tiles[i];
+        tile.addImage(image);
     }
 }
 
-void GridMap::addStaticObject(StaticObject& object, int i, int j)
+void GridMap::addStaticObject(StaticObject& object, int index1d)
 {
-    object.setMapLocation(i, j);
-    for (const Tile& tile: object.tiles()) {
-        m_grid.addLayer(tile.mapLocation(), tile.layer());
+    object.setMapLocation(index1d);
+    for (const Image& image: object.images()) {
+        Index2D index2d = m_grid.getIndex2D(index1d);
+        index2d += image.indexOffsetFromLeftTopCorner();
+        int index1d = m_grid.getIndex1D(index2d);
+        if (m_grid.addLayer(index1d, image.layer())) {
+            Tile& tile = m_tiles[index1d];
+            tile.addImage(image);
+        }
     }
     m_staticObjects.push_back(object);
 }
 
-void GridMap::addStaticObject(StaticObject& object, const Index2D& indexMap2D)
-{
-    addStaticObject(object, indexMap2D.i(), indexMap2D.j());
-}
-
 void GridMap::addSnake(Snake* snake)
 {
-    m_snakes.push_back(snake);
+//    m_snakes.push_back(snake);
 }
 
 } // namespace core

@@ -1,37 +1,35 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "index2d.h"
 #include "pixmaplayer.h"
 
+#include <map>
 #include <string>
 
 namespace core {
 
+class Image;
+
 class Tile
 {
 public:
-    Tile(const std::string& imageFilePath, PixmapLayer PixmapLayer, const Index2D& indexOffsetFromLeftTopCorner = Index2D(0,0));
+    Tile(int id): m_id(id) {}
 
-    const std::string& imageFilePath() const { return m_imageFilePath; }
-    const Index2D& mapLocation() const { return m_mapLocation; }
-    PixmapLayer layer() const { return m_PixmapLayer; }
+    int id() const { return m_id; }
+    void addImage(const Image& image);
+    void removeImage(PixmapLayer pixmapLayer);
 
-    const Index2D& indexOffsetFromLeftTopCorner() const { return m_indexOffsetFromLeftTopCorner; }
-    void setMapLocation(int i, int j) {
-        m_mapLocation.set(i, j);
-        m_mapLocation += m_indexOffsetFromLeftTopCorner;
-    }
-    void updateMapLocation(const Index2D& rootMapLocation) {
-        m_mapLocation.set(rootMapLocation.i(), rootMapLocation.j());
-        m_mapLocation += m_indexOffsetFromLeftTopCorner;
-    }
+    bool isDirty() const { return m_isDirty; }
+    void resetIsDirtyFlag() const { m_isDirty = false; }
+
+    const std::map<int, std::string>& data() const { return m_data; }
 
 private:
-    std::string m_imageFilePath;
-    PixmapLayer m_PixmapLayer;
-    Index2D m_indexOffsetFromLeftTopCorner;
-    Index2D m_mapLocation;
+    int m_id = -1;
+    std::map<int, std::string> m_data;
+    mutable bool m_isDirty = false;
+
+    void addImage(const std::string& imageFilePath, PixmapLayer pixmapLayer);
 };
 
 } // namespace core

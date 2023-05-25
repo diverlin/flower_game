@@ -33,17 +33,17 @@ void GridTest::testGridAddRemoveLayer()
     }
 
     // add
-    grid.addLayer(2,3,core::PixmapLayer::FLOWER_LAYER);
+    grid.addLayer(grid.getIndex1D(2,3),core::PixmapLayer::FLOWER_LAYER);
     QVERIFY(!grid.isIndexFree(core::Index2D(2,3)));
 
-    grid.addLayer(4,4,core::PixmapLayer::ROCK_LAYER);
+    grid.addLayer(grid.getIndex1D(4,4),core::PixmapLayer::ROCK_LAYER);
     QVERIFY(!grid.isIndexFree(core::Index2D(4,4)));
 
     // remove
-    grid.removeLayer(2,3,core::PixmapLayer::FLOWER_LAYER);
+    grid.removeLayer(grid.getIndex1D(2,3),core::PixmapLayer::FLOWER_LAYER);
     QVERIFY(grid.isIndexFree(core::Index2D(2,3)));
 
-    grid.removeLayer(4,4,core::PixmapLayer::ROCK_LAYER);
+    grid.removeLayer(grid.getIndex1D(4,4),core::PixmapLayer::ROCK_LAYER);
     QVERIFY(grid.isIndexFree(core::Index2D(4,4)));
 }
 
@@ -55,20 +55,14 @@ void GridTest::testGridFreeRandomIndex()
 
     int counter = 0;
     for (int i=0; i<20; ++i) {
-        core::Index2D index2d = grid.getFreeRandomIndex();
-        grid.addLayer(index2d, core::PixmapLayer::FLOWER_LAYER);
-        //qInfo() << index2d.i() << index2d.j();
+        int index1d = grid.getFreeRandomIndex();
+        grid.addLayer(index1d, core::PixmapLayer::FLOWER_LAYER);
         if (counter<16) {
-            QVERIFY(index2d.isValid());
+            QVERIFY(index1d >= 0);
         } else {
-            QVERIFY(!index2d.isValid());
+            QVERIFY(index1d == -1);
         }
         counter++;
     }
-
 }
 
-//void GridTest::testGridBusyIndex()
-//{
-
-//}

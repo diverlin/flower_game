@@ -26,17 +26,17 @@ public:
     bool isIndexPassable(const Index2D& index2D) const;
     bool isIndexFree(const Index2D& index2D) const;
 
-    bool addLayer(const Index2D& index2d, PixmapLayer layer);
-    bool addLayer(int i, int j, PixmapLayer layer);
-    void removeLayer(int i, int j, PixmapLayer layer);
+    bool addLayer(std::size_t index1d, PixmapLayer layer);
+    void removeLayer(std::size_t index1d, PixmapLayer layer);
 
-    bool hasLayer(int i, int j, PixmapLayer layer) const;
+    bool hasLayer(std::size_t index1d, PixmapLayer layer) const;
 
     std::size_t getIndex1D(int i, int j) const;
     std::size_t getIndex1D(const Index2D&) const;
     Index2D getIndex2D(std::size_t index1D) const;
 
-    Index2D getFreeRandomIndex(const std::vector<Index2D>& localOffsets = {}) const;
+    int getFreeRandomIndex(const std::vector<Index2D>& localOffsets = {}) const;
+    Index2D getFreeRandomIndex2D(const std::vector<Index2D>& localOffsets = {}) const;
 
 private:
     int m_rows = -1;

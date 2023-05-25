@@ -14,14 +14,13 @@ namespace core {
 
 class StaticObject;
 class Snake;
+class Image;
 
 class GridMap
 {
 public:
     GridMap(int rows, int columns, const Size& size);
     ~GridMap();
-
-    void create();
 
     const Size& tileSize() const { return m_tileSize; }
     const Grid& grid() const { return m_grid; }
@@ -32,19 +31,7 @@ public:
     Index2D index2dFromWorldCoord(const vec2&) const;
     //
 
-    void addTile(Tile& tile, int i, int j);
-    void addTile(Tile& tile, const Index2D&);
-    
-    void addStaticObject(StaticObject&, int i, int j);
-    void addStaticObject(StaticObject&, const Index2D&);
-
-    void addSnake(Snake*);
-
-    void removeTile(int i, int j, PixmapLayer PixmapLayer);
-
     const std::vector<Tile>& tiles() const { return m_tiles; }
-    const std::vector<StaticObject>& staticObjects() const { return m_staticObjects; }
-    const std::vector<Snake*> snakes() const { return m_snakes; }
 
 private:
     Grid m_grid;
@@ -52,13 +39,19 @@ private:
 
     std::vector<Tile> m_tiles;
     std::vector<StaticObject> m_staticObjects;
-    std::vector<Snake*> m_snakes;
+//    std::vector<Snake*> m_snakes;
 
-    void createGroundLayer();
-    void createGrassLayer(int numMin, int numMax);
-    void createRockLayer(int numMin, int numMax);
-    void createWoodLayer(int numMin, int numMax);
-    void createTreeLayer(int numMin, int numMax);
+    void create();
+
+    void createGround();
+    void createGrasses(int numMin, int numMax);
+    void createRocks(int numMin, int numMax);
+    void createWoods(int numMin, int numMax);
+    void createTrees(int numMin, int numMax);
+
+    void addImageToTile(Image& image, int i);
+    void addStaticObject(StaticObject&, int i);
+    void addSnake(Snake*);
 };
 
 } // namespace core

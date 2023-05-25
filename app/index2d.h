@@ -18,6 +18,11 @@ public:
     int i() const { return m_i; }
     int j() const { return m_j; }
 
+    Index2D operator+(const Index2D& rhs) const {
+        Index2D result(*this);
+        result+=rhs;
+        return result;
+    }
     Index2D& operator+=(const Index2D& rhs) {
         m_i += rhs.i();
         m_j += rhs.j();

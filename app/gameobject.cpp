@@ -1,27 +1,26 @@
 #include "gameobject.h"
 
-#include "tile.h"
+#include "image.h"
 
 namespace core {
 
-StaticObject::StaticObject(const std::vector<Tile>& tiles)
+StaticObject::StaticObject(const std::vector<Image>& images)
     :
-    m_tiles(tiles)
+    m_images(images)
 {
+    for (Image& image: m_images) {
+        if (!image.indexOffsetFromLeftTopCorner().isNull()) {
+            m_localOffsets.push_back(image.indexOffsetFromLeftTopCorner());
+        }
+    }
 }
 
-void StaticObject::setMapLocation(int i, int j)
+void StaticObject::setMapLocation(int index1d)
 {
-    if (m_mapLocation.isMach(i, j)) {
+    if (m_mapLocation == index1d) {
         return;
     }
-    m_mapLocation.set(i, j);
-    for (Tile& tile: m_tiles) {
-        if (!tile.indexOffsetFromLeftTopCorner().isNull()) {
-            m_localOffsets.push_back(tile.indexOffsetFromLeftTopCorner());
-        }
-        tile.updateMapLocation(m_mapLocation);
-    }
+    m_mapLocation = index1d;
 }
 
 } // namespace core

@@ -19,41 +19,33 @@ Grid::Grid(int rows, int columns)
     std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
 }
 
-bool Grid::hasLayer(int i, int j, PixmapLayer PixmapLayer) const
+bool Grid::hasLayer(std::size_t index1d, PixmapLayer PixmapLayer) const
 {
-    std::size_t _1d_index = getIndex1D(i, j);
-    if (_1d_index < m_elements.size()) {
-        return static_cast<int>(PixmapLayer) & m_elements[_1d_index];
+    if (index1d < m_elements.size()) {
+        return static_cast<int>(PixmapLayer) & m_elements[index1d];
     } else {
-        std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
+        std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
         return false;
     }
 }
 
-bool Grid::addLayer(const Index2D& index2d, PixmapLayer layer)
+bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
 {
-    return addLayer(index2d.i(), index2d.j(), layer);
-}
-
-bool Grid::addLayer(int i, int j, PixmapLayer layer)
-{
-    std::size_t index1d = getIndex1D(i, j);
     if (index1d < size()) {
         m_elements[index1d] |= static_cast<int>(layer);
         return true;
     } else {
-        std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
+        std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
         return false;
     }
 }
 
-void Grid::removeLayer(int i, int j, PixmapLayer layer)
+void Grid::removeLayer(std::size_t index1d, PixmapLayer layer)
 {
-    std::size_t index1d = getIndex1D(i, j);
     if (index1d < m_elements.size()) {
         m_elements[index1d] ^= static_cast<int>(layer);
     } else {
-        std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
+        std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
     }
 }
 
@@ -97,13 +89,13 @@ Index2D Grid::getIndex2D(size_t index1d) const
     return Index2D(index1d / m_columns, index1d % m_columns);
 }
 
-Index2D Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const
+int Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const
 {
     for (int randIndex1D: m_randomIndexes) {
         Index2D topLeftIndex = getIndex2D(randIndex1D);
         if (isIndexFree(topLeftIndex)) {
             if (localOffsets.empty()) {
-                return topLeftIndex;
+                return randIndex1D;
             } else {
                 bool at_least_one_offset_slot_busy = false;
                 for (const Index2D& localOffset: localOffsets) {
@@ -115,13 +107,23 @@ Index2D Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const
                 }
 
                 if (!at_least_one_offset_slot_busy) {
-                    return topLeftIndex;
+                    return randIndex1D;
                 }
             }
         }
     }
 
-    return Index2D(); // return ivalid index
+    return -1; // return ivalid index
+}
+
+Index2D Grid::getFreeRandomIndex2D(const std::vector<Index2D>& localOffsets) const
+{
+    int index1d = getFreeRandomIndex(localOffsets);
+    if (index1d != -1) {
+        return getIndex2D(index1d);
+    } else {
+        return Index2D();
+    }
 }
 
 } // namespace core
