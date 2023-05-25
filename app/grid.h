@@ -2,7 +2,7 @@
 #define GRID_H
 
 #include "index2d.h"
-#include "tilelayer.h"
+#include "pixmaplayer.h"
 
 #include <vector>
 
@@ -26,11 +26,11 @@ public:
     bool isIndexPassable(const Index2D& index2D) const;
     bool isIndexFree(const Index2D& index2D) const;
 
-    bool addLayer(const Index2D& index2d, TileLayer layer);
-    bool addLayer(int i, int j, TileLayer layer);
-    void removeLayer(int i, int j, TileLayer layer);
+    bool addLayer(const Index2D& index2d, PixmapLayer layer);
+    bool addLayer(int i, int j, PixmapLayer layer);
+    void removeLayer(int i, int j, PixmapLayer layer);
 
-    bool hasLayer(int i, int j, TileLayer layer) const;
+    bool hasLayer(int i, int j, PixmapLayer layer) const;
 
     std::size_t getIndex1D(int i, int j) const;
     std::size_t getIndex1D(const Index2D&) const;

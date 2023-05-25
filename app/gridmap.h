@@ -5,7 +5,7 @@
 #include "size.h"
 #include "vec2.h"
 #include "index2d.h"
-#include "tilelayer.h"
+#include "pixmaplayer.h"
 #include "tile.h"
 
 #include <vector>
@@ -37,7 +37,7 @@ public:
 
     void addSnake(Snake*);
 
-    void removeTile(int i, int j, TileLayer tileLayer);
+    void removeTile(int i, int j, PixmapLayer PixmapLayer);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
     const std::vector<StaticObject>& staticObjects() const { return m_staticObjects; }

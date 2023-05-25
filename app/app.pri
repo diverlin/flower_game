@@ -6,7 +6,7 @@ HEADERS += \
     $$PWD/qtdependant/pixmapprovider.h \
     $$PWD/qtdependant/graphicsscene.h \
     $$PWD/qtdependant/textinformationitem.h \
-    $$PWD/tilelayer.h \
+    $$PWD/pixmaplayer.h \
     $$PWD/grid.h \
     $$PWD/vec2.h \
     $$PWD/size.h \

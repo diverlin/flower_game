@@ -4,10 +4,10 @@
 
 namespace core {
 
-Tile::Tile(const std::string& imageFilePath, TileLayer tileLayer, const Index2D& indexOffsetFromLeftTopCorner)
+Tile::Tile(const std::string& imageFilePath, PixmapLayer PixmapLayer, const Index2D& indexOffsetFromLeftTopCorner)
     :
     m_imageFilePath(imageFilePath)
-  , m_tileLayer(tileLayer)
+  , m_PixmapLayer(PixmapLayer)
   , m_indexOffsetFromLeftTopCorner(indexOffsetFromLeftTopCorner)
 {
 }

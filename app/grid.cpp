@@ -19,23 +19,23 @@ Grid::Grid(int rows, int columns)
     std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
 }
 
-bool Grid::hasLayer(int i, int j, TileLayer tileLayer) const
+bool Grid::hasLayer(int i, int j, PixmapLayer PixmapLayer) const
 {
     std::size_t _1d_index = getIndex1D(i, j);
     if (_1d_index < m_elements.size()) {
-        return static_cast<int>(tileLayer) & m_elements[_1d_index];
+        return static_cast<int>(PixmapLayer) & m_elements[_1d_index];
     } else {
         std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
         return false;
     }
 }
 
-bool Grid::addLayer(const Index2D& index2d, TileLayer layer)
+bool Grid::addLayer(const Index2D& index2d, PixmapLayer layer)
 {
     return addLayer(index2d.i(), index2d.j(), layer);
 }
 
-bool Grid::addLayer(int i, int j, TileLayer layer)
+bool Grid::addLayer(int i, int j, PixmapLayer layer)
 {
     std::size_t index1d = getIndex1D(i, j);
     if (index1d < size()) {
@@ -47,7 +47,7 @@ bool Grid::addLayer(int i, int j, TileLayer layer)
     }
 }
 
-void Grid::removeLayer(int i, int j, TileLayer layer)
+void Grid::removeLayer(int i, int j, PixmapLayer layer)
 {
     std::size_t index1d = getIndex1D(i, j);
     if (index1d < m_elements.size()) {

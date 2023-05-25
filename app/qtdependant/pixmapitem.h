@@ -15,6 +15,7 @@ public:
     QSizeF size() const;
     QRectF boundingRect() const override;
 
+protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
 private:

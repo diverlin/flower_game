@@ -22,7 +22,7 @@ private:
 
     core::GridMap m_gridMap;
     QTimer m_gameLoopTimer;
-    QMap<size_t, PixmapItem*> m_overlay;
+    QMap<size_t, PixmapItem*> m_tilesViews;
     
     void addObject(const core::StaticObject& object);
     void addTile(const core::Tile& tile);

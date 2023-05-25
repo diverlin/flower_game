@@ -3,7 +3,7 @@
 #include "pixmapprovider.h"
 //#include "textinformationitem.h"
 
-#include "../tilelayer.h"
+#include "../PixmapLayer.h"
 #include "../gameobject.h"
 
 #include <QApplication>
@@ -72,12 +72,13 @@ void GraphicsScene::create()
     createTilesOverlays();
 }
 
-void GraphicsScene::createTilesOverlays()
+void GraphicsScene::createTilesViews()
 {
+    m_tilesViews
     const core::Grid& grid = m_gridMap.grid();
     for (std::size_t i=0; i<grid.size(); ++i) {
         PixmapItem* tileOverlay = new PixmapItem(PixmapProvider::instance().getPixmap(":/tiles/frame.png", m_gridMap.tileSize()));
-        tileOverlay->setZValue(static_cast<int>(core::TileLayer::OVERLAY_LAYER));
+        tileOverlay->setZValue(static_cast<int>(core::PixmapLayer::OVERLAY_LAYER));
         core::vec2 pos = m_gridMap.worldCoordFromIndex(i);
         tileOverlay->setPos(pos.x(), pos.y());
         //tileOverlay->setOpacity(0.5f);

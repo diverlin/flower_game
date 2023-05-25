@@ -1,6 +1,6 @@
 #include "gridtest.h"
 #include <grid.h>
-#include <tilelayer.h>
+#include <PixmapLayer.h>
 #include <index2d.h>
 
 #include <QTest>
@@ -33,17 +33,17 @@ void GridTest::testGridAddRemoveLayer()
     }
 
     // add
-    grid.addLayer(2,3,core::TileLayer::FLOWER_LAYER);
+    grid.addLayer(2,3,core::PixmapLayer::FLOWER_LAYER);
     QVERIFY(!grid.isIndexFree(core::Index2D(2,3)));
 
-    grid.addLayer(4,4,core::TileLayer::ROCK_LAYER);
+    grid.addLayer(4,4,core::PixmapLayer::ROCK_LAYER);
     QVERIFY(!grid.isIndexFree(core::Index2D(4,4)));
 
     // remove
-    grid.removeLayer(2,3,core::TileLayer::FLOWER_LAYER);
+    grid.removeLayer(2,3,core::PixmapLayer::FLOWER_LAYER);
     QVERIFY(grid.isIndexFree(core::Index2D(2,3)));
 
-    grid.removeLayer(4,4,core::TileLayer::ROCK_LAYER);
+    grid.removeLayer(4,4,core::PixmapLayer::ROCK_LAYER);
     QVERIFY(grid.isIndexFree(core::Index2D(4,4)));
 }
 
@@ -56,7 +56,7 @@ void GridTest::testGridFreeRandomIndex()
     int counter = 0;
     for (int i=0; i<20; ++i) {
         core::Index2D index2d = grid.getFreeRandomIndex();
-        grid.addLayer(index2d, core::TileLayer::FLOWER_LAYER);
+        grid.addLayer(index2d, core::PixmapLayer::FLOWER_LAYER);
         //qInfo() << index2d.i() << index2d.j();
         if (counter<16) {
             QVERIFY(index2d.isValid());

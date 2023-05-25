@@ -1,9 +1,9 @@
-#ifndef TILELAYER_H
-#define TILELAYER_H
+#ifndef PIXMAPLAYER_H
+#define PIXMAPLAYER_H
 
 namespace core {
 
-enum class TileLayer: int {
+enum class PixmapLayer: int {
     GROUND_LAYER=0,
     GRASS_LAYER=1<<0,
     ROCK_LAYER=1<<1,
@@ -16,5 +16,5 @@ enum class TileLayer: int {
 
 } // namespace core
 
-#endif // TILELAYER_H
+#endif // PIXMAPLAYER_H
 
