@@ -3,8 +3,12 @@
 
 #include <string>
 
-namespace utils {
+namespace core {
+namespace stringutils {
+
 std::string replace(const std::string& src, const std::string& search, const std::string& replace);
-} // namespace utils
+
+} // namespace stringutils
+} // namespace core
 
 #endif // STRINGUTILS_H

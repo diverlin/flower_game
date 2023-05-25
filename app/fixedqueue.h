@@ -3,6 +3,8 @@
 
 #include <deque>
 
+namespace core {
+
 template<typename T>
 class FixedQueue {
 private:
@@ -62,5 +64,7 @@ private:
         }
     }
 };
+
+} //namespace core
 
 #endif // FIXEDQUEUE_H

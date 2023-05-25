@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iostream>
 
+namespace core {
+
 Grid::Grid(int rows, int columns)
     :
     m_rows(rows),
@@ -90,9 +92,9 @@ std::size_t Grid::getIndex1D(const Index2D& index2d) const
     return getIndex1D(index2d.i(), index2d.j());
 }
 
-Index2D Grid::getIndex2D(size_t index1D) const
+Index2D Grid::getIndex2D(size_t index1d) const
 {
-    return Index2D(index1D / m_columns, index1D % m_columns);
+    return Index2D(index1d / m_columns, index1d % m_columns);
 }
 
 Index2D Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const
@@ -122,3 +124,4 @@ Index2D Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const
     return Index2D(); // return ivalid index
 }
 
+} // namespace core

@@ -1,6 +1,8 @@
 #ifndef INDEX2D_H
 #define INDEX2D_H
 
+namespace core {
+
 class Index2D {
 public:
     Index2D(int i, int j): m_i(i), m_j(j) {}
@@ -27,5 +29,7 @@ private:
     int m_i = -1;
     int m_j = -1;
 };
+
+} // namespace core
 
 #endif // INDEX2D_H

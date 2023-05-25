@@ -2,6 +2,8 @@
 
 #include "tile.h"
 
+namespace core {
+
 StaticObject::StaticObject(const std::vector<Tile>& tiles)
     :
     m_tiles(tiles)
@@ -21,3 +23,5 @@ void StaticObject::setMapLocation(int i, int j)
         tile.updateMapLocation(m_mapLocation);
     }
 }
+
+} // namespace core

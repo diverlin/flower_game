@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <QMap>
 
+namespace view {
+
 //class TextInformationItem;
 class PixmapItem;
 
@@ -18,12 +20,12 @@ public:
 private:
 //    TextInformationItem* textInformationItem;
 
-    GridMap m_gridMap;
+    core::GridMap m_gridMap;
     QTimer m_gameLoopTimer;
     QMap<size_t, PixmapItem*> m_overlay;
     
-    void addObject(const StaticObject& object);
-    void addTile(const Tile& tile);
+    void addObject(const core::StaticObject& object);
+    void addTile(const core::Tile& tile);
     void addItem(QGraphicsItem* item);
     void removeItem(QGraphicsItem* item);
 
@@ -33,5 +35,7 @@ private:
 
     void updateGameLoop();
 };
+
+} // namespace view
 
 #endif // GRAPHICSSCENE_H

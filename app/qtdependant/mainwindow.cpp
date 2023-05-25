@@ -4,6 +4,8 @@
 #include <QApplication>
 #include <QGraphicsView>
 
+namespace view {
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
@@ -12,3 +14,5 @@ MainWindow::MainWindow(QWidget* parent)
     m_view = new QGraphicsView(m_scene, this);
     setCentralWidget(m_view);
 }
+
+} // namespace view

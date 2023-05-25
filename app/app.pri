@@ -7,7 +7,6 @@ HEADERS += \
     $$PWD/qtdependant/graphicsscene.h \
     $$PWD/qtdependant/textinformationitem.h \
     $$PWD/tilelayer.h \
-    $$PWD/index2d.h \
     $$PWD/grid.h \
     $$PWD/vec2.h \
     $$PWD/size.h \
@@ -25,7 +24,6 @@ SOURCES += \
     $$PWD/qtdependant/pixmapprovider.cpp \
     $$PWD/qtdependant/graphicsscene.cpp \
     $$PWD/qtdependant/textinformationitem.cpp \
-    $$PWD/index2d.cpp \
     $$PWD/grid.cpp \
     $$PWD/gridmap.cpp \
     $$PWD/randutils.cpp \

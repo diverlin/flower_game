@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 
-class GraphicsScene;
-
 QT_BEGIN_NAMESPACE
 class QGraphicsView;
 QT_END_NAMESPACE
+
+namespace view {
+
+class GraphicsScene;
 
 class MainWindow : public QMainWindow
 {
@@ -19,5 +21,7 @@ private:
     GraphicsScene* m_scene = nullptr;
     QGraphicsView* m_view = nullptr;
 };
+
+} // namespace view
 
 #endif // MAINWINDOW_H

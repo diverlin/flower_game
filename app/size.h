@@ -1,6 +1,8 @@
 #ifndef SIZE_H
 #define SIZE_H
 
+namespace core {
+
 class Size {
 public:
     Size(int width, int height): m_width(width), m_height(height) {}
@@ -20,5 +22,7 @@ private:
     int m_width = 0;
     int m_height = 0;
 };
+
+} // namespace core
 
 #endif // SIZE_H

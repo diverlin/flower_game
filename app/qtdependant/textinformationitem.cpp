@@ -2,6 +2,8 @@
 
 #include <QFont>
 
+namespace view {
+
 TextInformationItem::TextInformationItem(QGraphicsItem* parent)
     : QGraphicsTextItem(parent)
 {
@@ -16,3 +18,5 @@ void TextInformationItem::setMessage(const QString& text, bool centerPosition)
                parentItem()->boundingRect().center().y());
     }
 }
+
+} // namespace view

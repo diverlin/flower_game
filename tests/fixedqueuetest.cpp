@@ -3,7 +3,7 @@
 
 #include <QTest>
 
-QString intQueueToString(const FixedQueue<int>& q)
+QString intQueueToString(const core::FixedQueue<int>& q)
 {
     QString buff;
     for (int el: q) {
@@ -14,7 +14,7 @@ QString intQueueToString(const FixedQueue<int>& q)
 
 void FixedQueueTest::testBase()
 {
-    FixedQueue<int> q(5);
+    core::FixedQueue<int> q(5);
     q.push(1);
     q.push(2);
     q.push(3);

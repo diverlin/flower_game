@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+namespace core {
+
 class Tile;
 
 class StaticObject
@@ -24,5 +26,7 @@ private:
     Index2D m_mapLocation;
     std::vector<Index2D> m_localOffsets;
 };
+
+} // namespace core
 
 #endif // GAMEOBJECT_H

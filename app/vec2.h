@@ -1,6 +1,8 @@
 #ifndef VEC2_H
 #define VEC2_H
 
+namespace core {
+
 class vec2 {
 public:
     vec2(float x, float y): m_x(x), m_y(y) {}
@@ -13,5 +15,7 @@ private:
     int m_x = 0;
     int m_y = 0;
 };
+
+} // namespace core
 
 #endif // VEC2_H

@@ -4,6 +4,8 @@
 #include <random>
 #include <algorithm>
 
+namespace core {
+
 int getRandomInt(int min, int max);
 int getRandomInt(int max);
 bool getRandomBool();
@@ -15,5 +17,7 @@ void randomizeVector(std::vector<T>& vec)
     std::mt19937 gen(rd());
     std::shuffle(vec.begin(), vec.end(), gen);
 }
+
+} // namespace core
 
 #endif // RANDUTILS_H

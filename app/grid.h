@@ -6,6 +6,8 @@
 
 #include <vector>
 
+namespace core {
+
 class Grid {
 public:
     Grid(int rows, int columns);
@@ -43,6 +45,8 @@ private:
     std::vector<int> m_elements;
     std::vector<int> m_randomIndexes;
 };
+
+} // namespace core
 
 #endif // GRID_H
 

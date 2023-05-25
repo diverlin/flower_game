@@ -2,6 +2,8 @@
 
 #include <QPainter>
 
+namespace core {
+
 Tile::Tile(const std::string& imageFilePath, TileLayer tileLayer, const Index2D& indexOffsetFromLeftTopCorner)
     :
     m_imageFilePath(imageFilePath)
@@ -9,3 +11,5 @@ Tile::Tile(const std::string& imageFilePath, TileLayer tileLayer, const Index2D&
   , m_indexOffsetFromLeftTopCorner(indexOffsetFromLeftTopCorner)
 {
 }
+
+} // namespace core

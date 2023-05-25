@@ -6,6 +6,8 @@
 
 #include <string>
 
+namespace core {
+
 class Tile
 {
 public:
@@ -31,5 +33,7 @@ private:
     Index2D m_indexOffsetFromLeftTopCorner;
     Index2D m_mapLocation;
 };
+
+} // namespace core
 
 #endif // TILE_H

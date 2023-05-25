@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iostream>
 
+namespace core {
 
 GridMap::GridMap(int rows, int columns, const Size& size)
     :
@@ -16,7 +17,9 @@ GridMap::GridMap(int rows, int columns, const Size& size)
 
 GridMap::~GridMap()
 {
-
+    for (Snake* snake: m_snakes) {
+        delete snake;
+    }
 }
 
 vec2 GridMap::worldCoordFromIndex(std::size_t index1d) const
@@ -57,7 +60,7 @@ void GridMap::createGrassLayer(int numMin, int numMax)
         Index2D randMapIndex = m_grid.getFreeRandomIndex();
         if (randMapIndex.isValid()) {
             const int grass_variant = getRandomInt(1,2);
-            std::string imageFilePath = utils::replace(std::string(":/tiles/grass%1.png"), "%1", std::to_string(grass_variant));
+            std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/grass%1.png"), "%1", std::to_string(grass_variant));
             Tile tile(imageFilePath, TileLayer::GRASS_LAYER);
             addTile(tile, randMapIndex);
         } else {
@@ -74,7 +77,7 @@ void GridMap::createRockLayer(int numMin, int numMax)
         Index2D randMapIndex = m_grid.getFreeRandomIndex();
         if (randMapIndex.isValid()) {
             const bool rock_variant = getRandomBool();
-            std::string imageFilePath = utils::replace(std::string(":/tiles/rock_%1.png"), "%1", rock_variant?"big":"middle");
+            std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/rock_%1.png"), "%1", rock_variant?"big":"middle");
             Tile tile(imageFilePath, TileLayer::ROCK_LAYER);
             addTile(tile, randMapIndex);
         } else {
@@ -158,4 +161,10 @@ void GridMap::addStaticObject(StaticObject& object, const Index2D& indexMap2D)
     addStaticObject(object, indexMap2D.i(), indexMap2D.j());
 }
 
+void GridMap::addSnake(Snake* snake)
+{
+    m_snakes.push_back(snake);
+}
+
+} // namespace core
 

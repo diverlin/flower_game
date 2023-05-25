@@ -1,6 +1,7 @@
 #include "stringutils.h"
 
-namespace utils {
+namespace core {
+namespace stringutils {
 
 std::string replace(const std::string& src, const std::string& search, const std::string& replace)
 {
@@ -12,5 +13,6 @@ std::string replace(const std::string& src, const std::string& search, const std
     return result;
 }
 
-} // namespace utils
+} // namespace stringutils
+} // namescore core
 

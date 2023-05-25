@@ -2,6 +2,8 @@
 
 #include <QPainter>
 
+namespace view {
+
 PixmapItem::PixmapItem(const QPixmap& pixmap)
     : QGraphicsObject(),
     m_pixmap(pixmap)
@@ -23,3 +25,4 @@ void PixmapItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidg
     painter->drawPixmap(0, 0, m_pixmap);
 }
 
+} // namespace view

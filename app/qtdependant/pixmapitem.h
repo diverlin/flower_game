@@ -3,6 +3,8 @@
 
 #include <QGraphicsObject>
 
+namespace view {
+
 class PixmapItem : public QGraphicsObject
 {
 public:
@@ -18,5 +20,7 @@ public:
 private:
     QPixmap m_pixmap;
 };
+
+} // namespace view
 
 #endif // PIXMAPITEM_H
