@@ -23,6 +23,7 @@ public:
 
 private:
 //    TextInformationItem* textInformationItem;
+    bool m_isMousePressed = false;
 
     core::Index2D m_index2dUnderCursor;
     core::GridMap m_gridMap;

@@ -32,13 +32,11 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 void GraphicsScene::onMousePositionChanged(const QPointF& scenePos)
 {
     m_index2dUnderCursor = m_gridMap.index2dFromWorldCoord(core::vec2(scenePos.x(), scenePos.y()));
-    //qDebug() << "[on move] Cursor position in scene: " << scenePos;
 }
 
 void GraphicsScene::onMousePress(const QPointF& scenePos)
 {
-    m_index2dUnderCursor = m_gridMap.index2dFromWorldCoord(core::vec2(scenePos.x(), scenePos.y()));
-    qDebug() << "[on press] Cursor position in scene: " << scenePos << m_index2dUnderCursor.i() << m_index2dUnderCursor.j();
+    m_isMousePressed = true;
 }
 
 void GraphicsScene::addObject(const core::StaticObject& object)
@@ -64,6 +62,9 @@ void GraphicsScene::updateGameLoop()
         PixmapItem* tileView = m_tilesViews[i];
         if (m_index2dUnderCursor.isValid() && (index2d == m_index2dUnderCursor)) {
             if (m_gridMap.grid().isIndexPassable(index2d)) {
+                if (m_isMousePressed) {
+                    // put flower
+                }
                 tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_blue_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
             } else {
                 tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
@@ -77,6 +78,8 @@ void GraphicsScene::updateGameLoop()
             //}
         }
     }
+
+    m_isMousePressed = false;
 }
 
 void GraphicsScene::create()
