@@ -3,6 +3,8 @@ QT += widgets
 HEADERS += \
     $$PWD/qtdependant/mainwindow.h \
     $$PWD/qtdependant/pixmapitem.h \
+    $$PWD/qtdependant/pixmapprovider.h \
+    $$PWD/qtdependant/size.h \
     $$PWD/qtdependant/graphicsscene.h \
     $$PWD/qtdependant/textinformationitem.h \
     $$PWD/tilelayer.h \
@@ -18,6 +20,7 @@ HEADERS += \
 SOURCES += \
     $$PWD/qtdependant/mainwindow.cpp \
     $$PWD/qtdependant/pixmapitem.cpp \
+    $$PWD/qtdependant/pixmapprovider.cpp \
     $$PWD/qtdependant/graphicsscene.cpp \
     $$PWD/qtdependant/textinformationitem.cpp \
     $$PWD/index2d.cpp \

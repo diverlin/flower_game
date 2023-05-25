@@ -6,12 +6,11 @@
 class PixmapItem : public QGraphicsObject
 {
 public:
-    PixmapItem(const QString& fileName, QGraphicsItem* parent = nullptr);
+    PixmapItem(const QPixmap& pixmap);
 
     QSizeF size() const;
     QRectF boundingRect() const override;
 
-    void fit(float size);
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
 private:

@@ -2,10 +2,10 @@
 
 #include <QPainter>
 
-PixmapItem::PixmapItem(const QString& fileName, QGraphicsItem* parent)
-    : QGraphicsObject(parent)
+PixmapItem::PixmapItem(const QPixmap& pixmap)
+    : QGraphicsObject(),
+    m_pixmap(pixmap)
 {
-    m_pixmap = QPixmap(fileName);
 }
 
 QSizeF PixmapItem::size() const
@@ -21,16 +21,5 @@ QRectF PixmapItem::boundingRect() const
 void PixmapItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     painter->drawPixmap(0, 0, m_pixmap);
-}
-
-void PixmapItem::fit(float size)
-{
-    int w = m_pixmap.size().width();
-    int h = m_pixmap.size().height();
-    float scaleWidth = size/float(w);
-    float scaleHeight = size/float(h);
-    float scale = std::min(scaleWidth, scaleHeight);
-    setScale(scale);
-
 }
 

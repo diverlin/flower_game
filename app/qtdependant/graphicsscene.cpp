@@ -1,5 +1,6 @@
 #include "graphicsscene.h"
 #include "pixmapitem.h"
+#include "pixmapprovider.h"
 //#include "textinformationitem.h"
 
 #include "../tilelayer.h"
@@ -23,6 +24,11 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 //    textInformationItem->setMessage(QString("Hello world!"), false);
 //    textInformationItem->setPos(backgroundItem->boundingRect().center().x(),
 //                                backgroundItem->boundingRect().height()* 3 / 4);
+
+    m_gameLoopTimer.setInterval(20);
+    m_gameLoopTimer.start();
+
+    QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
 }
 
 void GraphicsScene::addObject(const StaticObject& object)
@@ -34,23 +40,29 @@ void GraphicsScene::addObject(const StaticObject& object)
 
 void GraphicsScene::addTile(const Tile& tile)
 {
-    static int size = 48;
+    static Size size(48, 48);
 
-    PixmapItem* tile_view = new PixmapItem(tile.imageFilePath().c_str());
+    PixmapItem* tile_view = new PixmapItem(PixmapProvider::instance().getPixmap(tile.imageFilePath().c_str(), size));
     tile_view->setZValue(static_cast<int>(tile.layer()));
-    tile_view->setPos(tile.mapLocation().i()*size, tile.mapLocation().j()*size);
-    tile_view->fit(size);
+    tile_view->setPos(tile.mapLocation().i()*size.width(), tile.mapLocation().j()*size.height());
     addItem(tile_view);
 
     // overlay
-    PixmapItem* overlay = new PixmapItem(":/tiles/frame.png");
+
+    PixmapItem* overlay = new PixmapItem(PixmapProvider::instance().getPixmap(":/tiles/frame.png", size));
     overlay->setZValue(static_cast<int>(TileLayer::OVERLAY_LAYER));
-    overlay->setPos(tile.mapLocation().i()*size, tile.mapLocation().j()*size);
-    overlay->fit(size);
+    overlay->setPos(tile.mapLocation().i()*size.width(), tile.mapLocation().j()*size.height());
+    overlay->setOpacity(0.5f);
+
     addItem(overlay);
 }
 
-void GraphicsScene::createScene()
+void GraphicsScene::updateGameLoop()
+{
+
+}
+
+void GraphicsScene::create()
 {
 //    for (int i=0; i<m_grid.rows(); ++i) {
 //        for (int j=0; j<m_grid.columns(); ++j) {
@@ -91,7 +103,12 @@ void GraphicsScene::addItem(QGraphicsItem* item)
     QGraphicsScene::addItem(item);
 }
 
-void GraphicsScene::clearScene()
+void GraphicsScene::removeItem(QGraphicsItem* item)
+{
+    QGraphicsScene::removeItem(item);
+}
+
+void GraphicsScene::clear()
 {
     QGraphicsScene::clear();
 }
