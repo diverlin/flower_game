@@ -10,15 +10,9 @@
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
     : QGraphicsScene(x, y, width, height, parent)
-    , m_gridMap(16, 12)
+    , m_gridMap(16, 12, Size(800, 600))
 {
-    m_gridMap.create();
-    for (const Tile& tile: m_gridMap.tiles()) {
-        addTile(tile);
-    }
-    for (const StaticObject& object: m_gridMap.staticObjects()) {
-        addObject(object);
-    }
+    create();
 //    textInformationItem = new TextInformationItem();
 
 //    textInformationItem->setMessage(QString("Hello world!"), false);
@@ -40,62 +34,54 @@ void GraphicsScene::addObject(const StaticObject& object)
 
 void GraphicsScene::addTile(const Tile& tile)
 {
-    static Size size(48, 48);
-
-    PixmapItem* tile_view = new PixmapItem(PixmapProvider::instance().getPixmap(tile.imageFilePath().c_str(), size));
+    PixmapItem* tile_view = new PixmapItem(PixmapProvider::instance().getPixmap(tile.imageFilePath().c_str(), m_gridMap.tileSize()));
     tile_view->setZValue(static_cast<int>(tile.layer()));
-    tile_view->setPos(tile.mapLocation().i()*size.width(), tile.mapLocation().j()*size.height());
+    vec2 pos = m_gridMap.worldCoordFromIndex(tile.mapLocation());
+    tile_view->setPos(pos.x(), pos.y());
     addItem(tile_view);
-
-    // overlay
-
-    PixmapItem* overlay = new PixmapItem(PixmapProvider::instance().getPixmap(":/tiles/frame.png", size));
-    overlay->setZValue(static_cast<int>(TileLayer::OVERLAY_LAYER));
-    overlay->setPos(tile.mapLocation().i()*size.width(), tile.mapLocation().j()*size.height());
-    overlay->setOpacity(0.5f);
-
-    addItem(overlay);
 }
 
 void GraphicsScene::updateGameLoop()
 {
-
+    qInfo() << "---tick";
+    const Grid& grid = m_gridMap.grid();
+    for (std::size_t i=0; i<grid.size(); ++i) {
+        Index2D index2d = grid.getIndex2D(i);
+        PixmapItem* item = m_overlay[i];
+        if (m_gridMap.grid().isIndexPassable(index2d)) {
+            item->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame.png", m_gridMap.tileSize()));
+        } else {
+            item->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red.png", m_gridMap.tileSize()));
+        }
+        //qInfo() << i << index2d.i() << index2d.j() << grid.value(i);
+    }
 }
 
 void GraphicsScene::create()
 {
-//    for (int i=0; i<m_grid.rows(); ++i) {
-//        for (int j=0; j<m_grid.columns(); ++j) {
-//            GameObject ground(":/tiles/ground.png", ObjectLayer::GROUND_LAYER);
+    m_gridMap.create();
+    for (const Tile& tile: m_gridMap.tiles()) {
+        addTile(tile);
+    }
+    for (const StaticObject& object: m_gridMap.staticObjects()) {
+        addObject(object);
+    }
 
-//            PixmapItem* ground_tile = new PixmapItem();
+    createTilesOverlays();
+}
 
-
-//            const bool is_covered_with_grass = (getRandomInt(10) == 0);
-//            if (is_covered_with_grass) {
-//                const int grass_variant = getRandomInt(1,2);
-
-//                QString pixmapLocation = QString(":/tiles/grass%1.png").arg(grass_variant);
-//                PixmapItem* grass_tile = new PixmapItem(pixmapLocation);
-//                grass_tile->setZValue(GRASS_LAYER);
-//                grass_tile->setPos(i*size, j*size);
-//                grass_tile->fit(size);
-//                addItem(grass_tile);
-//            } else {
-//                const bool is_covered_with_rock = (getRandomInt(30) == 0);
-//                if (is_covered_with_rock) {
-//                    const int rock_variant = getRandomInt(0,1);
-
-//                    QString pixmapLocation = QString(":/tiles/rock_%1.png").arg(rock_variant?"big":"middle");
-//                    PixmapItem* rock_tile = new PixmapItem(pixmapLocation);
-//                    rock_tile->setZValue(ROCK_LAYER);
-//                    rock_tile->setPos(i*size, j*size);
-//                    rock_tile->fit(size);
-//                    addItem(rock_tile);
-//                }
-//            }
-//        }
-//    }
+void GraphicsScene::createTilesOverlays()
+{
+    const Grid& grid = m_gridMap.grid();
+    for (std::size_t i=0; i<grid.size(); ++i) {
+        PixmapItem* tileOverlay = new PixmapItem(PixmapProvider::instance().getPixmap(":/tiles/frame.png", m_gridMap.tileSize()));
+        tileOverlay->setZValue(static_cast<int>(TileLayer::OVERLAY_LAYER));
+        vec2 pos = m_gridMap.worldCoordFromIndex(i);
+        tileOverlay->setPos(pos.x(), pos.y());
+        //tileOverlay->setOpacity(0.5f);
+        m_overlay[i] = tileOverlay;
+        addItem(tileOverlay);
+    }
 }
 
 void GraphicsScene::addItem(QGraphicsItem* item)

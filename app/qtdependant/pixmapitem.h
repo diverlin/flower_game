@@ -8,6 +8,8 @@ class PixmapItem : public QGraphicsObject
 public:
     PixmapItem(const QPixmap& pixmap);
 
+    void setPixmap(const QPixmap& pixmap) { m_pixmap = pixmap; }
+
     QSizeF size() const;
     QRectF boundingRect() const override;
 

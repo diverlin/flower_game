@@ -7,16 +7,27 @@
 #include <iostream>
 
 
-GridMap::GridMap(int rows, int columns)
+GridMap::GridMap(int rows, int columns, const Size& size)
     :
     m_grid(rows, columns)
 {
-
+    m_tileSize = Size(size.width()/rows, size.height()/columns);
 }
 
 GridMap::~GridMap()
 {
 
+}
+
+vec2 GridMap::worldCoordFromIndex(std::size_t index1d) const
+{
+    Index2D index2d = m_grid.getIndex2D(index1d);
+    return worldCoordFromIndex(index2d);
+}
+
+vec2 GridMap::worldCoordFromIndex(const Index2D& index2d) const
+{
+    return vec2(index2d.i()*m_tileSize.width(), index2d.j()*m_tileSize.height());
 }
 
 void GridMap::create()

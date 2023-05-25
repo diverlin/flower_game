@@ -5,9 +5,10 @@
 
 #include <QGraphicsScene>
 #include <QTimer>
-#include <QSet>
+#include <QMap>
 
-class TextInformationItem;
+//class TextInformationItem;
+class PixmapItem;
 
 class GraphicsScene : public QGraphicsScene
 {
@@ -19,6 +20,7 @@ private:
 
     GridMap m_gridMap;
     QTimer m_gameLoopTimer;
+    QMap<size_t, PixmapItem*> m_overlay;
     
     void addObject(const StaticObject& object);
     void addTile(const Tile& tile);
@@ -26,6 +28,7 @@ private:
     void removeItem(QGraphicsItem* item);
 
     void create();
+    void createTilesOverlays();
     void clear();
 
     void updateGameLoop();

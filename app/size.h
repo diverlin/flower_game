@@ -1,12 +1,9 @@
 #ifndef SIZE_H
 #define SIZE_H
 
-#include <QSize>
-
 class Size {
 public:
     Size(int width, int height): m_width(width), m_height(height) {}
-    Size(const QSize& size):Size(size.width(), size.height()) {}
     ~Size()=default;
 
     bool operator<(const Size& rhs) const {

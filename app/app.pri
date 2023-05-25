@@ -4,12 +4,13 @@ HEADERS += \
     $$PWD/qtdependant/mainwindow.h \
     $$PWD/qtdependant/pixmapitem.h \
     $$PWD/qtdependant/pixmapprovider.h \
-    $$PWD/qtdependant/size.h \
     $$PWD/qtdependant/graphicsscene.h \
     $$PWD/qtdependant/textinformationitem.h \
     $$PWD/tilelayer.h \
     $$PWD/index2d.h \
     $$PWD/grid.h \
+    $$PWD/vec2.h \
+    $$PWD/size.h \
     $$PWD/gridmap.h \
     $$PWD/randutils.h \
     $$PWD/stringutils.h \

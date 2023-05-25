@@ -8,20 +8,20 @@ Grid::Grid(int rows, int columns)
     :
     m_rows(rows),
     m_columns(columns),
-    m_array(rows*columns)
+    m_elements(rows*columns)
 {
     for (int i=0; i<rows*columns; ++i) {
         m_randomIndexes.push_back(i);
     }
     randomizeVector(m_randomIndexes);
-    std::cout << "m_array.capacity=" << m_array.capacity() << std::endl;
+    std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
 }
 
 bool Grid::hasLayer(int i, int j, TileLayer tileLayer) const
 {
     std::size_t _1d_index = getIndex1D(i, j);
-    if (_1d_index < m_array.size()) {
-        return static_cast<int>(tileLayer) & m_array[_1d_index];
+    if (_1d_index < m_elements.size()) {
+        return static_cast<int>(tileLayer) & m_elements[_1d_index];
     } else {
         std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
         return false;
@@ -37,7 +37,7 @@ bool Grid::addLayer(int i, int j, TileLayer layer)
 {
     std::size_t index1d = getIndex1D(i, j);
     if (index1d < size()) {
-        m_array[index1d] |= static_cast<int>(layer);
+        m_elements[index1d] |= static_cast<int>(layer);
         return true;
     } else {
         std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
@@ -48,8 +48,8 @@ bool Grid::addLayer(int i, int j, TileLayer layer)
 void Grid::removeLayer(int i, int j, TileLayer layer)
 {
     std::size_t index1d = getIndex1D(i, j);
-    if (index1d < m_array.size()) {
-        m_array[index1d] ^= static_cast<int>(layer);
+    if (index1d < m_elements.size()) {
+        m_elements[index1d] ^= static_cast<int>(layer);
     } else {
         std::cout << "ERROR:" << "cannot get 1D index from i=" << i << ", j=" << j << std::endl;
     }
@@ -61,24 +61,24 @@ bool Grid::isIndexFree(const Index2D& index2d) const
         return false;
     }
     std::size_t index1d = getIndex1D(index2d.i(), index2d.j());
-    if (index1d < m_array.size()) {
-        int value = m_array.at(index1d);
+    if (index1d < m_elements.size()) {
+        int value = m_elements.at(index1d);
         return (value == 0);
     } else {
         return false;
     }
 }
 
-//bool Grid::isIndexPassible(const Index2D& index2D) const
-//{
-//    std::size_t index1d = getIndex1D(index2D.i(), index2D.j());
-//    if (index1d < m_array.size()) {
-//        int value = m_array.at(index1d);
-//        return (value == 0); // check bitmask here
-//    } else {
-//        return false;
-//    }
-//}
+bool Grid::isIndexPassable(const Index2D& index2D) const
+{
+    std::size_t index1d = getIndex1D(index2D.i(), index2D.j());
+    if (index1d < m_elements.size()) {
+        int value = m_elements.at(index1d);
+        return (value == 0); // check bitmask here
+    } else {
+        return false;
+    }
+}
 
 std::size_t Grid::getIndex1D(int i, int j) const
 {

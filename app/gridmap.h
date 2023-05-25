@@ -2,6 +2,8 @@
 #define GRIDMAP_H
 
 #include "grid.h"
+#include "size.h"
+#include "vec2.h"
 #include "index2d.h"
 #include "tilelayer.h"
 #include "tile.h"
@@ -13,10 +15,16 @@ class StaticObject;
 class GridMap
 {
 public:
-    GridMap(int rows, int columns);
+    GridMap(int rows, int columns, const Size& size);
     ~GridMap();
 
     void create();
+
+    const Size& tileSize() const { return m_tileSize; }
+    const Grid& grid() const { return m_grid; }
+
+    vec2 worldCoordFromIndex(std::size_t) const;
+    vec2 worldCoordFromIndex(const Index2D&) const;
 
     void addTile(Tile& tile, int i, int j);
     void addTile(Tile& tile, const Index2D&);
@@ -30,6 +38,7 @@ public:
 
 private:
     Grid m_grid;
+    Size m_tileSize = Size(10, 10);
     std::vector<Tile> m_tiles;
     std::vector<StaticObject> m_staticObjects;
 

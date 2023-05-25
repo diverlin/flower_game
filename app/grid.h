@@ -13,9 +13,15 @@ public:
     int rows() const { return m_rows; }
     int columns() const { return m_columns; }
 
-    std::size_t size() const { return m_array.size(); }
+    std::size_t size() const { return m_elements.size(); }
 
-    bool isIndexPassble(const Index2D& index2D) const;
+    int value(std::size_t index1d) const {
+        if (index1d >= size()) {
+            return -1;
+        }
+        return m_elements.at(index1d);
+    }
+    bool isIndexPassable(const Index2D& index2D) const;
     bool isIndexFree(const Index2D& index2D) const;
 
     bool addLayer(const Index2D& index2d, TileLayer layer);
@@ -34,7 +40,7 @@ private:
     int m_rows = -1;
     int m_columns = -1;
 
-    std::vector<int> m_array;
+    std::vector<int> m_elements;
     std::vector<int> m_randomIndexes;
 };
 
