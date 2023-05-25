@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include <QTimer>
 #include <QMap>
+#include <QElapsedTimer>
 
 namespace view {
 
@@ -26,9 +27,11 @@ private:
     bool m_isMousePressed = false;
 
     core::Index2D m_index2dUnderCursor;
-    core::GridMap m_gridMap;
+    core::GridMap m_world;
     QTimer m_gameLoopTimer;
     QMap<size_t, PixmapItem*> m_tilesViews;
+
+    QElapsedTimer m_elapsedTimer;
     
     void createTilesViews();
     void updateOverlay();

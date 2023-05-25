@@ -27,7 +27,7 @@ public:
     bool isIndexFree(const Index2D& index2D) const;
 
     bool addLayer(std::size_t index1d, PixmapLayer layer);
-    void removeLayer(std::size_t index1d, PixmapLayer layer);
+    bool removeLayer(std::size_t index1d, PixmapLayer layer);
 
     bool hasLayer(std::size_t index1d, PixmapLayer layer) const;
 
@@ -43,7 +43,7 @@ private:
     int m_columns = -1;
 
     std::vector<int> m_elements;
-    std::vector<int> m_randomIndexes;
+    std::vector<int> m_randomIndexes; // used for randomization objects on the map
 };
 
 } // namespace core

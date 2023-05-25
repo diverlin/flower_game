@@ -19,6 +19,8 @@ class Image;
 class GridMap
 {
 public:
+    int SNAKE_MOVE_UPDATE_INTERVAL = 1000;
+
     GridMap(int rows, int columns, const Size& size);
     ~GridMap();
 
@@ -31,6 +33,8 @@ public:
     Index2D index2dFromWorldCoord(const vec2&) const;
     //
 
+    void update(long long deltaTimeMs);
+
     const std::vector<Tile>& tiles() const { return m_tiles; }
 
 private:
@@ -39,7 +43,9 @@ private:
 
     std::vector<Tile> m_tiles;
     std::vector<StaticObject> m_staticObjects;
-//    std::vector<Snake*> m_snakes;
+    std::vector<Snake*> m_snakes; // dinamic objects
+
+    long long m_msSinceLastSnakesMoveUpdate = 0;
 
     void create();
 
@@ -48,9 +54,11 @@ private:
     void createRocks(int numMin, int numMax);
     void createWoods(int numMin, int numMax);
     void createTrees(int numMin, int numMax);
+    void createSnake();
 
-    void addImageToTile(Image& image, int i);
-    void addStaticObject(StaticObject&, int i);
+    void addImageToTile(const Image& image, int index1d);
+    void removeImageFromTile(PixmapLayer layer, int index1d);
+    void addStaticObject(StaticObject&, int index1d);
     void addSnake(Snake*);
 };
 

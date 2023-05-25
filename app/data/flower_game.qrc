@@ -19,5 +19,6 @@
         <file>tiles/frame_blue.png</file>
         <file>tiles/frame_blue_blurred.png</file>
         <file>tiles/frame_red_blurred.png</file>
+        <file>tiles/snake_segment.png</file>
     </qresource>
 </RCC>

@@ -36,17 +36,19 @@ bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
         return true;
     } else {
         std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
-        return false;
     }
+    return false;
 }
 
-void Grid::removeLayer(std::size_t index1d, PixmapLayer layer)
+bool Grid::removeLayer(std::size_t index1d, PixmapLayer layer)
 {
     if (index1d < m_elements.size()) {
         m_elements[index1d] ^= static_cast<int>(layer);
+        return true;
     } else {
         std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
     }
+    return false;
 }
 
 bool Grid::isIndexFree(const Index2D& index2d) const

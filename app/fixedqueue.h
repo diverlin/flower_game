@@ -40,6 +40,14 @@ public:
         return m_elements.at(n);
     }
 
+    const T& first() const {
+        return m_elements.at(0);
+    }
+
+    const T& last() const {
+        return m_elements.at(m_elements.size()-1);
+    }
+
     // Iterator support
     typename std::deque<T>::iterator begin() {
         return m_elements.begin();

@@ -24,9 +24,9 @@ GridMap::GridMap(int rows, int columns, const Size& size)
 
 GridMap::~GridMap()
 {
-//    for (Snake* snake: m_snakes) {
-//        delete snake;
-//    }
+    for (Snake* snake: m_snakes) {
+        delete snake;
+    }
 }
 
 vec2 GridMap::worldCoordFromIndex(std::size_t index1d) const
@@ -53,11 +53,7 @@ void GridMap::create()
     createRocks(3,6);
     createWoods(1,1);
     createTrees(1,2);
-
-//    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
-
-//    Snake* snake = new Snake(2, {randMapIndex, randMapIndex+Index2D(0,1)});
-//    addSnake(snake);
+    createSnake();
 }
 
 void GridMap::createGround()
@@ -149,11 +145,27 @@ void GridMap::createTrees(int numMin, int numMax)
     }
 }
 
-void GridMap::addImageToTile(Image& image, int i)
+void GridMap::createSnake()
 {
-    if (m_grid.addLayer(i, image.layer())) {
-        Tile& tile = m_tiles[i];
+    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
+    Image image(":/tiles/snake_segment.png", PixmapLayer::SNAKE_LAYER);
+    Snake* snake = new Snake(image, 2, {randMapIndex, randMapIndex+Index2D(0,1)});
+    addSnake(snake);
+}
+
+void GridMap::addImageToTile(const Image& image, int index1d)
+{
+    if (m_grid.addLayer(index1d, image.layer())) {
+        Tile& tile = m_tiles[index1d];
         tile.addImage(image);
+    }
+}
+
+void GridMap::removeImageFromTile(PixmapLayer layer, int index1d)
+{
+    if (m_grid.removeLayer(index1d, layer)) {
+        Tile& tile = m_tiles[index1d];
+        tile.removeImage(layer);
     }
 }
 
@@ -174,7 +186,29 @@ void GridMap::addStaticObject(StaticObject& object, int index1d)
 
 void GridMap::addSnake(Snake* snake)
 {
-//    m_snakes.push_back(snake);
+    m_snakes.push_back(snake);
+    for (const Index2D& index2d: *snake) {
+        addImageToTile(snake->image(), m_grid.getIndex1D(index2d));
+    }
+}
+
+void GridMap::update(long long deltaTimeMs)
+{
+    m_msSinceLastSnakesMoveUpdate += int(deltaTimeMs);
+    if (m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) {
+        for (Snake* snake: m_snakes) {
+            Index2D lastTailIndex2d = snake->last();
+            Index2D headIndex2d = snake->first();
+            Index2D newIndex2d = headIndex2d;
+            newIndex2d += Index2D(0, 1);
+            snake->push(newIndex2d);
+
+            removeImageFromTile(snake->image().layer(), m_grid.getIndex1D(lastTailIndex2d));
+            addImageToTile(snake->image(), m_grid.getIndex1D(newIndex2d));
+        }
+
+        m_msSinceLastSnakesMoveUpdate = 0;
+    }
 }
 
 } // namespace core

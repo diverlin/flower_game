@@ -60,9 +60,9 @@ void PixmapItem::unitePixmaps()
 {
     QPainter painter(&m_finalPixmap);
     QList<core::PixmapLayer> keys = m_pixmaps.keys();
-    qInfo() << "unitePixmaps";
+    //qInfo() << "unitePixmaps";
     for (core::PixmapLayer layer: qAsConst(keys)) {
-        qInfo() << "layer=" << static_cast<int>(layer);
+        //qInfo() << "layer=" << static_cast<int>(layer);
         if (m_finalPixmap.cacheKey() == m_pixmaps[layer].cacheKey()) {
             continue; // we already set m_finalPixmap as first pixmap
         }
