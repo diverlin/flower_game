@@ -10,6 +10,7 @@ QT_END_NAMESPACE
 namespace view {
 
 class GraphicsScene;
+class GraphicsView;
 
 class MainWindow : public QMainWindow
 {
@@ -19,7 +20,7 @@ public:
 
 private:
     GraphicsScene* m_scene = nullptr;
-    QGraphicsView* m_view = nullptr;
+    GraphicsView* m_view = nullptr;
 };
 
 } // namespace view

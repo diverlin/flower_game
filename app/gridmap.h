@@ -26,8 +26,11 @@ public:
     const Size& tileSize() const { return m_tileSize; }
     const Grid& grid() const { return m_grid; }
 
+    // map coordinates between index and word/map coords
     vec2 worldCoordFromIndex(std::size_t) const;
     vec2 worldCoordFromIndex(const Index2D&) const;
+    Index2D index2dFromWorldCoord(const vec2&) const;
+    //
 
     void addTile(Tile& tile, int i, int j);
     void addTile(Tile& tile, const Index2D&);

@@ -5,9 +5,11 @@ HEADERS += \
     $$PWD/qtdependant/pixmapitem.h \
     $$PWD/qtdependant/pixmapprovider.h \
     $$PWD/qtdependant/graphicsscene.h \
+    $$PWD/qtdependant/graphicsview.h \
     $$PWD/qtdependant/textinformationitem.h \
     $$PWD/pixmaplayer.h \
     $$PWD/grid.h \
+    $$PWD/index2d.h \
     $$PWD/vec2.h \
     $$PWD/size.h \
     $$PWD/gridmap.h \
@@ -23,6 +25,7 @@ SOURCES += \
     $$PWD/qtdependant/pixmapitem.cpp \
     $$PWD/qtdependant/pixmapprovider.cpp \
     $$PWD/qtdependant/graphicsscene.cpp \
+    $$PWD/qtdependant/graphicsview.cpp \
     $$PWD/qtdependant/textinformationitem.cpp \
     $$PWD/grid.cpp \
     $$PWD/gridmap.cpp \

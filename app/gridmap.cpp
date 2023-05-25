@@ -33,6 +33,12 @@ vec2 GridMap::worldCoordFromIndex(const Index2D& index2d) const
     return vec2(index2d.i()*m_tileSize.width(), index2d.j()*m_tileSize.height());
 }
 
+Index2D GridMap::index2dFromWorldCoord(const vec2& worldCoord) const
+{
+    Index2D result(static_cast<int>(worldCoord.x()/m_tileSize.width()), static_cast<int>(worldCoord.y()/m_tileSize.height()));
+    return result;
+}
+
 void GridMap::create()
 {
     m_tiles.clear();

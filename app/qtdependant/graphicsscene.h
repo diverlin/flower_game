@@ -17,9 +17,14 @@ class GraphicsScene : public QGraphicsScene
 Q_OBJECT
 public:
     GraphicsScene(int x, int y, int width, int height, QObject* parent = nullptr);
+
+    void onMousePositionChanged(const QPointF&);
+    void onMousePress(const QPointF&);
+
 private:
 //    TextInformationItem* textInformationItem;
 
+    core::Index2D m_index2dUnderCursor;
     core::GridMap m_gridMap;
     QTimer m_gameLoopTimer;
     QMap<size_t, PixmapItem*> m_tilesViews;

@@ -13,7 +13,8 @@
         <file>tiles/wood_horizontal_r.png</file>
         <file>tiles/wood_vertical_b.png</file>
         <file>tiles/wood_vertical_t.png</file>
-        <file>tiles/frame.png</file>
         <file>tiles/frame_red.png</file>
+        <file>tiles/frame_black.png</file>
+        <file>tiles/frame_white.png</file>
     </qresource>
 </RCC>

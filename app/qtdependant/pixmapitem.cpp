@@ -32,19 +32,19 @@ void PixmapItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidg
 
 void PixmapItem::setPixmap(const QPixmap& pixmap, core::PixmapLayer layer)
 {
-    if (m_finalPixmap.isNull()) {
-        m_finalPixmap = pixmap;
-    }
-
     if (m_pixmaps.contains(layer)) {
         if (m_pixmaps[layer].cacheKey() == pixmap.cacheKey()) {
-            // the equal pixmap for that layer is already set, skip
+            //qDebug() << "the equal pixmap for that layer is already set, skip";
             return;
         }
+    }
+    if (m_finalPixmap.isNull()) {
+        m_finalPixmap = pixmap;
     }
     m_pixmaps[layer] = pixmap;
 
     m_isDirty = true;
+    update();
 }
 
 void PixmapItem::unitePixmaps()

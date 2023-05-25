@@ -13,6 +13,8 @@ public:
     bool isMach(int i, int j) const { return (m_i == i) && (m_j == j); }
 
     void set(int i, int j) { m_i = i; m_j = j; }
+    void reset() { m_i = -1; m_j = -1; }
+
     int i() const { return m_i; }
     int j() const { return m_j; }
 
