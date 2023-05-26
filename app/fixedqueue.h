@@ -21,6 +21,8 @@ public:
         m_elements.push_front(value);
     }
 
+    std::size_t maxLength() const { return m_maxLength; }
+
     void setMaxLength(std::size_t maxLength) {
         m_maxLength = maxLength;
         while (m_elements.size() > m_maxLength) {

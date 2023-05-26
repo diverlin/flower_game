@@ -12,6 +12,9 @@ namespace core {
 
 class Snake : public FixedQueue<Index2D>, public IBaseObject
 {
+    const int GROW_INTERVAL_MS = 2000;
+    const int LENGTH_GROW_LIMIT = 5;
+
 public:
     Snake(const Image& image, std::size_t maxLength, const std::vector<Index2D>& indexes);
     ~Snake()=default;
@@ -21,6 +24,7 @@ public:
 
 private:
     Image m_image;
+    int m_msSinceLastGrow = 0;
 };
 
 } // namespace core
