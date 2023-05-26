@@ -1,7 +1,7 @@
 #include "gridmap.h"
 #include "randutils.h"
 #include "stringutils.h"
-#include "gameobject.h"
+#include "staticobject.h"
 #include "flower.h"
 #include "snake.h"
 #include "image.h"
@@ -25,8 +25,8 @@ GridMap::GridMap(int rows, int columns, const Size& size)
 
 GridMap::~GridMap()
 {
-    for (Snake* snake: m_snakes) {
-        delete snake;
+    for (IBaseObject* object: m_objects) {
+        delete object;
     }
 }
 
@@ -194,12 +194,12 @@ void GridMap::addStaticObject(StaticObject* object, int index1d)
             tile.addImage(image);
         }
     }
-    m_staticObjects.push_back(object);
+    m_objects.push_back(object);
 }
 
 void GridMap::addSnake(Snake* snake)
 {
-    m_snakes.push_back(snake);
+    m_objects.push_back(snake);
     for (const Index2D& index2d: *snake) {
         addImageToTile(snake->image(), m_grid.getIndex1D(index2d));
     }
@@ -207,22 +207,27 @@ void GridMap::addSnake(Snake* snake)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
-    for (StaticObject* object: m_staticObjects) {
+    for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
     }
 
     // TODO: move this into snake::update
     m_msSinceLastSnakesMoveUpdate += int(frameDeltaTimeMs);
     if (m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) {
-        for (Snake* snake: m_snakes) {
-            Index2D lastTailIndex2d = snake->last();
-            Index2D headIndex2d = snake->first();
-            Index2D newIndex2d = headIndex2d;
-            newIndex2d += Index2D(0, 1);
-            snake->push(newIndex2d);
+        for (IBaseObject* object: m_objects) {
+            if (typeid(*object) == typeid(Snake)) {
+                Snake* snake = static_cast<Snake*>(object);
+                if (snake) {
+                    Index2D lastTailIndex2d = snake->last();
+                    Index2D headIndex2d = snake->first();
+                    Index2D newIndex2d = headIndex2d;
+                    newIndex2d += Index2D(0, 1);
+                    snake->push(newIndex2d);
 
-            removeImageFromTile(snake->image().layer(), m_grid.getIndex1D(lastTailIndex2d));
-            addImageToTile(snake->image(), m_grid.getIndex1D(newIndex2d));
+                    removeImageFromTile(snake->image().layer(), m_grid.getIndex1D(lastTailIndex2d));
+                    addImageToTile(snake->image(), m_grid.getIndex1D(newIndex2d));
+                }
+            }
         }
 
         m_msSinceLastSnakesMoveUpdate = 0;

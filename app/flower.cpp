@@ -14,7 +14,7 @@ Flower::Flower(const std::vector<Image>& images)
 
 void Flower::update(int frameDeltaTimeMs)
 {
-    std::cout<<"flower update"<<std::endl;
+    std::cout<<"flower " << id() << " update"<<std::endl;
 }
 
 } // namespace core

@@ -17,6 +17,7 @@ HEADERS += \
     $$PWD/stringutils.h \
     $$PWD/tile.h \
     $$PWD/image.h \
+    $$PWD/ibaseobject.h \
     $$PWD/staticobject.h \
     $$PWD/flower.h \
     $$PWD/fixedqueue.h \
@@ -35,6 +36,7 @@ SOURCES += \
     $$PWD/stringutils.cpp \
     $$PWD/tile.cpp \
     $$PWD/image.cpp \
+    $$PWD/ibaseobject.cpp \
     $$PWD/staticobject.cpp \
     $$PWD/flower.cpp \
     $$PWD/snake.cpp \

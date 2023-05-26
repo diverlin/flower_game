@@ -12,6 +12,7 @@
 
 namespace core {
 
+class IBaseObject;
 class StaticObject;
 class Snake;
 class Image;
@@ -43,8 +44,9 @@ private:
     Size m_tileSize = Size(10, 10);
 
     std::vector<Tile> m_tiles;
-    std::vector<StaticObject*> m_staticObjects;
-    std::vector<Snake*> m_snakes; // dinamic objects
+//    std::vector<StaticObject*> m_staticObjects;
+//    std::vector<Snake*> m_snakes; // dinamic objects
+    std::vector<IBaseObject*> m_objects;
 
     long long m_msSinceLastSnakesMoveUpdate = 0;
 

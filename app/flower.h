@@ -1,7 +1,7 @@
 #ifndef FLOWER_H
 #define FLOWER_H
 
-#include "gameobject.h"
+#include "staticobject.h"
 
 #include <string>
 #include <vector>
