@@ -25,7 +25,7 @@ public:
     Snake(Grid* grid, const Image& image, std::size_t maxLength, const std::vector<Index2D>& indexes);
     ~Snake()=default;
 
-    bool hasDirtyIndexes() const { return m_hasDirtyIndexes; }
+    bool hasDirtyIndexes() const { return m_hasPosDirtyIndexes; }
 
     const Image& image() const { return m_image; }
     void update(int frameDeltaTimeMs) override final;
@@ -35,7 +35,10 @@ public:
     const Index2D& head() const { return first(); }
     const Index2D& tail() const { return last(); }
 
-    void takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes);
+    void takeDirtyMoveIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes);
+
+    bool hasEatenFlowers() const { return !m_eatenFlowerIndexes.empty(); }
+    void takeEatenFlowerIndexes(std::vector<Index2D>& eatenIndexes);
 
 private:
     Grid* m_grid = nullptr;
@@ -48,10 +51,13 @@ private:
     int m_direction = UP;
 
     // used to notify render to add/remove snake segment
-    bool m_hasDirtyIndexes = false;
+    bool m_hasPosDirtyIndexes = false;
     std::vector<Index2D> m_oldPosDirtyIndexes;
     std::vector<Index2D> m_newPosDirtyIndexes;
     //
+
+    // to check the eaten flowers
+    std::vector<Index2D> m_eatenFlowerIndexes;
 
     void increaseLength();
 

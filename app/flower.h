@@ -17,7 +17,7 @@ class Flower final: public StaticObject
 
 public:
     Flower(const std::vector<Image>& images, const std::string& colorCode);
-    ~Flower() override final = default;
+    ~Flower() override final;
 
     void update(int frameDeltaTimeMs) override final;
     int takeCoins();

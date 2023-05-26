@@ -23,6 +23,13 @@ Grid::Grid(int rows, int columns)
     }
 
     for (int i=0; i<rows*columns; ++i) {
+        Index2D index2d = getIndex2D(i);
+        if ((index2d.i() == 0) || (index2d.j() == 0)) {
+            continue;
+        }
+        if ((index2d.i() == m_rows-1) || (index2d.j() == m_columns-1)) {
+            continue;
+        }
         m_randomIndexes.push_back(i);
     }
 

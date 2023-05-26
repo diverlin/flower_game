@@ -17,7 +17,7 @@ Snake::Snake(Grid* grid, const Image& image, std::size_t maxLength, const std::v
         m_newPosDirtyIndexes.push_back(index);
     }
 
-    m_hasDirtyIndexes = true;
+    m_hasPosDirtyIndexes = true;
 }
 
 void Snake::update(int frameDeltaTimeMs)
@@ -155,11 +155,15 @@ void Snake::handleMove()
 
 void Snake::move(const Index2D& newIndex2d)
 {
+    if (m_grid->hasLayer(m_grid->getIndex1D(newIndex2d), PixmapLayer::FLOWER_LAYER)) {
+        m_eatenFlowerIndexes.push_back(newIndex2d);
+    }
+
     m_oldPosDirtyIndexes.push_back(tail());
     push(newIndex2d);
     m_newPosDirtyIndexes.push_back(newIndex2d);
 
-    m_hasDirtyIndexes = true;
+    m_hasPosDirtyIndexes = true;
 }
 
 bool Snake::checkIndex(const Index2D& index2d) const
@@ -210,7 +214,7 @@ Index2D Snake::nextRightIndex() const
     return Index2D(head()+Index2D(1,0));
 }
 
-void Snake::takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes)
+void Snake::takeDirtyMoveIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes)
 {
     oldIndexes.clear();
     newIndexes.clear();
@@ -218,7 +222,15 @@ void Snake::takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index
     std::swap(oldIndexes, m_oldPosDirtyIndexes);
     std::swap(newIndexes, m_newPosDirtyIndexes);
 
-    m_hasDirtyIndexes = false;
+    m_hasPosDirtyIndexes = false;
+}
+
+void Snake::takeEatenFlowerIndexes(std::vector<Index2D>& eatenIndexes)
+{
+    for (const Index2D& index2d: m_eatenFlowerIndexes) {
+        eatenIndexes.push_back(index2d);
+    }
+    m_eatenFlowerIndexes.clear();
 }
 
 void Snake::increaseLength()
@@ -237,7 +249,7 @@ void Snake::decreaseLength()
         //std::cout<<"snake decreaseLength to=" << lengthCandidate << std::endl;
         if (size() >= lengthCandidate) {
             m_oldPosDirtyIndexes.push_back(tail());
-            m_hasDirtyIndexes = true;
+            m_hasPosDirtyIndexes = true;
         }
         setMaxLength(lengthCandidate);
     }

@@ -14,7 +14,6 @@ namespace core {
 GridMap::GridMap(int rows, int columns, const Size& size)
     :
     m_grid(rows, columns)
-    , m_snakeObsticlesMap(rows*columns)
 {
     m_tileSize = Size(size.width()/rows, size.height()/columns);
     for (std::size_t i=0; i<m_grid.size(); ++i) {
@@ -215,6 +214,7 @@ bool  GridMap::removeImageFromTile(PixmapLayer layer, int index1d)
 
 void GridMap::addStaticObject(StaticObject* object, int index1d)
 {
+    m_staticObjectsMap[index1d] = object;
     object->setMapTileIndex(index1d);
     for (const Image& image: object->images()) {
         Index2D index2d = m_grid.getIndex2D(index1d);
@@ -226,6 +226,36 @@ void GridMap::addStaticObject(StaticObject* object, int index1d)
         }
     }
     m_objects.push_back(object);
+}
+
+void GridMap::removeStaticObject(std::size_t index1d)
+{
+    auto it_map = m_staticObjectsMap.find(index1d);
+    if (it_map != m_staticObjectsMap.end()) {
+        StaticObject* object = it_map->second;
+        if (typeid(*object) == typeid(Flower)) {
+            m_staticObjectsMap.erase(it_map);
+            for (const Image& image: object->images()) {
+                Index2D _index2d = m_grid.getIndex2D(index1d);
+                _index2d += image.indexOffsetFromLeftTopCorner();
+                int _index1d = m_grid.getIndex1D(_index2d);
+                if (m_grid.removeLayer(_index1d, image.layer())) {
+                    Tile& tile = m_tiles[_index1d];
+                    tile.removeImage(PixmapLayer::FLOWER_LAYER);
+                }
+            }
+
+            for (auto it_vec = m_objects.begin(); it_vec != m_objects.end(); ) {
+                if (*it_vec == object) {
+                    it_vec = m_objects.erase(it_vec);
+                    delete object;
+                    break;
+                } else {
+                    ++it_vec;
+                }
+            }
+        }
+    }
 }
 
 void GridMap::addSnake(Snake* snake)
@@ -244,6 +274,8 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
+    m_eatenFlowerIndexesBuffer.clear();
+
     for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
 
@@ -259,22 +291,30 @@ void GridMap::update(int frameDeltaTimeMs)
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
                 if (snake->hasDirtyIndexes()) {
-                    snake->takeDirtyIndexes(m_oldDirtyIndexes, m_newDirtyIndexes);
-                    for (Index2D& index2d: m_oldDirtyIndexes) {
+                    snake->takeDirtyMoveIndexes(m_oldDirtyIndexesBuffer, m_newDirtyIndexesBuffer);
+                    for (Index2D& index2d: m_oldDirtyIndexesBuffer) {
                         std::size_t index1d = m_grid.getIndex1D(index2d);
                         if (!removeImageFromTile(PixmapLayer::SNAKE_LAYER, index1d)) {
                             std::cout<<"ERROR: to remove" << index2d << std::endl;
                         }
                     }
-                    for (Index2D& index2d: m_newDirtyIndexes) {
+                    for (Index2D& index2d: m_newDirtyIndexesBuffer) {
                         std::size_t index1d = m_grid.getIndex1D(index2d);
                         if (!addImageToTile(snake->image(), index1d)) {
                             std::cout<<"ERROR: to add" << index2d << std::endl;
                         }
                     }
                 }
+
+                if (snake->hasEatenFlowers()) {
+                    snake->takeEatenFlowerIndexes(m_eatenFlowerIndexesBuffer);
+                }
             }
         }
+    }
+
+    for (const Index2D& index2d: m_eatenFlowerIndexesBuffer) {
+        removeStaticObject(m_grid.getIndex1D(index2d));
     }
 }
 

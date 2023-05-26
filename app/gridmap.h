@@ -49,7 +49,6 @@ public:
     void update(int frameDeltaTimeMs);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
-    const std::vector<int>& pathBuffer() const { return m_pathBuffer; }
 
 private:
     Grid m_grid;
@@ -63,11 +62,11 @@ private:
 
     int m_coins = 75;
 
-    std::vector<Index2D> m_oldDirtyIndexes;
-    std::vector<Index2D> m_newDirtyIndexes;
+    std::vector<Index2D> m_oldDirtyIndexesBuffer;
+    std::vector<Index2D> m_newDirtyIndexesBuffer;
+    std::vector<Index2D> m_eatenFlowerIndexesBuffer;
 
-    std::vector<int> m_pathBuffer; // used for path finding
-    std::vector<int> m_snakeObsticlesMap; // used in path finding A*
+    std::map<std::size_t, StaticObject*> m_staticObjectsMap;
 
     void create();
 
@@ -82,6 +81,7 @@ private:
     bool removeImageFromTile(PixmapLayer layer, int index1d);
 
     void addStaticObject(StaticObject*, int index1d);
+    void removeStaticObject(std::size_t index1d);
     void addSnake(Snake*);
 };
 

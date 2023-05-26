@@ -13,6 +13,10 @@ Flower::Flower(const std::vector<Image>& images, const std::string& colorCode)
 
 }
 
+Flower::~Flower()
+{
+}
+
 void Flower::update(int frameDeltaTimeMs)
 {
     m_msSinceLastCoinProduce += frameDeltaTimeMs;

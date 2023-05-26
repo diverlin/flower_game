@@ -13,8 +13,7 @@ enum class PixmapLayer: int {
     TREE_BOTTOM_LAYER=1<<6,
     TREE_TOP_LAYER=1<<7,
     OVERLAY_LAYER=1<<8,
-    HUD_LAYER=1<<9,
-    DEBUG_LAYER=1<<10
+    HUD_LAYER=1<<9
 };
 
 } // namespace core
