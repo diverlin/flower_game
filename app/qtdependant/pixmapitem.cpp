@@ -63,10 +63,14 @@ void PixmapItem::unitePixmaps()
     //qInfo() << "unitePixmaps";
     for (core::PixmapLayer layer: qAsConst(keys)) {
         //qInfo() << "layer=" << static_cast<int>(layer);
-        if (m_finalPixmap.cacheKey() == m_pixmaps[layer].cacheKey()) {
+        const QPixmap& pixmap = m_pixmaps[layer];
+        if (pixmap.isNull()) {
+            continue;
+        }
+        if (m_finalPixmap.cacheKey() == pixmap.cacheKey()) {
             continue; // we already set m_finalPixmap as first pixmap
         }
-        painter.drawPixmap(0, 0, m_pixmaps[layer]);
+        painter.drawPixmap(0, 0, pixmap);
     }
 }
 

@@ -12,6 +12,16 @@ Grid::Grid(int rows, int columns)
     m_columns(columns),
     m_elements(rows*columns)
 {
+    std::vector<core::PixmapLayer> obsticles = {
+        core::PixmapLayer::ROCK_LAYER,
+        core::PixmapLayer::WOOD_LAYER,
+        core::PixmapLayer::SNAKE_LAYER,
+        core::PixmapLayer::TREE_LAYER
+    };
+    for (core::PixmapLayer layer: obsticles) {
+        m_obsticalsMask |= static_cast<int>(layer);
+    }
+
     for (int i=0; i<rows*columns; ++i) {
         m_randomIndexes.push_back(i);
     }
@@ -19,13 +29,29 @@ Grid::Grid(int rows, int columns)
     std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
 }
 
+bool Grid::hasLayer(std::size_t index1d, PixmapLayer layer) const
+{
+    if (index1d < size()) {
+        return static_cast<int>(layer) & m_elements[index1d];
+    }
+    return false;
+}
+
+bool Grid::contain(int layer, int value) const
+{
+    return layer & value;
+}
+
 bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
 {
     if (index1d < size()) {
-        m_elements[index1d] |= static_cast<int>(layer);
-        return true;
+        int l = static_cast<int>(layer);
+        if (!contain(l, m_elements[index1d])) {
+            m_elements[index1d] |= l;
+            return true;
+        }
     } else {
-        std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
+        std::cout << "ERROR:" << "index1d=" << index1d << " bigger than array size" << std::endl;
     }
     return false;
 }
@@ -33,14 +59,13 @@ bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
 bool Grid::removeLayer(std::size_t index1d, PixmapLayer layer)
 {
     if (index1d < m_elements.size()) {
-        if (static_cast<int>(layer) & m_elements[index1d]) {
+        int l = static_cast<int>(layer);
+        if (contain(l, m_elements[index1d])) {
             m_elements[index1d] ^= static_cast<int>(layer);
             return true;
-        } else {
-            return false;
         }
     } else {
-        std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
+        std::cout << "ERROR:" << "index1d=" << index1d << " bigger than array size" << std::endl;
     }
     return false;
 }
@@ -49,7 +74,7 @@ bool Grid::isIndexFree(std::size_t index1d) const
 {
     if (index1d < m_elements.size()) {
         int value = m_elements.at(index1d);
-        return (value == 0);
+        return (value == 0) || (value == static_cast<int>(PixmapLayer::GROUND_LAYER));
     } else {
         return false;
     }
@@ -59,7 +84,7 @@ bool Grid::isIndexPassable(std::size_t index1d) const
 {
     if (index1d < m_elements.size()) {
         int value = m_elements.at(index1d);
-        return (value == 0); // check bitmask here
+        return !(value & m_obsticalsMask);
     } else {
         return false;
     }

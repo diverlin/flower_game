@@ -66,3 +66,80 @@ void GridTest::testGridFreeRandomIndex()
     }
 }
 
+void GridTest::testGridMultilayer()
+{
+    const int rows = 8;
+    const int columns = 4;
+    core::Grid grid(rows, columns);
+
+    std::vector<core::PixmapLayer> allLayers = {
+        core::PixmapLayer::GROUND_LAYER,
+        core::PixmapLayer::GRASS_LAYER,
+        core::PixmapLayer::ROCK_LAYER,
+        core::PixmapLayer::WOOD_LAYER,
+        core::PixmapLayer::FLOWER_LAYER,
+        core::PixmapLayer::SNAKE_LAYER,
+        core::PixmapLayer::TREE_LAYER,
+        core::PixmapLayer::OVERLAY_LAYER,
+        core::PixmapLayer::HUD_LAYER
+    };
+
+    std::size_t index1d = 1;
+
+    for (core::PixmapLayer& layer: allLayers) {
+        grid.addLayer(index1d, layer);
+        QVERIFY(grid.hasLayer(index1d, layer));
+    }
+
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(!grid.isIndexPassable(index1d));
+
+    // remove obsticles one by one
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::ROCK_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::ROCK_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(!grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::WOOD_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::WOOD_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(!grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::SNAKE_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::SNAKE_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(!grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::TREE_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::TREE_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(grid.isIndexPassable(index1d)); // index becomes passable here
+    // end removing obsticles
+
+    // remove decors one by one
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::OVERLAY_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::OVERLAY_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::HUD_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::HUD_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::FLOWER_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::FLOWER_LAYER));
+    QVERIFY(!grid.isIndexFree(index1d));
+    QVERIFY(grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::GRASS_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::GRASS_LAYER));
+    QVERIFY(grid.isIndexFree(index1d)); // index becomes free
+    QVERIFY(grid.isIndexPassable(index1d));
+
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::GROUND_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::GROUND_LAYER));
+    QVERIFY(grid.isIndexFree(index1d));
+    QVERIFY(grid.isIndexPassable(index1d));
+}
+

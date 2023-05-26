@@ -46,7 +46,7 @@ void GraphicsScene::onMousePositionChanged(const QPointF& scenePos)
 void GraphicsScene::onMousePress(const QPointF& /*scenePos*/)
 {
     if (m_tileIndexUnderCursor != -1) {
-        if (m_world.grid().isIndexPassable(m_tileIndexUnderCursor)) {
+        if (m_world.grid().isIndexFree(m_tileIndexUnderCursor)) {
             m_world.createFlower(m_tileIndexUnderCursor);
         } else {
             m_world.tapOnBusyTile(m_tileIndexUnderCursor);
@@ -104,7 +104,7 @@ void GraphicsScene::updateOverlay()
     for (std::size_t i=0; i<world.size(); ++i) {
         PixmapItem* tileView = m_tilesViews[i];
         if ((m_tileIndexUnderCursor != -1) && (i == static_cast<std::size_t>(m_tileIndexUnderCursor))) {
-            if (m_world.grid().isIndexPassable(m_tileIndexUnderCursor)) {
+            if (m_world.grid().isIndexFree(m_tileIndexUnderCursor)) {
                 tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_blue_blurred.png", m_world.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
             } else {
                 tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red_blurred.png", m_world.tileSize()), core::PixmapLayer::OVERLAY_LAYER);

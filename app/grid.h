@@ -26,6 +26,7 @@ public:
     bool isIndexPassable(std::size_t index) const;
     bool isIndexFree(std::size_t index) const;
 
+    bool hasLayer(std::size_t index1d, PixmapLayer layer) const;
     bool addLayer(std::size_t index1d, PixmapLayer layer);
     bool removeLayer(std::size_t index1d, PixmapLayer layer);
 
@@ -40,8 +41,12 @@ private:
     int m_rows = -1;
     int m_columns = -1;
 
+    int m_obsticalsMask = 0;
+
     std::vector<int> m_elements;
     std::vector<int> m_randomIndexes; // used for randomization objects on the map
+
+    bool contain(int layer, int value) const;
 };
 
 } // namespace core

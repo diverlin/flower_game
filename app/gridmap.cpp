@@ -175,6 +175,9 @@ void GridMap::tapOnBusyTile(std::size_t index1d)
 
 void GridMap::createFlower(std::size_t index1d)
 {
+    if (m_grid.hasLayer(index1d, PixmapLayer::FLOWER_LAYER)) {
+        return;
+    }
     if (m_coins >= FLOWER_COST) {
         m_coins -= FLOWER_COST;
         int flower_variant = getRandomInt(1, 3);
