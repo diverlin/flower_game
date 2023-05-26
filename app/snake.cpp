@@ -14,7 +14,7 @@ Snake::Snake(Grid* grid, const Image& image, std::size_t maxLength, const std::v
 {
     for (const Index2D& index: indexes) {
         push(index);
-        m_newDirtyIndexes.push_back(index);
+        m_newPosDirtyIndexes.push_back(index);
     }
 
     m_hasDirtyIndexes = true;
@@ -155,9 +155,9 @@ void Snake::handleMove()
 
 void Snake::move(const Index2D& newIndex2d)
 {
-    m_oldDirtyIndexes.push_back(tail());
+    m_oldPosDirtyIndexes.push_back(tail());
     push(newIndex2d);
-    m_newDirtyIndexes.push_back(newIndex2d);
+    m_newPosDirtyIndexes.push_back(newIndex2d);
 
     m_hasDirtyIndexes = true;
 }
@@ -215,8 +215,8 @@ void Snake::takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index
     oldIndexes.clear();
     newIndexes.clear();
 
-    std::swap(oldIndexes, m_oldDirtyIndexes);
-    std::swap(newIndexes, m_newDirtyIndexes);
+    std::swap(oldIndexes, m_oldPosDirtyIndexes);
+    std::swap(newIndexes, m_newPosDirtyIndexes);
 
     m_hasDirtyIndexes = false;
 }
@@ -236,7 +236,7 @@ void Snake::decreaseLength()
     if (lengthCandidate >= LENGTH_MIN) {
         //std::cout<<"snake decreaseLength to=" << lengthCandidate << std::endl;
         if (size() >= lengthCandidate) {
-            m_oldDirtyIndexes.push_back(tail());
+            m_oldPosDirtyIndexes.push_back(tail());
             m_hasDirtyIndexes = true;
         }
         setMaxLength(lengthCandidate);

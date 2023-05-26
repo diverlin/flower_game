@@ -49,8 +49,8 @@ private:
 
     // used to notify render to add/remove snake segment
     bool m_hasDirtyIndexes = false;
-    std::vector<Index2D> m_oldDirtyIndexes;
-    std::vector<Index2D> m_newDirtyIndexes;
+    std::vector<Index2D> m_oldPosDirtyIndexes;
+    std::vector<Index2D> m_newPosDirtyIndexes;
     //
 
     void increaseLength();
