@@ -1,4 +1,4 @@
-#include "gameobject.h"
+#include "staticobject.h"
 
 #include "image.h"
 

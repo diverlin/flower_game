@@ -17,7 +17,7 @@ HEADERS += \
     $$PWD/stringutils.h \
     $$PWD/tile.h \
     $$PWD/image.h \
-    $$PWD/gameobject.h \
+    $$PWD/staticobject.h \
     $$PWD/flower.h \
     $$PWD/fixedqueue.h \
     $$PWD/snake.h \
@@ -35,7 +35,7 @@ SOURCES += \
     $$PWD/stringutils.cpp \
     $$PWD/tile.cpp \
     $$PWD/image.cpp \
-    $$PWD/gameobject.cpp \
+    $$PWD/staticobject.cpp \
     $$PWD/flower.cpp \
     $$PWD/snake.cpp \
 
