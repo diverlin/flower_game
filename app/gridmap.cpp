@@ -59,6 +59,7 @@ void GridMap::create()
     createWoods(1,1);
     createTrees(2,4);
     createSnake();
+    createSnake();
 }
 
 void GridMap::createGround()
@@ -152,8 +153,7 @@ void GridMap::createTrees(int numMin, int numMax)
 
 void GridMap::createSnake()
 {
-//    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
-    Index2D randMapIndex(1,1);
+    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
     const int snakeVariant = getRandomInt(1,2);
     std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/snake_segment_%1.png"), "%1", std::to_string(snakeVariant));
 
