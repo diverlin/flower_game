@@ -40,7 +40,7 @@ void Snake::updateGrow(int frameDeltaTimeMs)
 void Snake::updateMove(int frameDeltaTimeMs)
 {
     m_msSinceLastMove += frameDeltaTimeMs;
-    if (m_msSinceLastMove > m_moveIntervalMs) {
+    if (m_msSinceLastMove > int(m_moveIntervalMs / m_moveSpeedMultiplier)) {
         handleMove();
         m_msSinceLastMove = 0;
     }
@@ -236,7 +236,7 @@ void Snake::takeEatenFlowerIndexes(std::vector<Index2D>& eatenIndexes)
 void Snake::increaseLength()
 {
     int lengthCandidate = maxLength()+1;
-    if (lengthCandidate <= LENGTH_MAX) {
+    if (lengthCandidate <= int(LENGTH_MAX * m_maxLengthMultiplier)) {
         setMaxLength(lengthCandidate);
     }
 }

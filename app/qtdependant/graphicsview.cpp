@@ -15,7 +15,11 @@ GraphicsView::GraphicsView(GraphicsScene* scene, QWidget* parent)
 void GraphicsView::mousePressEvent(QMouseEvent* event)
 {
     QPointF scenePos = mapToScene(event->pos());
-    m_scene->onMousePress(scenePos);
+    if (event->button() == Qt::LeftButton) {
+        m_scene->onMouseLeftButtonPress(scenePos);
+    } else if (event->button() == Qt::RightButton) {
+        m_scene->onMouseRightButtonPress(scenePos);
+    }
     QGraphicsView::mousePressEvent(event);
 }
 

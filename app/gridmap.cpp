@@ -57,8 +57,6 @@ void GridMap::create()
     createRocks(6,10);
     createWoods(1,1);
     createTrees(2,4);
-    createSnake();
-    createSnake();
 }
 
 void GridMap::createGround()
@@ -274,6 +272,9 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
+    int snakesCounter = 0;
+    int flowersCounter = 0;
+
     m_eatenFlowerIndexesBuffer.clear();
 
     for (IBaseObject* object: m_objects) {
@@ -282,6 +283,7 @@ void GridMap::update(int frameDeltaTimeMs)
         if (typeid(*object) == typeid(Flower)) {
             Flower* flower = static_cast<Flower*>(object);
             if (flower) {
+                flowersCounter++;
                 int coins = flower->takeCoins();
                 if (coins > 0) {
                     m_rewards.emplace_back(Reward{flower->mapTileIndex(), coins, flower->colorCode()});
@@ -289,7 +291,10 @@ void GridMap::update(int frameDeltaTimeMs)
             }
         } else if (typeid(*object) == typeid(Snake)) {
             Snake* snake = static_cast<Snake*>(object);
+            snake->setMoveSpeedMultiplier(m_snakeMoveSpeedMultiplier);
+            snake->setMaxLengthMultiplier(m_snakeMaxLengthMultiplier);
             if (snake) {
+                snakesCounter++;
                 if (snake->hasDirtyIndexes()) {
                     snake->takeDirtyMoveIndexes(m_oldDirtyIndexesBuffer, m_newDirtyIndexesBuffer);
                     for (Index2D& index2d: m_oldDirtyIndexesBuffer) {
@@ -308,6 +313,7 @@ void GridMap::update(int frameDeltaTimeMs)
 
                 if (snake->hasEatenFlowers()) {
                     snake->takeEatenFlowerIndexes(m_eatenFlowerIndexesBuffer);
+                    m_moveSpeedRatioDurationMs = SNAKE_SPEED_MULTIPLIER_EXPIRATION_MS; // start speed multiplicator
                 }
             }
         }
@@ -315,6 +321,32 @@ void GridMap::update(int frameDeltaTimeMs)
 
     for (const Index2D& index2d: m_eatenFlowerIndexesBuffer) {
         removeStaticObject(m_grid.getIndex1D(index2d));
+    }
+
+    m_msSinceLastSnakesOccur += frameDeltaTimeMs;
+    if (flowersCounter > 0) {
+        //if (snakesCounter < 4) {
+            if (m_msSinceLastSnakesOccur > m_snakeOccurIntervalMs) {
+                createSnake();
+                m_snakeOccurIntervalMs = SNAKE_OCCUR_INTERVAL_MS;
+                m_msSinceLastSnakesOccur = 0;
+            }
+        //}
+    }
+
+    if (flowersCounter >= 2) {
+            m_snakeMaxLengthMultiplier = 2.0f;
+    } else {
+            m_snakeMaxLengthMultiplier = 1.0f;
+    }
+
+    // todo move to separate class
+    // count down move speed multiplicator
+    if (m_moveSpeedRatioDurationMs > 0) {
+        m_moveSpeedRatioDurationMs -= frameDeltaTimeMs;
+        m_snakeMoveSpeedMultiplier = 2.0f;
+    } else {
+        m_snakeMoveSpeedMultiplier = 1.0f;
     }
 }
 

@@ -26,7 +26,10 @@ struct Reward {
 class GridMap
 {
 public:
-    const int FLOWER_COST = 25;
+    const int FLOWER_COST = 50;
+    const int START_COINS_NUM = 150;
+    const int SNAKE_OCCUR_INTERVAL_MS = 5000;
+    const int SNAKE_SPEED_MULTIPLIER_EXPIRATION_MS = 5000;
 
     GridMap(int rows, int columns, const Size& size);
     ~GridMap();
@@ -58,9 +61,13 @@ private:
     std::vector<IBaseObject*> m_objects;
     std::vector<Reward> m_rewards;
 
-    int m_msSinceLastSnakesMoveUpdate = 0;
+    int m_msSinceLastSnakesOccur = 0;
+    int m_snakeOccurIntervalMs = 0;
+    int m_moveSpeedRatioDurationMs = -1;
+    float m_snakeMoveSpeedMultiplier = 1.0f;
+    float m_snakeMaxLengthMultiplier = 1.0f;
 
-    int m_coins = 75;
+    int m_coins = START_COINS_NUM;
 
     std::vector<Index2D> m_oldDirtyIndexesBuffer;
     std::vector<Index2D> m_newDirtyIndexesBuffer;

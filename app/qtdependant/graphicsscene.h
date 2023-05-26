@@ -21,7 +21,8 @@ public:
     GraphicsScene(int x, int y, int width, int height, QObject* parent = nullptr);
 
     void onMousePositionChanged(const QPointF&);
-    void onMousePress(const QPointF&);
+    void onMouseLeftButtonPress(const QPointF&);
+    void onMouseRightButtonPress(const QPointF&);
 
 private:
     TextInformationItem* m_textInformationItem;

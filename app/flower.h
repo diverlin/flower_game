@@ -12,8 +12,8 @@ class Image;
 
 class Flower final: public StaticObject
 {
-    const int PRODUCE_COIN_INTERVAL_MS = 1000;
-    const int PRODUCE_COIN_AMOUNT = 25;
+    const int PRODUCE_COIN_INTERVAL_MS = 3000;
+    const int PRODUCE_COIN_AMOUNT = 5;
 
 public:
     Flower(const std::vector<Image>& images, const std::string& colorCode);

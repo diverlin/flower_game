@@ -14,8 +14,8 @@ class Grid;
 
 class Snake : public FixedQueue<Index2D>, public IBaseObject
 {
-    const int GROW_INTERVAL_MS = 4000;
-    const int DEFAULT_MOVE_INTERVAL_MS = 200;
+    const int GROW_INTERVAL_MS = 3000;
+    const int DEFAULT_MOVE_INTERVAL_MS = 500;
     const int LENGTH_MIN = 2;
     const int LENGTH_MAX = 5;
 
@@ -40,8 +40,14 @@ public:
     bool hasEatenFlowers() const { return !m_eatenFlowerIndexes.empty(); }
     void takeEatenFlowerIndexes(std::vector<Index2D>& eatenIndexes);
 
+    void setMoveSpeedMultiplier(float moveSpeedMultiplier) { m_moveSpeedMultiplier = moveSpeedMultiplier; }
+    void setMaxLengthMultiplier(float maxLengthMultiplier) { m_maxLengthMultiplier = maxLengthMultiplier; }
+
 private:
     Grid* m_grid = nullptr;
+
+    float m_moveSpeedMultiplier = 1.0f;
+    float m_maxLengthMultiplier = 1.0f;
 
     Image m_image;
     int m_msSinceLastGrow = 0;

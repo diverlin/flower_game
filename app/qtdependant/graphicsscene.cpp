@@ -43,7 +43,14 @@ void GraphicsScene::onMousePositionChanged(const QPointF& scenePos)
     m_tileIndexUnderCursor = m_world.indexFromWorldCoord(core::vec2(scenePos.x(), scenePos.y()));
 }
 
-void GraphicsScene::onMousePress(const QPointF& /*scenePos*/)
+void GraphicsScene::onMouseLeftButtonPress(const QPointF& /*scenePos*/)
+{
+    if (m_tileIndexUnderCursor != -1) {
+        m_world.tapOnBusyTile(m_tileIndexUnderCursor);
+    }
+}
+
+void GraphicsScene::onMouseRightButtonPress(const QPointF& /*scenePos*/)
 {
     if (m_tileIndexUnderCursor != -1) {
         if (m_world.grid().isIndexFree(m_tileIndexUnderCursor)) {
