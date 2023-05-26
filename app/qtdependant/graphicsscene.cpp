@@ -152,6 +152,17 @@ void GraphicsScene::updateTilesViews(const std::vector<core::Tile>& tiles)
             tile.resetIsDirtyFlag();
         }
     }
+
+    // debug
+    for (const core::Tile& tile: tiles) {
+        PixmapItem* view = m_tilesViews[tile.id()];
+        view->removePixmap(core::PixmapLayer::DEBUG_LAYER);
+    }
+    for (int i: m_world.pathBuffer()) {
+        PixmapItem* view = m_tilesViews[i];
+        view->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_black.png", m_world.tileSize()), core::PixmapLayer::DEBUG_LAYER);
+    }
+    // debug
 }
 
 } // namespace view

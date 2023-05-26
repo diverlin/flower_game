@@ -9,6 +9,7 @@ HEADERS += \
     $$PWD/qtdependant/textinformationitem.h \
     $$PWD/qtdependant/textinformationpopupitem.h \
     $$PWD/pixmaplayer.h \
+    $$PWD/findastar.h \
     $$PWD/grid.h \
     $$PWD/index2d.h \
     $$PWD/vec2.h \
@@ -32,6 +33,7 @@ SOURCES += \
     $$PWD/qtdependant/graphicsview.cpp \
     $$PWD/qtdependant/textinformationitem.cpp \
     $$PWD/qtdependant/textinformationpopupitem.cpp \
+    $$PWD/findastar.cpp \
     $$PWD/grid.cpp \
     $$PWD/gridmap.cpp \
     $$PWD/randutils.cpp \

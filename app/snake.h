@@ -13,7 +13,7 @@ namespace core {
 class Snake : public FixedQueue<Index2D>, public IBaseObject
 {
     const int GROW_INTERVAL_MS = 4000;
-    const int DEFAULT_MOVE_INTERVAL_MS = 2000;
+    const int DEFAULT_MOVE_INTERVAL_MS = 1000;
     const int LENGTH_MIN = 2;
     const int LENGTH_MAX = 5;
 
@@ -21,10 +21,14 @@ public:
     Snake(const Image& image, std::size_t maxLength, const std::vector<Index2D>& indexes);
     ~Snake()=default;
 
+    bool hasPath() const { return !m_path.empty(); }
     bool hasDirtyIndexes() const { return m_hasDirtyIndexes; }
 
     const Image& image() const { return m_image; }
     void update(int frameDeltaTimeMs) override final;
+
+    const std::vector<Index2D> path() const { return m_path; }
+    void setPath(std::vector<Index2D>& path);
 
     void decreaseLength();
 
@@ -35,6 +39,9 @@ public:
 
 private:
     bool m_hasDirtyIndexes = false;
+    std::vector<Index2D> m_path;
+    int m_currentPathIndex = -1;
+
     Image m_image;
     int m_msSinceLastGrow = 0;
     int m_msSinceLastMove = 0;

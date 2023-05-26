@@ -17,6 +17,12 @@ Snake::Snake(const Image& image, std::size_t maxLength, const std::vector<Index2
     m_hasDirtyIndexes = true;
 }
 
+void Snake::setPath(std::vector<Index2D>& path)
+{
+    std::swap(path, m_path);
+    m_currentPathIndex = 0;
+}
+
 void Snake::update(int frameDeltaTimeMs)
 {
     //std::cout<<"snake " << id() << " update"<<std::endl;
@@ -29,7 +35,7 @@ void Snake::updateGrow(int frameDeltaTimeMs)
     m_msSinceLastGrow += frameDeltaTimeMs;
     if (m_msSinceLastGrow > GROW_INTERVAL_MS) {
         increaseLength();
-        std::cout<<"snake id=" << id() <<"grow to size=" << size() << std::endl;
+        std::cout<<"snake id=" << id() <<" grow to size=" << size() << std::endl;
         m_msSinceLastGrow = 0;
     }
 }
@@ -45,17 +51,26 @@ void Snake::updateMove(int frameDeltaTimeMs)
 
 void Snake::move()
 {
-    m_oldDirtyIndexes.push_back(tail());
+    if (m_path.empty()) {
+        return;
+    }
+    if ((m_currentPathIndex != -1) && (m_currentPathIndex < m_path.size()-1)) {
+        m_currentPathIndex++;
 
-    Index2D newIndex2d(head());
-    newIndex2d += Index2D(0, 1);
+        m_oldDirtyIndexes.push_back(tail());
 
-    push(newIndex2d);
+        Index2D newIndex2d(m_path[m_currentPathIndex]);
 
-    m_newDirtyIndexes.push_back(newIndex2d);
+        push(newIndex2d);
 
-    std::cout << "move snake to=" << newIndex2d << std::endl;
-    m_hasDirtyIndexes = true;
+        m_newDirtyIndexes.push_back(newIndex2d);
+
+        std::cout << "move snake to=" << newIndex2d << std::endl;
+        m_hasDirtyIndexes = true;
+    } else {
+        m_path.clear();
+        m_currentPathIndex = -1;
+    }
 }
 
 void Snake::takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes)

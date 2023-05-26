@@ -12,10 +12,14 @@ class Grid {
 public:
     Grid(int rows, int columns);
 
+    void randomizeIndexes();
+
     int rows() const { return m_rows; }
     int columns() const { return m_columns; }
 
     std::size_t size() const { return m_elements.size(); }
+
+    void updateSnakeObsticlesRawMap(std::vector<int>&) const;
 
     int value(std::size_t index1d) const {
         if (index1d >= size()) {

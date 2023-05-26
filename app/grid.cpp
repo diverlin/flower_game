@@ -15,7 +15,7 @@ Grid::Grid(int rows, int columns)
     std::vector<core::PixmapLayer> obsticles = {
         core::PixmapLayer::ROCK_LAYER,
         core::PixmapLayer::WOOD_LAYER,
-        core::PixmapLayer::SNAKE_LAYER,
+//        core::PixmapLayer::SNAKE_LAYER,
         core::PixmapLayer::TREE_LAYER
     };
     for (core::PixmapLayer layer: obsticles) {
@@ -25,8 +25,14 @@ Grid::Grid(int rows, int columns)
     for (int i=0; i<rows*columns; ++i) {
         m_randomIndexes.push_back(i);
     }
-    randomizeVector(m_randomIndexes);
+
+    randomizeIndexes();
     std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
+}
+
+void Grid::randomizeIndexes()
+{
+    randomizeVector(m_randomIndexes);
 }
 
 bool Grid::hasLayer(std::size_t index1d, PixmapLayer layer) const
@@ -40,6 +46,13 @@ bool Grid::hasLayer(std::size_t index1d, PixmapLayer layer) const
 bool Grid::contain(int layer, int value) const
 {
     return layer & value;
+}
+
+void Grid::updateSnakeObsticlesRawMap(std::vector<int>& data) const
+{
+    for (int i=0; i<size(); ++i) {
+        data[i] = (m_elements[i] & m_obsticalsMask);
+    }
 }
 
 bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)

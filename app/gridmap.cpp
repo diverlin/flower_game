@@ -5,6 +5,7 @@
 #include "flower.h"
 #include "snake.h"
 #include "image.h"
+#include "findastar.h"
 
 #include <algorithm>
 #include <iostream>
@@ -14,6 +15,7 @@ namespace core {
 GridMap::GridMap(int rows, int columns, const Size& size)
     :
     m_grid(rows, columns)
+    , m_snakeObsticlesMap(rows*columns)
 {
     m_tileSize = Size(size.width()/rows, size.height()/columns);
     for (std::size_t i=0; i<m_grid.size(); ++i) {
@@ -243,6 +245,9 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
+    m_grid.updateSnakeObsticlesRawMap(m_snakeObsticlesMap);
+    m_grid.randomizeIndexes();
+
     for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
 
@@ -271,6 +276,27 @@ void GridMap::update(int frameDeltaTimeMs)
                             std::cout<<"ERROR: to add" << index2d << std::endl;
                         }
                     }
+                }
+
+                if (!snake->hasPath()) {
+                    m_pathBuffer.clear();
+
+                    Index2D fromIndex2D = snake->head();
+                    Index2D targetIndex2D = m_grid.getFreeRandomIndex2D();
+
+                    int result = findPathAStar(fromIndex2D.i(), fromIndex2D.j(),
+                                               targetIndex2D.i(), targetIndex2D.j(),
+                                               m_snakeObsticlesMap.data(),
+                                               m_grid.columns(), m_grid.rows(),
+                                               m_pathBuffer);
+                    std::cout << "found path for snake path size=" << m_pathBuffer.size() << std::endl;
+
+                    std::vector<Index2D> path;
+                    for (int element: m_pathBuffer) {
+                        path.push_back(m_grid.getIndex2D(element));
+                    }
+                    std::reverse(path.begin(), path.end());
+                    snake->setPath(path);
                 }
             }
         }

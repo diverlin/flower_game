@@ -49,6 +49,7 @@ public:
     void update(int frameDeltaTimeMs);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
+    const std::vector<int>& pathBuffer() const { return m_pathBuffer; }
 
 private:
     Grid m_grid;
@@ -64,6 +65,9 @@ private:
 
     std::vector<Index2D> m_oldDirtyIndexes;
     std::vector<Index2D> m_newDirtyIndexes;
+
+    std::vector<int> m_pathBuffer; // used for path finding
+    std::vector<int> m_snakeObsticlesMap; // used in path finding A*
 
     void create();
 
