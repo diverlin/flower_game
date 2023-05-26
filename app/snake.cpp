@@ -16,7 +16,7 @@ Snake::Snake(const Image& image, std::size_t maxLength, const std::vector<Index2
 
 void Snake::update(int frameDeltaTimeMs)
 {
-    std::cout<<"snake " << id() << " update"<<std::endl;
+    //std::cout<<"snake " << id() << " update"<<std::endl;
 }
 
 } // namespace core

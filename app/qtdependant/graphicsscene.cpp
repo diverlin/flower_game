@@ -1,7 +1,8 @@
 #include "graphicsscene.h"
 #include "pixmapitem.h"
 #include "pixmapprovider.h"
-//#include "textinformationitem.h"
+#include "textinformationitem.h"
+#include "textinformationpopupitem.h"
 
 #include <QApplication>
 
@@ -13,17 +14,28 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 {
     createTilesViews();
 
-    //    textInformationItem = new TextInformationItem();
+    m_textInformationItem = new TextInformationItem();
+    addItem(m_textInformationItem);
 
-//    textInformationItem->setMessage(QString("Hello world!"), false);
-//    textInformationItem->setPos(backgroundItem->boundingRect().center().x(),
-//                                backgroundItem->boundingRect().height()* 3 / 4);
+    const int icoSize = 20;
+    const float hudOpacity = 0.8;
+
+    // coin ico
+    m_coinIcoItem = new PixmapItem;
+    m_coinIcoItem->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/coin.png", core::Size(icoSize, icoSize)), core::PixmapLayer::HUD_LAYER);
+    m_coinIcoItem->setPos(5, 5);
+    m_coinIcoItem->setOpacity(hudOpacity);
+    addItem(m_coinIcoItem);
+
+    // coin label
+    m_textInformationItem->setPos(1.2*icoSize, 0);
+    m_textInformationItem->setOpacity(hudOpacity);
 
     QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
     m_gameLoopTimer.setInterval(20);
     m_gameLoopTimer.start();
 
-    m_elapsedTimer.start();
+    m_frameElapsedTimer.start();
 }
 
 void GraphicsScene::onMousePositionChanged(const QPointF& scenePos)
@@ -42,13 +54,44 @@ void GraphicsScene::onMousePress(const QPointF& /*scenePos*/)
 
 void GraphicsScene::updateGameLoop()
 {
-    qint64 deltaTimeMs = m_elapsedTimer.elapsed();
+    qint64 frameDeltaTimeMs = m_frameElapsedTimer.elapsed();
 
-    m_world.update(deltaTimeMs);
+    m_textInformationItem->setMessage(QString("x%1").arg(m_world.coins()));
+
+    m_world.update(frameDeltaTimeMs);
     updateTilesViews(m_world.tiles());
     updateOverlay();
 
-    m_elapsedTimer.restart();
+    handleRewards();
+    updatePopUps(frameDeltaTimeMs);
+
+    m_frameElapsedTimer.restart();
+}
+
+void GraphicsScene::handleRewards()
+{
+    std::vector<core::Reward> rewards;
+    m_world.takeRewards(rewards);
+    for (const core::Reward& reward: rewards) {
+        core::vec2 pos = m_world.worldCoordFromIndex(reward.index);
+        TextInformationPopupItem* popUp = new TextInformationPopupItem(QPointF(pos.x(), pos.y()), QString::number(reward.coins), reward.colorCode.c_str());
+        addItem(popUp);
+        m_popUps.push_back(popUp);
+    }
+}
+
+void GraphicsScene::updatePopUps(int frameDeltaTimeMs)
+{
+    std::vector<TextInformationPopupItem*>::iterator it = m_popUps.begin();
+    for (; it != m_popUps.end(); ++it) {
+        TextInformationPopupItem* popUp = *it;
+        popUp->update(frameDeltaTimeMs);
+        if (popUp->isDone()) {
+            it = m_popUps.erase(it);
+            removeItem(popUp);
+            delete popUp;
+        }
+    }
 }
 
 void GraphicsScene::updateOverlay()

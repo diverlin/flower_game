@@ -11,7 +11,8 @@ enum class PixmapLayer: int {
     FLOWER_LAYER=1<<3,
     SNAKE_LAYER=1<<4,
     TREE_LAYER=1<<5,
-    OVERLAY_LAYER=1<<6
+    OVERLAY_LAYER=1<<6,
+    HUD_LAYER=1<<7
 };
 
 } // namespace core

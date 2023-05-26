@@ -7,7 +7,7 @@ namespace view {
 TextInformationItem::TextInformationItem(QGraphicsItem* parent)
     : QGraphicsTextItem(parent)
 {
-    setFont(QFont(QStringList{"Comic Sans MS"}, 15));
+    setFont(QFont(QStringList{"Comic Sans MS"}, 12));
 }
 
 void TextInformationItem::setMessage(const QString& text, bool centerPosition)

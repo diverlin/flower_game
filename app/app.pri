@@ -7,6 +7,7 @@ HEADERS += \
     $$PWD/qtdependant/graphicsscene.h \
     $$PWD/qtdependant/graphicsview.h \
     $$PWD/qtdependant/textinformationitem.h \
+    $$PWD/qtdependant/textinformationpopupitem.h \
     $$PWD/pixmaplayer.h \
     $$PWD/grid.h \
     $$PWD/index2d.h \
@@ -30,6 +31,7 @@ SOURCES += \
     $$PWD/qtdependant/graphicsscene.cpp \
     $$PWD/qtdependant/graphicsview.cpp \
     $$PWD/qtdependant/textinformationitem.cpp \
+    $$PWD/qtdependant/textinformationpopupitem.cpp \
     $$PWD/grid.cpp \
     $$PWD/gridmap.cpp \
     $$PWD/randutils.cpp \

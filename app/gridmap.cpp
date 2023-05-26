@@ -159,11 +159,15 @@ void GridMap::createSnake()
 
 void GridMap::createFlower(std::size_t index1d)
 {
-    int flower_variant = getRandomInt(1, 3);
-    std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flower_variant));
-    Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
-    Flower* flower = new Flower(std::vector<Image>{imageTopLeft});
-    addStaticObject(flower, index1d);
+    if (m_coins >= FLOWER_COST) {
+        m_coins -= FLOWER_COST;
+        int flower_variant = getRandomInt(1, 3);
+        std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flower_variant));
+        Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
+        static std::map<int, std::string> colorMap = {{1,"#8A6000"}, {2,"#0042F2"}, {3,"#AF2D00"}};
+        Flower* flower = new Flower(std::vector<Image>{imageTopLeft}, colorMap[flower_variant]);
+        addStaticObject(flower, index1d);
+    }
 }
 
 void GridMap::addImageToTile(const Image& image, int index1d)
@@ -205,10 +209,29 @@ void GridMap::addSnake(Snake* snake)
     }
 }
 
+void GridMap::takeRewards(std::vector<Reward>& rewards)
+{
+    rewards.clear();
+    for (const Reward& reward: m_rewards) {
+        m_coins += reward.coins;
+    }
+    std::swap(rewards, m_rewards);
+}
+
 void GridMap::update(int frameDeltaTimeMs)
 {
     for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
+
+        if (typeid(*object) == typeid(Flower)) {
+            Flower* flower = static_cast<Flower*>(object);
+            if (flower) {
+                int coins = flower->takeCoins();
+                if (coins > 0) {
+                    m_rewards.emplace_back(Reward{flower->mapTileIndex(), coins, flower->colorCode()});
+                }
+            }
+        }
     }
 
     // TODO: move this into snake::update

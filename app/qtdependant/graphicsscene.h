@@ -10,7 +10,8 @@
 
 namespace view {
 
-//class TextInformationItem;
+class TextInformationPopupItem;
+class TextInformationItem;
 class PixmapItem;
 
 class GraphicsScene : public QGraphicsScene
@@ -23,18 +24,23 @@ public:
     void onMousePress(const QPointF&);
 
 private:
-//    TextInformationItem* textInformationItem;
+    TextInformationItem* m_textInformationItem;
+    PixmapItem* m_coinIcoItem = nullptr;
 
     int m_tileIndexUnderCursor;
     core::GridMap m_world;
     QTimer m_gameLoopTimer;
     QMap<size_t, PixmapItem*> m_tilesViews;
 
-    QElapsedTimer m_elapsedTimer;
+    std::vector<TextInformationPopupItem*> m_popUps;
+
+    QElapsedTimer m_frameElapsedTimer;
     
     void createTilesViews();
     void updateOverlay();
     void updateTilesViews(const std::vector<core::Tile>&);
+    void handleRewards();
+    void updatePopUps(int frameDeltaTimeMs);
 
     void updateGameLoop();
 };

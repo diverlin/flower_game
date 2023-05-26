@@ -12,11 +12,21 @@ class Image;
 
 class Flower final: public StaticObject
 {
+    const int PRODUCE_COIN_INTERVAL_MS = 1000;
+    const int PRODUCE_COIN_AMOUNT = 25;
+
 public:
-    Flower(const std::vector<Image>& images);
+    Flower(const std::vector<Image>& images, const std::string& colorCode);
     ~Flower() override final = default;
 
     void update(int frameDeltaTimeMs) override final;
+    int takeCoins();
+    const std::string& colorCode() const { return m_colorCode; }
+
+private:
+    std::string m_colorCode;
+    int m_coins = 0;
+    int m_msSinceLastCoinProduce = 0;
 };
 
 } // namespace core
