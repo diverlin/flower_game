@@ -15,7 +15,7 @@ StaticObject::StaticObject(const std::vector<Image>& images)
     }
 }
 
-void StaticObject::setMapLocation(int index1d)
+void StaticObject::setMapTileIndex(std::size_t index1d)
 {
     if (m_mapLocation == index1d) {
         return;

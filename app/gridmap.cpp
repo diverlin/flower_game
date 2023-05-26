@@ -2,6 +2,7 @@
 #include "randutils.h"
 #include "stringutils.h"
 #include "gameobject.h"
+#include "flower.h"
 #include "snake.h"
 #include "image.h"
 
@@ -109,8 +110,8 @@ void GridMap::createWoods(int numMin, int numMax)
         if (wood_variant) {
             Image imageLeft(":/tiles/wood_horizontal_l.png", PixmapLayer::WOOD_LAYER);
             Image imageRight(":/tiles/wood_horizontal_r.png", PixmapLayer::WOOD_LAYER, Index2D(1,0));
-            StaticObject object(std::vector<Image>{imageLeft, imageRight});
-            int randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
+            StaticObject* object = new StaticObject(std::vector<Image>{imageLeft, imageRight});
+            int randMapIndex = m_grid.getFreeRandomIndex(object->localOffsets());
             if (randMapIndex != -1) {
                 addStaticObject(object, randMapIndex);
             } else {
@@ -119,8 +120,8 @@ void GridMap::createWoods(int numMin, int numMax)
         } else {
             Image imageTop(":/tiles/wood_vertical_t.png", PixmapLayer::WOOD_LAYER);
             Image imageBottom(":/tiles/wood_vertical_b.png", PixmapLayer::WOOD_LAYER, Index2D(0,1));
-            StaticObject object(std::vector<Image>{imageTop, imageBottom});
-            int randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
+            StaticObject* object = new StaticObject(std::vector<Image>{imageTop, imageBottom});
+            int randMapIndex = m_grid.getFreeRandomIndex(object->localOffsets());
             if (randMapIndex != -1) {
                 addStaticObject(object, randMapIndex);
             } else {
@@ -138,8 +139,8 @@ void GridMap::createTrees(int numMin, int numMax)
         Image imageTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_LAYER, Index2D(1,0));
         Image imageBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_LAYER, Index2D(0,1));
         Image imageBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_LAYER, Index2D(1,1));
-        StaticObject object(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight});
-        int randMapIndex = m_grid.getFreeRandomIndex(object.localOffsets());
+        StaticObject* object = new StaticObject(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight});
+        int randMapIndex = m_grid.getFreeRandomIndex(object->localOffsets());
         if (randMapIndex != -1) {
             addStaticObject(object, randMapIndex);
         } else {
@@ -161,8 +162,8 @@ void GridMap::createFlower(std::size_t index1d)
     int flower_variant = getRandomInt(1, 3);
     std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flower_variant));
     Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
-    StaticObject object(std::vector<Image>{imageTopLeft});
-    addStaticObject(object, index1d);
+    Flower* flower = new Flower(std::vector<Image>{imageTopLeft});
+    addStaticObject(flower, index1d);
 }
 
 void GridMap::addImageToTile(const Image& image, int index1d)
@@ -181,10 +182,10 @@ void GridMap::removeImageFromTile(PixmapLayer layer, int index1d)
     }
 }
 
-void GridMap::addStaticObject(StaticObject& object, int index1d)
+void GridMap::addStaticObject(StaticObject* object, int index1d)
 {
-    object.setMapLocation(index1d);
-    for (const Image& image: object.images()) {
+    object->setMapTileIndex(index1d);
+    for (const Image& image: object->images()) {
         Index2D index2d = m_grid.getIndex2D(index1d);
         index2d += image.indexOffsetFromLeftTopCorner();
         int index1d = m_grid.getIndex1D(index2d);
@@ -204,9 +205,14 @@ void GridMap::addSnake(Snake* snake)
     }
 }
 
-void GridMap::update(long long deltaTimeMs)
+void GridMap::update(int frameDeltaTimeMs)
 {
-    m_msSinceLastSnakesMoveUpdate += int(deltaTimeMs);
+    for (StaticObject* object: m_staticObjects) {
+        object->update(frameDeltaTimeMs);
+    }
+
+    // TODO: move this into snake::update
+    m_msSinceLastSnakesMoveUpdate += int(frameDeltaTimeMs);
     if (m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) {
         for (Snake* snake: m_snakes) {
             Index2D lastTailIndex2d = snake->last();

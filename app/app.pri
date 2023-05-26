@@ -18,6 +18,7 @@ HEADERS += \
     $$PWD/tile.h \
     $$PWD/image.h \
     $$PWD/gameobject.h \
+    $$PWD/flower.h \
     $$PWD/fixedqueue.h \
     $$PWD/snake.h \
 
@@ -35,6 +36,7 @@ SOURCES += \
     $$PWD/tile.cpp \
     $$PWD/image.cpp \
     $$PWD/gameobject.cpp \
+    $$PWD/flower.cpp \
     $$PWD/snake.cpp \
 
 RESOURCES += $$PWD/data/flower_game.qrc

@@ -34,7 +34,7 @@ public:
     //
 
     void createFlower(std::size_t index1d);
-    void update(long long deltaTimeMs);
+    void update(int frameDeltaTimeMs);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
 
@@ -43,7 +43,7 @@ private:
     Size m_tileSize = Size(10, 10);
 
     std::vector<Tile> m_tiles;
-    std::vector<StaticObject> m_staticObjects;
+    std::vector<StaticObject*> m_staticObjects;
     std::vector<Snake*> m_snakes; // dinamic objects
 
     long long m_msSinceLastSnakesMoveUpdate = 0;
@@ -59,7 +59,8 @@ private:
 
     void addImageToTile(const Image& image, int index1d);
     void removeImageFromTile(PixmapLayer layer, int index1d);
-    void addStaticObject(StaticObject&, int index1d);
+
+    void addStaticObject(StaticObject*, int index1d);
     void addSnake(Snake*);
 };
 
