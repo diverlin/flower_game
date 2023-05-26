@@ -13,7 +13,7 @@ namespace core {
 class Snake : public FixedQueue<Index2D>, public IBaseObject
 {
     const int GROW_INTERVAL_MS = 4000;
-    const int DEFAULT_MOVE_INTERVAL_MS = 1000;
+    const int DEFAULT_MOVE_INTERVAL_MS = 2000;
     const int LENGTH_MIN = 2;
     const int LENGTH_MAX = 5;
 

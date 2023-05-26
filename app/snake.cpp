@@ -45,8 +45,6 @@ void Snake::updateMove(int frameDeltaTimeMs)
 
 void Snake::move()
 {
-    return;
-
     m_oldDirtyIndexes.push_back(tail());
 
     Index2D newIndex2d(head());
@@ -82,9 +80,9 @@ void Snake::increaseLength()
 void Snake::decreaseLength()
 {
     int lengthCandidate = maxLength()-1;
-    std::cout<<"try snake decreaseLength to" << lengthCandidate << std::endl;
-    if (lengthCandidate > LENGTH_MIN) {
-        std::cout<<"snake decreaseLength to" << lengthCandidate << std::endl;
+    std::cout<<"try snake decreaseLength to=" << lengthCandidate << std::endl;
+    if (lengthCandidate >= LENGTH_MIN) {
+        std::cout<<"snake decreaseLength to=" << lengthCandidate << std::endl;
         if (size() >= lengthCandidate) {
             m_oldDirtyIndexes.push_back(tail());
             m_hasDirtyIndexes = true;
