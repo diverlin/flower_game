@@ -30,9 +30,10 @@ public:
     // map coordinates between index and word/map coords
     vec2 worldCoordFromIndex(std::size_t) const;
     vec2 worldCoordFromIndex(const Index2D&) const;
-    Index2D index2dFromWorldCoord(const vec2&) const;
+    int indexFromWorldCoord(const vec2&) const;
     //
 
+    void createFlower(std::size_t index1d);
     void update(long long deltaTimeMs);
 
     const std::vector<Tile>& tiles() const { return m_tiles; }

@@ -15,14 +15,14 @@ GraphicsView::GraphicsView(GraphicsScene* scene, QWidget* parent)
 void GraphicsView::mousePressEvent(QMouseEvent* event)
 {
     QPointF scenePos = mapToScene(event->pos());
-    m_scene->onMousePositionChanged(scenePos);
+    m_scene->onMousePress(scenePos);
     QGraphicsView::mousePressEvent(event);
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent* event)
 {
     QPointF scenePos = mapToScene(event->pos());
-    m_scene->onMousePress(scenePos);
+    m_scene->onMousePositionChanged(scenePos);
     QGraphicsView::mouseMoveEvent(event);
 }
 

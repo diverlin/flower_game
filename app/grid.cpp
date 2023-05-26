@@ -51,12 +51,8 @@ bool Grid::removeLayer(std::size_t index1d, PixmapLayer layer)
     return false;
 }
 
-bool Grid::isIndexFree(const Index2D& index2d) const
+bool Grid::isIndexFree(std::size_t index1d) const
 {
-    if (index2d.i() >= m_columns || index2d.j() >= m_rows) {
-        return false;
-    }
-    std::size_t index1d = getIndex1D(index2d.i(), index2d.j());
     if (index1d < m_elements.size()) {
         int value = m_elements.at(index1d);
         return (value == 0);
@@ -65,9 +61,8 @@ bool Grid::isIndexFree(const Index2D& index2d) const
     }
 }
 
-bool Grid::isIndexPassable(const Index2D& index2D) const
+bool Grid::isIndexPassable(std::size_t index1d) const
 {
-    std::size_t index1d = getIndex1D(index2D.i(), index2D.j());
     if (index1d < m_elements.size()) {
         int value = m_elements.at(index1d);
         return (value == 0); // check bitmask here
@@ -93,23 +88,24 @@ Index2D Grid::getIndex2D(size_t index1d) const
 
 int Grid::getFreeRandomIndex(const std::vector<Index2D>& localOffsets) const
 {
-    for (int randIndex1D: m_randomIndexes) {
-        Index2D topLeftIndex = getIndex2D(randIndex1D);
-        if (isIndexFree(topLeftIndex)) {
+    for (int topLeftIndex1d: m_randomIndexes) {
+        Index2D topLeftIndex2d = getIndex2D(topLeftIndex1d);
+        if (isIndexFree(topLeftIndex1d)) {
             if (localOffsets.empty()) {
-                return randIndex1D;
+                return topLeftIndex1d;
             } else {
                 bool at_least_one_offset_slot_busy = false;
                 for (const Index2D& localOffset: localOffsets) {
-                    Index2D nextIndex(localOffset);
-                    nextIndex += topLeftIndex;
-                    if (!isIndexFree(nextIndex)) {
+                    Index2D nextIndex2d(localOffset);
+                    nextIndex2d += topLeftIndex2d;
+                    std::size_t nextIndex1D = getIndex1D(nextIndex2d);
+                    if (!isIndexFree(nextIndex1D)) {
                         at_least_one_offset_slot_busy = true;
                     }
                 }
 
                 if (!at_least_one_offset_slot_busy) {
-                    return randIndex1D;
+                    return topLeftIndex1d;
                 }
             }
         }

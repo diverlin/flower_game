@@ -24,9 +24,8 @@ public:
 
 private:
 //    TextInformationItem* textInformationItem;
-    bool m_isMousePressed = false;
 
-    core::Index2D m_index2dUnderCursor;
+    int m_tileIndexUnderCursor;
     core::GridMap m_world;
     QTimer m_gameLoopTimer;
     QMap<size_t, PixmapItem*> m_tilesViews;

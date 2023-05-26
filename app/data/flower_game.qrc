@@ -21,5 +21,8 @@
         <file>tiles/frame_red_blurred.png</file>
         <file>tiles/snake_segment.png</file>
         <file>tiles/snake_segment_texture.png</file>
+        <file>tiles/flower_1.png</file>
+        <file>tiles/flower_2.png</file>
+        <file>tiles/flower_3.png</file>
     </qresource>
 </RCC>

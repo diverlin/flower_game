@@ -40,10 +40,13 @@ vec2 GridMap::worldCoordFromIndex(const Index2D& index2d) const
     return vec2(index2d.i()*m_tileSize.width(), index2d.j()*m_tileSize.height());
 }
 
-Index2D GridMap::index2dFromWorldCoord(const vec2& worldCoord) const
+int GridMap::indexFromWorldCoord(const vec2& worldCoord) const
 {
-    Index2D result(static_cast<int>(worldCoord.x()/m_tileSize.width()), static_cast<int>(worldCoord.y()/m_tileSize.height()));
-    return result;
+    Index2D index2d(static_cast<int>(worldCoord.x()/m_tileSize.width()), static_cast<int>(worldCoord.y()/m_tileSize.height()));
+    if (index2d.isValid()) {
+        return m_grid.getIndex1D(index2d);
+    }
+    return -1;
 }
 
 void GridMap::create()
@@ -151,6 +154,15 @@ void GridMap::createSnake()
     Image image(":/tiles/snake_segment_texture.png", PixmapLayer::SNAKE_LAYER);
     Snake* snake = new Snake(image, 2, {randMapIndex, randMapIndex+Index2D(0,1)});
     addSnake(snake);
+}
+
+void GridMap::createFlower(std::size_t index1d)
+{
+    int flower_variant = getRandomInt(1, 3);
+    std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flower_variant));
+    Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
+    StaticObject object(std::vector<Image>{imageTopLeft});
+    addStaticObject(object, index1d);
 }
 
 void GridMap::addImageToTile(const Image& image, int index1d)

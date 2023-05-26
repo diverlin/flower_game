@@ -23,8 +23,8 @@ public:
         }
         return m_elements.at(index1d);
     }
-    bool isIndexPassable(const Index2D& index2D) const;
-    bool isIndexFree(const Index2D& index2D) const;
+    bool isIndexPassable(std::size_t index) const;
+    bool isIndexFree(std::size_t index) const;
 
     bool addLayer(std::size_t index1d, PixmapLayer layer);
     bool removeLayer(std::size_t index1d, PixmapLayer layer);

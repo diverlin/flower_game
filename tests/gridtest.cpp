@@ -28,23 +28,23 @@ void GridTest::testGridAddRemoveLayer()
 
     for (int i=0; i<rows; ++i) {
         for (int j=0; j<rows; ++j) {
-            QVERIFY(grid.isIndexFree(core::Index2D(i, j)));
+            QVERIFY(grid.isIndexFree(grid.getIndex1D(core::Index2D(i, j))));
         }
     }
 
     // add
     grid.addLayer(grid.getIndex1D(2,3),core::PixmapLayer::FLOWER_LAYER);
-    QVERIFY(!grid.isIndexFree(core::Index2D(2,3)));
+    QVERIFY(!grid.isIndexFree(grid.getIndex1D(core::Index2D(2,3))));
 
     grid.addLayer(grid.getIndex1D(4,4),core::PixmapLayer::ROCK_LAYER);
-    QVERIFY(!grid.isIndexFree(core::Index2D(4,4)));
+    QVERIFY(!grid.isIndexFree(grid.getIndex1D(core::Index2D(4,4))));
 
     // remove
     grid.removeLayer(grid.getIndex1D(2,3),core::PixmapLayer::FLOWER_LAYER);
-    QVERIFY(grid.isIndexFree(core::Index2D(2,3)));
+    QVERIFY(grid.isIndexFree(grid.getIndex1D(core::Index2D(2,3))));
 
     grid.removeLayer(grid.getIndex1D(4,4),core::PixmapLayer::ROCK_LAYER);
-    QVERIFY(grid.isIndexFree(core::Index2D(4,4)));
+    QVERIFY(grid.isIndexFree(grid.getIndex1D(core::Index2D(4,4))));
 }
 
 void GridTest::testGridFreeRandomIndex()
