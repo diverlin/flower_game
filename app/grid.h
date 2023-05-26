@@ -19,14 +19,14 @@ public:
 
     std::size_t size() const { return m_elements.size(); }
 
-    void updateSnakeObsticlesRawMap(std::vector<int>&) const;
-
     int value(std::size_t index1d) const {
         if (index1d >= size()) {
             return -1;
         }
         return m_elements.at(index1d);
     }
+    bool isValid(const Index2D& index2d) const;
+    bool isIndexPassable(const Index2D&) const;
     bool isIndexPassable(std::size_t index) const;
     bool isIndexFree(std::size_t index) const;
 

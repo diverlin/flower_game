@@ -1,12 +1,15 @@
 #include "snake.h"
+#include "grid.h"
+#include "randutils.h"
 
 #include <iostream>
 
 namespace core {
 
-Snake::Snake(const Image& image, std::size_t maxLength, const std::vector<Index2D>& indexes)
+Snake::Snake(Grid* grid, const Image& image, std::size_t maxLength, const std::vector<Index2D>& indexes)
     :
     FixedQueue<Index2D>(maxLength)
+    , m_grid(grid)
     , m_image(image)
 {
     for (const Index2D& index: indexes) {
@@ -15,12 +18,6 @@ Snake::Snake(const Image& image, std::size_t maxLength, const std::vector<Index2
     }
 
     m_hasDirtyIndexes = true;
-}
-
-void Snake::setPath(std::vector<Index2D>& path)
-{
-    std::swap(path, m_path);
-    m_currentPathIndex = 0;
 }
 
 void Snake::update(int frameDeltaTimeMs)
@@ -44,33 +41,173 @@ void Snake::updateMove(int frameDeltaTimeMs)
 {
     m_msSinceLastMove += frameDeltaTimeMs;
     if (m_msSinceLastMove > m_moveIntervalMs) {
-        move();
+        handleMove();
         m_msSinceLastMove = 0;
     }
 }
 
-void Snake::move()
+bool Snake::tryMoveUp()
 {
-    if (m_path.empty()) {
-        return;
+    if (probeUpIndex()) {
+        m_direction = UP;
+        move(nextUpIndex());
+        return true;
     }
-    if ((m_currentPathIndex != -1) && (m_currentPathIndex < m_path.size()-1)) {
-        m_currentPathIndex++;
+    return false;
+}
 
-        m_oldDirtyIndexes.push_back(tail());
+bool Snake::tryMoveDown()
+{
+    if (probeDownIndex()) {
+        m_direction = DOWN;
+        move(nextDownIndex());
+        return true;
+    }
+    return false;
+}
 
-        Index2D newIndex2d(m_path[m_currentPathIndex]);
+bool Snake::tryMoveRight()
+{
+    if (probeRightIndex()) {
+        m_direction = RIGHT;
+        move(nextRightIndex());
+        return true;
+    }
+    return false;
+}
 
-        push(newIndex2d);
+bool Snake::tryMoveLeft()
+{
+    if (probeLeftIndex()) {
+        m_direction = LEFT;
+        move(nextLeftIndex());
+        return true;
+    }
+    return false;
+}
 
-        m_newDirtyIndexes.push_back(newIndex2d);
-
-        std::cout << "move snake to=" << newIndex2d << std::endl;
-        m_hasDirtyIndexes = true;
+bool Snake::tryMoveLeftOrRight()
+{
+    bool dice = getRandomBool();
+    if (dice) {
+        if (!tryMoveLeft()) {
+            if (!tryMoveRight()) {
+                return false;
+            }
+        }
     } else {
-        m_path.clear();
-        m_currentPathIndex = -1;
+        if (!tryMoveRight()) {
+            if (!tryMoveLeft()) {
+                return false;
+            }
+        }
     }
+    return true;
+}
+
+bool Snake::tryMoveUpOrDown()
+{
+    bool dice = getRandomBool();
+    if (dice) {
+        if (!tryMoveUp()) {
+            if (!tryMoveDown()) {
+                return false;
+            }
+        }
+    } else {
+        if (!tryMoveDown()) {
+            if (!tryMoveUp()) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void Snake::handleMove()
+{
+    if (m_direction == UP) {
+        if (!tryMoveUp()) {
+            if (!tryMoveLeftOrRight()) {
+                std::cout << "WARNING: snake="<< id() << " is blocked" << std::endl;
+            }
+        }
+    } else if (m_direction == DOWN) {
+        if (!tryMoveDown()) {
+            if (!tryMoveLeftOrRight()) {
+                std::cout << "WARNING: snake="<< id() << " is blocked" << std::endl;
+            }
+        }
+    } else if (m_direction == LEFT) {
+        if (!tryMoveLeft()) {
+            if (!tryMoveUpOrDown()) {
+                std::cout << "WARNING: snake="<< id() << " is blocked" << std::endl;
+            }
+        }
+    } else if (m_direction == RIGHT) {
+        if (!tryMoveRight()) {
+            if (!tryMoveUpOrDown()) {
+                std::cout << "WARNING: snake="<< id() << " is blocked" << std::endl;
+            }
+        }
+    }
+}
+
+void Snake::move(const Index2D& newIndex2d)
+{
+    m_oldDirtyIndexes.push_back(tail());
+    push(newIndex2d);
+    m_newDirtyIndexes.push_back(newIndex2d);
+
+    m_hasDirtyIndexes = true;
+}
+
+bool Snake::checkIndex(const Index2D& index2d) const
+{
+    if (m_grid->isValid(index2d) && m_grid->isIndexPassable(index2d)) {
+        return true;
+    }
+    return false;
+}
+
+bool Snake::probeUpIndex() const
+{
+    return checkIndex(nextUpIndex());
+}
+
+bool Snake::probeDownIndex() const
+{
+    return checkIndex(nextDownIndex());
+}
+
+bool Snake::probeLeftIndex() const
+{
+    return checkIndex(nextLeftIndex());
+}
+
+bool Snake::probeRightIndex() const
+{
+    return checkIndex(nextRightIndex());
+}
+
+Index2D Snake::nextUpIndex() const
+{
+    return Index2D(head() + Index2D(0,-1));
+}
+
+Index2D Snake::nextDownIndex() const
+{
+    return Index2D(head()+Index2D(0,1));
+}
+
+Index2D Snake::nextLeftIndex() const
+{
+    return Index2D(head()+Index2D(-1,0));
+}
+
+Index2D Snake::nextRightIndex() const
+{
+    return Index2D(head()+Index2D(1,0));
 }
 
 void Snake::takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes)
@@ -95,9 +232,9 @@ void Snake::increaseLength()
 void Snake::decreaseLength()
 {
     int lengthCandidate = maxLength()-1;
-    std::cout<<"try snake decreaseLength to=" << lengthCandidate << std::endl;
+    //std::cout<<"try snake decreaseLength to=" << lengthCandidate << std::endl;
     if (lengthCandidate >= LENGTH_MIN) {
-        std::cout<<"snake decreaseLength to=" << lengthCandidate << std::endl;
+        //std::cout<<"snake decreaseLength to=" << lengthCandidate << std::endl;
         if (size() >= lengthCandidate) {
             m_oldDirtyIndexes.push_back(tail());
             m_hasDirtyIndexes = true;

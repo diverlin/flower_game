@@ -79,7 +79,7 @@ void GridTest::testGridMultilayer()
         core::PixmapLayer::WOOD_LAYER,
         core::PixmapLayer::FLOWER_LAYER,
         core::PixmapLayer::SNAKE_LAYER,
-        core::PixmapLayer::TREE_LAYER,
+        core::PixmapLayer::TREE_BOTTOM_LAYER,
         core::PixmapLayer::OVERLAY_LAYER,
         core::PixmapLayer::HUD_LAYER
     };
@@ -109,9 +109,9 @@ void GridTest::testGridMultilayer()
     QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::SNAKE_LAYER));
     QVERIFY(!grid.isIndexFree(index1d));
     QVERIFY(!grid.isIndexPassable(index1d));
-
-    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::TREE_LAYER));
-    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::TREE_LAYER));
+    
+    QVERIFY(grid.removeLayer(index1d, core::PixmapLayer::TREE_BOTTOM_LAYER));
+    QVERIFY(!grid.hasLayer(index1d, core::PixmapLayer::TREE_BOTTOM_LAYER));
     QVERIFY(!grid.isIndexFree(index1d));
     QVERIFY(grid.isIndexPassable(index1d)); // index becomes passable here
     // end removing obsticles

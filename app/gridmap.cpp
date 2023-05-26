@@ -5,7 +5,6 @@
 #include "flower.h"
 #include "snake.h"
 #include "image.h"
-#include "findastar.h"
 
 #include <algorithm>
 #include <iostream>
@@ -56,9 +55,9 @@ void GridMap::create()
 {
     createGround();
     createGrasses(10,20);
-//    createRocks(3,6);
-//    createWoods(1,1);
-//    createTrees(1,2);
+    createRocks(6,10);
+    createWoods(1,1);
+    createTrees(2,4);
     createSnake();
 }
 
@@ -137,10 +136,10 @@ void GridMap::createTrees(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
-        Image imageTopLeft(":/tiles/tree_0_tl.png", PixmapLayer::TREE_LAYER);
-        Image imageTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_LAYER, Index2D(1,0));
-        Image imageBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_LAYER, Index2D(0,1));
-        Image imageBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_LAYER, Index2D(1,1));
+        Image imageTopLeft(":/tiles/tree_0_tl.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
         StaticObject* object = new StaticObject(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight});
         int randMapIndex = m_grid.getFreeRandomIndex(object->localOffsets());
         if (randMapIndex != -1) {
@@ -159,7 +158,7 @@ void GridMap::createSnake()
     std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/snake_segment_%1.png"), "%1", std::to_string(snakeVariant));
 
     Image image(imageFilePath, PixmapLayer::SNAKE_LAYER);
-    Snake* snake = new Snake(image, 2, {randMapIndex+Index2D(0,-1), randMapIndex});
+    Snake* snake = new Snake(&m_grid, image, 2, {randMapIndex+Index2D(0,-1), randMapIndex});
     addSnake(snake);
 }
 
@@ -245,9 +244,6 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
-    m_grid.updateSnakeObsticlesRawMap(m_snakeObsticlesMap);
-    m_grid.randomizeIndexes();
-
     for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
 
@@ -276,27 +272,6 @@ void GridMap::update(int frameDeltaTimeMs)
                             std::cout<<"ERROR: to add" << index2d << std::endl;
                         }
                     }
-                }
-
-                if (!snake->hasPath()) {
-                    m_pathBuffer.clear();
-
-                    Index2D fromIndex2D = snake->head();
-                    Index2D targetIndex2D = m_grid.getFreeRandomIndex2D();
-
-                    int result = findPathAStar(fromIndex2D.i(), fromIndex2D.j(),
-                                               targetIndex2D.i(), targetIndex2D.j(),
-                                               m_snakeObsticlesMap.data(),
-                                               m_grid.columns(), m_grid.rows(),
-                                               m_pathBuffer);
-                    std::cout << "found path for snake path size=" << m_pathBuffer.size() << std::endl;
-
-                    std::vector<Index2D> path;
-                    for (int element: m_pathBuffer) {
-                        path.push_back(m_grid.getIndex2D(element));
-                    }
-                    std::reverse(path.begin(), path.end());
-                    snake->setPath(path);
                 }
             }
         }

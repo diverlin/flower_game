@@ -15,8 +15,8 @@ Grid::Grid(int rows, int columns)
     std::vector<core::PixmapLayer> obsticles = {
         core::PixmapLayer::ROCK_LAYER,
         core::PixmapLayer::WOOD_LAYER,
-//        core::PixmapLayer::SNAKE_LAYER,
-        core::PixmapLayer::TREE_LAYER
+        core::PixmapLayer::SNAKE_LAYER,
+        core::PixmapLayer::TREE_BOTTOM_LAYER
     };
     for (core::PixmapLayer layer: obsticles) {
         m_obsticalsMask |= static_cast<int>(layer);
@@ -46,13 +46,6 @@ bool Grid::hasLayer(std::size_t index1d, PixmapLayer layer) const
 bool Grid::contain(int layer, int value) const
 {
     return layer & value;
-}
-
-void Grid::updateSnakeObsticlesRawMap(std::vector<int>& data) const
-{
-    for (int i=0; i<size(); ++i) {
-        data[i] = (m_elements[i] & m_obsticalsMask);
-    }
 }
 
 bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
@@ -88,6 +81,28 @@ bool Grid::isIndexFree(std::size_t index1d) const
     if (index1d < m_elements.size()) {
         int value = m_elements.at(index1d);
         return (value == 0) || (value == static_cast<int>(PixmapLayer::GROUND_LAYER));
+    } else {
+        return false;
+    }
+}
+
+bool Grid::isValid(const Index2D& index2d) const
+{
+    if (!index2d.isValid()) {
+        return false;
+    }
+    if ((index2d.i() >= m_rows) || (index2d.j() >= m_columns)) {
+        return false;
+    }
+    return true;
+}
+
+bool Grid::isIndexPassable(const Index2D& index2d) const
+{
+    std::size_t index1d = getIndex1D(index2d);
+    if (index1d < m_elements.size()) {
+        int value = m_elements.at(index1d);
+        return !(value & m_obsticalsMask);
     } else {
         return false;
     }
