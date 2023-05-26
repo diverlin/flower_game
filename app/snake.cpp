@@ -16,12 +16,53 @@ Snake::Snake(const Image& image, std::size_t maxLength, const std::vector<Index2
 
 void Snake::update(int frameDeltaTimeMs)
 {
+    //std::cout<<"snake " << id() << " update"<<std::endl;
+    updateGrow(frameDeltaTimeMs);
+    updateMove(frameDeltaTimeMs);
+}
+
+void Snake::updateGrow(int frameDeltaTimeMs)
+{
     m_msSinceLastGrow += frameDeltaTimeMs;
     if (m_msSinceLastGrow > GROW_INTERVAL_MS) {
-        //increaseLength();
+        increaseLength();
         m_msSinceLastGrow = 0;
     }
-    //std::cout<<"snake " << id() << " update"<<std::endl;
+}
+
+void Snake::updateMove(int frameDeltaTimeMs)
+{
+    m_msSinceLastMove += frameDeltaTimeMs;
+    if (m_msSinceLastMove > m_moveIntervalMs) {
+        move();
+        m_msSinceLastMove = 0;
+    }
+}
+
+void Snake::move()
+{
+    m_oldDirtyIndexes.push_back(tail());
+
+    Index2D newIndex2d(head());
+    newIndex2d += Index2D(0, 1);
+
+    push(newIndex2d);
+
+    m_newDirtyIndexes.push_back(newIndex2d);
+
+    std::cout << "move snake to=" << newIndex2d << std::endl;
+    m_hasDirtyIndexes = true;
+}
+
+void Snake::takeDirtyIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes)
+{
+    oldIndexes.clear();
+    newIndexes.clear();
+
+    std::swap(oldIndexes, m_oldDirtyIndexes);
+    std::swap(newIndexes, m_newDirtyIndexes);
+
+    m_hasDirtyIndexes = false;
 }
 
 void Snake::increaseLength()

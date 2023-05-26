@@ -166,6 +166,7 @@ void GridMap::tapOnBusyTile(std::size_t index1d)
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
                 if (snake->contain(index2d)) {
+                    std::cout << "gotcha snake" << snake->id() << " on index" << index1d << std::endl;
                     snake->decreaseLength();
                     return;
                 }
@@ -239,22 +240,6 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
-    bool moveSnakes = false;
-    // TODO: move this into snake::update
-    m_msSinceLastSnakesMoveUpdate += int(frameDeltaTimeMs);
-    if ((m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) && (m_DEBUG_snakesStepNumMax < 10)) {
-        moveSnakes = true;
-        m_msSinceLastSnakesMoveUpdate = 0;
-    }
-
-    // remove all snakes
-//    for (std::size_t i=0; i<m_grid.size(); ++i) {
-//        removeImageFromTile(PixmapLayer::SNAKE_LAYER, i);
-//    }
-
-
-    //
-
     for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
 
@@ -269,28 +254,19 @@ void GridMap::update(int frameDeltaTimeMs)
         } else if (typeid(*object) == typeid(Snake)) {
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
-                std::cout << "--- snake id=" << snake->id() << " l=" << snake->maxLength() << std::endl;
-                if (moveSnakes) {
-                    // TODO: move this into snake::update
-                    Index2D headIndex2d = snake->head();
-                    Index2D newIndex2d = headIndex2d;
-                    newIndex2d += Index2D(0, 1);
-
-                    Index2D tailIndex2D = snake->tail();
-                    std::size_t index1d = m_grid.getIndex1D(tailIndex2D);
-                    if (!removeImageFromTile(PixmapLayer::SNAKE_LAYER, index1d)) {
-                        std::cout<<"ERROR: to remove" << tailIndex2D << std::endl;
+                if (snake->hasDirtyIndexes()) {
+                    snake->takeDirtyIndexes(m_oldDirtyIndexes, m_newDirtyIndexes);
+                    for (Index2D& index2d: m_oldDirtyIndexes) {
+                        std::size_t index1d = m_grid.getIndex1D(index2d);
+                        if (!removeImageFromTile(PixmapLayer::SNAKE_LAYER, index1d)) {
+                            std::cout<<"ERROR: to remove" << index2d << std::endl;
+                        }
                     }
-
-                    snake->push(newIndex2d);
-                    m_DEBUG_snakesStepNumMax++;
-                    std::cout<< "move snake=" << m_DEBUG_snakesStepNumMax << " to="<< newIndex2d<< std::endl;
-                }
-
-                for (const Index2D& index2d: *snake) {
-                    std::cout << "attempt to addImage snake ToTile index=" << index2d << std::endl;
-                    if (!addImageToTile(snake->image(), m_grid.getIndex1D(index2d))) {
-                        //std::cout << "ERROR: fail to addImage snake toTile"<< std::endl;
+                    for (Index2D& index2d: m_newDirtyIndexes) {
+                        std::size_t index1d = m_grid.getIndex1D(index2d);
+                        if (!addImageToTile(snake->image(), index1d)) {
+                            std::cout<<"ERROR: to add" << index2d << std::endl;
+                        }
                     }
                 }
             }

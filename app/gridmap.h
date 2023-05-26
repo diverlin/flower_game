@@ -26,7 +26,6 @@ struct Reward {
 class GridMap
 {
 public:
-    const int SNAKE_MOVE_UPDATE_INTERVAL = 1000;
     const int FLOWER_COST = 25;
 
     GridMap(int rows, int columns, const Size& size);
@@ -63,7 +62,8 @@ private:
 
     int m_coins = 75;
 
-    int m_DEBUG_snakesStepNumMax = 0;
+    std::vector<Index2D> m_oldDirtyIndexes;
+    std::vector<Index2D> m_newDirtyIndexes;
 
     void create();
 
