@@ -11,7 +11,10 @@ Snake::Snake(const Image& image, std::size_t maxLength, const std::vector<Index2
 {
     for (const Index2D& index: indexes) {
         push(index);
+        m_newDirtyIndexes.push_back(index);
     }
+
+    m_hasDirtyIndexes = true;
 }
 
 void Snake::update(int frameDeltaTimeMs)
@@ -26,6 +29,7 @@ void Snake::updateGrow(int frameDeltaTimeMs)
     m_msSinceLastGrow += frameDeltaTimeMs;
     if (m_msSinceLastGrow > GROW_INTERVAL_MS) {
         increaseLength();
+        std::cout<<"snake id=" << id() <<"grow to size=" << size() << std::endl;
         m_msSinceLastGrow = 0;
     }
 }
@@ -41,6 +45,8 @@ void Snake::updateMove(int frameDeltaTimeMs)
 
 void Snake::move()
 {
+    return;
+
     m_oldDirtyIndexes.push_back(tail());
 
     Index2D newIndex2d(head());
@@ -79,6 +85,10 @@ void Snake::decreaseLength()
     std::cout<<"try snake decreaseLength to" << lengthCandidate << std::endl;
     if (lengthCandidate > LENGTH_MIN) {
         std::cout<<"snake decreaseLength to" << lengthCandidate << std::endl;
+        if (size() >= lengthCandidate) {
+            m_oldDirtyIndexes.push_back(tail());
+            m_hasDirtyIndexes = true;
+        }
         setMaxLength(lengthCandidate);
     }
 }

@@ -11,6 +11,7 @@ public:
 
 private slots:
     void testBase();
+    void testDescreaseSize();
 };
 
 #endif // FIXEDQUEUETEST_H

@@ -40,3 +40,20 @@ void FixedQueueTest::testBase()
     q.setMaxLength(2);
     QCOMPARE(intQueueToString(q), "76");
 }
+
+void FixedQueueTest::testDescreaseSize()
+{
+    core::FixedQueue<int> q(5);
+    q.push(1);
+    q.push(2);
+    q.push(3);
+    q.push(4);
+    q.push(5);
+
+    QCOMPARE(intQueueToString(q), "54321");
+
+    q.setMaxLength(2);
+
+    QCOMPARE(intQueueToString(q), "54");
+    QCOMPARE(q.size(), 2);
+}

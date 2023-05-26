@@ -91,8 +91,8 @@ void GridMap::createRocks(int numMin, int numMax)
     for (int i=0; i<num; ++i) {
         int randMapIndex = m_grid.getFreeRandomIndex();
         if (randMapIndex != -1) {
-            const bool rock_variant = getRandomBool();
-            std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/rock_%1.png"), "%1", rock_variant?"big":"middle");
+            const bool rockVariant = getRandomBool();
+            std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/rock_%1.png"), "%1", rockVariant?"big":"middle");
             Image image(imageFilePath, PixmapLayer::ROCK_LAYER);
             addImageToTile(image, randMapIndex);
         } else {
@@ -153,7 +153,10 @@ void GridMap::createSnake()
 {
 //    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
     Index2D randMapIndex(1,1);
-    Image image(":/tiles/snake_segment_texture.png", PixmapLayer::SNAKE_LAYER);
+    const int snakeVariant = getRandomInt(1,2);
+    std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/snake_segment_%1.png"), "%1", std::to_string(snakeVariant));
+
+    Image image(imageFilePath, PixmapLayer::SNAKE_LAYER);
     Snake* snake = new Snake(image, 2, {randMapIndex+Index2D(0,-1), randMapIndex});
     addSnake(snake);
 }
@@ -166,7 +169,7 @@ void GridMap::tapOnBusyTile(std::size_t index1d)
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
                 if (snake->contain(index2d)) {
-                    std::cout << "gotcha snake" << snake->id() << " on index" << index1d << std::endl;
+                    std::cout << "gotcha snake=" << snake->id() << " on index=" << index1d << std::endl;
                     snake->decreaseLength();
                     return;
                 }
@@ -182,11 +185,11 @@ void GridMap::createFlower(std::size_t index1d)
     }
     if (m_coins >= FLOWER_COST) {
         m_coins -= FLOWER_COST;
-        int flower_variant = getRandomInt(1, 3);
-        std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flower_variant));
+        int flowerVariant = getRandomInt(1, 3);
+        std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flowerVariant));
         Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
         static std::map<int, std::string> colorMap = {{1,"#8A6000"}, {2,"#0042F2"}, {3,"#AF2D00"}};
-        Flower* flower = new Flower(std::vector<Image>{imageTopLeft}, colorMap[flower_variant]);
+        Flower* flower = new Flower(std::vector<Image>{imageTopLeft}, colorMap[flowerVariant]);
         addStaticObject(flower, index1d);
     }
 }
