@@ -62,7 +62,7 @@ void GridMap::create()
 
 void GridMap::createGround()
 {
-    for (int i=0; i<m_grid.size(); ++i) {
+    for (std::size_t i=0; i<m_grid.size(); ++i) {
         Image image(":/tiles/ground.png", PixmapLayer::GROUND_LAYER);
         addImageToTile(image, i);
     }
@@ -261,6 +261,7 @@ void GridMap::update(int frameDeltaTimeMs)
         } else if (typeid(*object) == typeid(Snake)) {
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
+                std::cout << "--- snake id=" << snake->id() << " l=" << snake->maxLength() << std::endl;
                 if (moveSnakes) {
                     // TODO: move this into snake::update
                     Index2D headIndex2d = snake->first();
@@ -270,6 +271,7 @@ void GridMap::update(int frameDeltaTimeMs)
                 }
 
                 for (const Index2D& index2d: *snake) {
+                    std::cout << "---" << index2d <<std::endl;
                     addImageToTile(snake->image(), m_grid.getIndex1D(index2d));
                 }
             }
