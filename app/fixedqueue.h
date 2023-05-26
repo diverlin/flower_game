@@ -2,6 +2,7 @@
 #define FIXEDQUEUE_H
 
 #include <deque>
+//#include <iostream>
 
 namespace core {
 
@@ -36,6 +37,17 @@ public:
 
     std::size_t size() const {
         return m_elements.size();
+    }
+
+    bool contain(const T& target) const {
+        for (const T& element: m_elements) {
+            //std::cout << "compare target="<< target<<" with element"<< element<<std::endl;
+            if (element == target) {
+                //std::cout<<"got MATCH!!!"<<std::endl;
+                return true;
+            }
+        }
+        return false;
     }
 
     const T& at(std::size_t n) const {

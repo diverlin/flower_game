@@ -29,8 +29,6 @@ public:
     bool addLayer(std::size_t index1d, PixmapLayer layer);
     bool removeLayer(std::size_t index1d, PixmapLayer layer);
 
-    bool hasLayer(std::size_t index1d, PixmapLayer layer) const;
-
     std::size_t getIndex1D(int i, int j) const;
     std::size_t getIndex1D(const Index2D&) const;
     Index2D getIndex2D(std::size_t index1D) const;

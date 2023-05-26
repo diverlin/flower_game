@@ -48,6 +48,8 @@ void GraphicsScene::onMousePress(const QPointF& /*scenePos*/)
     if (m_tileIndexUnderCursor != -1) {
         if (m_world.grid().isIndexPassable(m_tileIndexUnderCursor)) {
             m_world.createFlower(m_tileIndexUnderCursor);
+        } else {
+            m_world.tapOnBusyTile(m_tileIndexUnderCursor);
         }
     }
 }
@@ -83,13 +85,15 @@ void GraphicsScene::handleRewards()
 void GraphicsScene::updatePopUps(int frameDeltaTimeMs)
 {
     std::vector<TextInformationPopupItem*>::iterator it = m_popUps.begin();
-    for (; it != m_popUps.end(); ++it) {
+    for (; it != m_popUps.end();) {
         TextInformationPopupItem* popUp = *it;
         popUp->update(frameDeltaTimeMs);
         if (popUp->isDone()) {
             it = m_popUps.erase(it);
             removeItem(popUp);
             delete popUp;
+        } else {
+            ++it;
         }
     }
 }

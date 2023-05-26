@@ -45,6 +45,7 @@ public:
 
     void takeRewards(std::vector<Reward>& reward);
 
+    void tapOnBusyTile(std::size_t index1d);
     void createFlower(std::size_t index1d);
     void update(int frameDeltaTimeMs);
 
@@ -58,7 +59,7 @@ private:
     std::vector<IBaseObject*> m_objects;
     std::vector<Reward> m_rewards;
 
-    long long m_msSinceLastSnakesMoveUpdate = 0;
+    int m_msSinceLastSnakesMoveUpdate = 0;
 
     int m_coins = 75;
 

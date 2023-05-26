@@ -1,6 +1,8 @@
 #ifndef INDEX2D_H
 #define INDEX2D_H
 
+#include <iostream>
+
 namespace core {
 
 class Index2D {
@@ -32,6 +34,10 @@ public:
         return (m_i == rhs.i()) && (m_j == rhs.j());
     }
 
+    friend std::ostream& operator<<(std::ostream& os, const Index2D& obj) {
+        os << "i=" << obj.i() << ",j=" << obj.j();
+        return os;
+    }
 private:
     int m_i = -1;
     int m_j = -1;

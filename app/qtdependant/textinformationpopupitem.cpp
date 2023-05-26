@@ -12,6 +12,10 @@ TextInformationPopupItem::TextInformationPopupItem(const QPointF& pos, const QSt
     setPos(pos);
 }
 
+TextInformationPopupItem::~TextInformationPopupItem()
+{
+}
+
 void TextInformationPopupItem::update(int frameDeltaTimeMs)
 {
     if (m_isDone) {

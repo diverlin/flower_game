@@ -19,16 +19,6 @@ Grid::Grid(int rows, int columns)
     std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
 }
 
-bool Grid::hasLayer(std::size_t index1d, PixmapLayer PixmapLayer) const
-{
-    if (index1d < m_elements.size()) {
-        return static_cast<int>(PixmapLayer) & m_elements[index1d];
-    } else {
-        std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
-        return false;
-    }
-}
-
 bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
 {
     if (index1d < size()) {
@@ -43,8 +33,12 @@ bool Grid::addLayer(std::size_t index1d, PixmapLayer layer)
 bool Grid::removeLayer(std::size_t index1d, PixmapLayer layer)
 {
     if (index1d < m_elements.size()) {
-        m_elements[index1d] ^= static_cast<int>(layer);
-        return true;
+        if (static_cast<int>(layer) & m_elements[index1d]) {
+            m_elements[index1d] ^= static_cast<int>(layer);
+            return true;
+        } else {
+            return false;
+        }
     } else {
         std::cout << "ERROR:" << "index1d=" << index1d << "bigger than array size" << std::endl;
     }

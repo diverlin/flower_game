@@ -157,6 +157,22 @@ void GridMap::createSnake()
     addSnake(snake);
 }
 
+void GridMap::tapOnBusyTile(std::size_t index1d)
+{
+    Index2D index2d = m_grid.getIndex2D(index1d);
+    for (IBaseObject* object: m_objects) {
+        if (typeid(*object) == typeid(Snake)) {
+            Snake* snake = static_cast<Snake*>(object);
+            if (snake) {
+                if (snake->contain(index2d)) {
+                    snake->decreaseLength();
+                    return;
+                }
+            }
+        }
+    }
+}
+
 void GridMap::createFlower(std::size_t index1d)
 {
     if (m_coins >= FLOWER_COST) {
@@ -204,9 +220,6 @@ void GridMap::addStaticObject(StaticObject* object, int index1d)
 void GridMap::addSnake(Snake* snake)
 {
     m_objects.push_back(snake);
-    for (const Index2D& index2d: *snake) {
-        addImageToTile(snake->image(), m_grid.getIndex1D(index2d));
-    }
 }
 
 void GridMap::takeRewards(std::vector<Reward>& rewards)
@@ -220,6 +233,20 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
+    bool moveSnakes = false;
+    // TODO: move this into snake::update
+    m_msSinceLastSnakesMoveUpdate += int(frameDeltaTimeMs);
+    if (m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) {
+        moveSnakes = true;
+        m_msSinceLastSnakesMoveUpdate = 0;
+    }
+
+    // remove all snakes
+    for (std::size_t i=0; i<m_grid.size(); ++i) {
+        removeImageFromTile(PixmapLayer::SNAKE_LAYER, i);
+    }
+    //
+
     for (IBaseObject* object: m_objects) {
         object->update(frameDeltaTimeMs);
 
@@ -231,29 +258,22 @@ void GridMap::update(int frameDeltaTimeMs)
                     m_rewards.emplace_back(Reward{flower->mapTileIndex(), coins, flower->colorCode()});
                 }
             }
-        }
-    }
-
-    // TODO: move this into snake::update
-    m_msSinceLastSnakesMoveUpdate += int(frameDeltaTimeMs);
-    if (m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) {
-        for (IBaseObject* object: m_objects) {
-            if (typeid(*object) == typeid(Snake)) {
-                Snake* snake = static_cast<Snake*>(object);
-                if (snake) {
-                    Index2D lastTailIndex2d = snake->last();
+        } else if (typeid(*object) == typeid(Snake)) {
+            Snake* snake = static_cast<Snake*>(object);
+            if (snake) {
+                if (moveSnakes) {
+                    // TODO: move this into snake::update
                     Index2D headIndex2d = snake->first();
                     Index2D newIndex2d = headIndex2d;
                     newIndex2d += Index2D(0, 1);
                     snake->push(newIndex2d);
+                }
 
-                    removeImageFromTile(snake->image().layer(), m_grid.getIndex1D(lastTailIndex2d));
-                    addImageToTile(snake->image(), m_grid.getIndex1D(newIndex2d));
+                for (const Index2D& index2d: *snake) {
+                    addImageToTile(snake->image(), m_grid.getIndex1D(index2d));
                 }
             }
         }
-
-        m_msSinceLastSnakesMoveUpdate = 0;
     }
 }
 

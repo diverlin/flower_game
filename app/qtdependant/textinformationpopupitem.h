@@ -5,10 +5,11 @@
 
 namespace view {
 
-class TextInformationPopupItem : public QGraphicsTextItem
+class TextInformationPopupItem final : public QGraphicsTextItem
 {
 public:
     TextInformationPopupItem(const QPointF& pos, const QString& text, const QString& colorCode);
+    ~TextInformationPopupItem() override final;
 
     void update(int frameDeltaTimeMs);
 
