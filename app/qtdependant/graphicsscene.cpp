@@ -145,6 +145,8 @@ void GraphicsScene::updateTilesViews(const std::vector<core::Tile>& tiles)
                 std::string imageFilePath = it->second;
                 if (!imageFilePath.empty()) { // sometimes we clear the image path in tile for a specific layer in order to remove it
                     view->setPixmap(PixmapProvider::instance().getPixmap(imageFilePath.c_str(), m_world.tileSize()), layer);
+                } else {
+                    view->removePixmap(layer);
                 }
             }
             tile.resetIsDirtyFlag();

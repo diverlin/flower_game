@@ -25,6 +25,9 @@ public:
 
     void decreaseLength();
 
+    const Index2D& head() const { return first(); }
+    const Index2D& tail() const { return last(); }
+
 private:
     Image m_image;
     int m_msSinceLastGrow = 0;

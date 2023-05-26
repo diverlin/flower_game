@@ -18,7 +18,7 @@ void Snake::update(int frameDeltaTimeMs)
 {
     m_msSinceLastGrow += frameDeltaTimeMs;
     if (m_msSinceLastGrow > GROW_INTERVAL_MS) {
-        increaseLength();
+        //increaseLength();
         m_msSinceLastGrow = 0;
     }
     //std::cout<<"snake " << id() << " update"<<std::endl;

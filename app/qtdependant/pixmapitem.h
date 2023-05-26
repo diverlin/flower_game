@@ -16,6 +16,7 @@ public:
 
     void setPixmap(const QPixmap& pixmap, core::PixmapLayer layer);
     void removePixmap(core::PixmapLayer layer);
+//    void markDirty() { m_isDirty = true; }
 
     QSizeF size() const;
     QRectF boundingRect() const override;

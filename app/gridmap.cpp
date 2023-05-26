@@ -54,9 +54,9 @@ void GridMap::create()
 {
     createGround();
     createGrasses(10,20);
-    createRocks(3,6);
-    createWoods(1,1);
-    createTrees(1,2);
+//    createRocks(3,6);
+//    createWoods(1,1);
+//    createTrees(1,2);
     createSnake();
 }
 
@@ -151,9 +151,10 @@ void GridMap::createTrees(int numMin, int numMax)
 
 void GridMap::createSnake()
 {
-    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
+//    Index2D randMapIndex = m_grid.getFreeRandomIndex2D({Index2D(0,1)});
+    Index2D randMapIndex(1,1);
     Image image(":/tiles/snake_segment_texture.png", PixmapLayer::SNAKE_LAYER);
-    Snake* snake = new Snake(image, 2, {randMapIndex, randMapIndex+Index2D(0,1)});
+    Snake* snake = new Snake(image, 2, {randMapIndex+Index2D(0,-1), randMapIndex});
     addSnake(snake);
 }
 
@@ -189,20 +190,22 @@ void GridMap::createFlower(std::size_t index1d)
     }
 }
 
-void GridMap::addImageToTile(const Image& image, int index1d)
+bool GridMap::addImageToTile(const Image& image, int index1d)
 {
     if (m_grid.addLayer(index1d, image.layer())) {
         Tile& tile = m_tiles[index1d];
-        tile.addImage(image);
+        return tile.addImage(image);
     }
+    return false;
 }
 
-void GridMap::removeImageFromTile(PixmapLayer layer, int index1d)
+bool  GridMap::removeImageFromTile(PixmapLayer layer, int index1d)
 {
     if (m_grid.removeLayer(index1d, layer)) {
         Tile& tile = m_tiles[index1d];
-        tile.removeImage(layer);
+        return tile.removeImage(layer);
     }
+    return false;
 }
 
 void GridMap::addStaticObject(StaticObject* object, int index1d)
@@ -239,15 +242,17 @@ void GridMap::update(int frameDeltaTimeMs)
     bool moveSnakes = false;
     // TODO: move this into snake::update
     m_msSinceLastSnakesMoveUpdate += int(frameDeltaTimeMs);
-    if (m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) {
+    if ((m_msSinceLastSnakesMoveUpdate >= SNAKE_MOVE_UPDATE_INTERVAL) && (m_DEBUG_snakesStepNumMax < 10)) {
         moveSnakes = true;
         m_msSinceLastSnakesMoveUpdate = 0;
     }
 
     // remove all snakes
-    for (std::size_t i=0; i<m_grid.size(); ++i) {
-        removeImageFromTile(PixmapLayer::SNAKE_LAYER, i);
-    }
+//    for (std::size_t i=0; i<m_grid.size(); ++i) {
+//        removeImageFromTile(PixmapLayer::SNAKE_LAYER, i);
+//    }
+
+
     //
 
     for (IBaseObject* object: m_objects) {
@@ -267,15 +272,26 @@ void GridMap::update(int frameDeltaTimeMs)
                 std::cout << "--- snake id=" << snake->id() << " l=" << snake->maxLength() << std::endl;
                 if (moveSnakes) {
                     // TODO: move this into snake::update
-                    Index2D headIndex2d = snake->first();
+                    Index2D headIndex2d = snake->head();
                     Index2D newIndex2d = headIndex2d;
                     newIndex2d += Index2D(0, 1);
+
+                    Index2D tailIndex2D = snake->tail();
+                    std::size_t index1d = m_grid.getIndex1D(tailIndex2D);
+                    if (!removeImageFromTile(PixmapLayer::SNAKE_LAYER, index1d)) {
+                        std::cout<<"ERROR: to remove" << tailIndex2D << std::endl;
+                    }
+
                     snake->push(newIndex2d);
+                    m_DEBUG_snakesStepNumMax++;
+                    std::cout<< "move snake=" << m_DEBUG_snakesStepNumMax << " to="<< newIndex2d<< std::endl;
                 }
 
                 for (const Index2D& index2d: *snake) {
-                    std::cout << "---" << index2d <<std::endl;
-                    addImageToTile(snake->image(), m_grid.getIndex1D(index2d));
+                    std::cout << "attempt to addImage snake ToTile index=" << index2d << std::endl;
+                    if (!addImageToTile(snake->image(), m_grid.getIndex1D(index2d))) {
+                        //std::cout << "ERROR: fail to addImage snake toTile"<< std::endl;
+                    }
                 }
             }
         }

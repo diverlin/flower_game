@@ -63,6 +63,8 @@ private:
 
     int m_coins = 75;
 
+    int m_DEBUG_snakesStepNumMax = 0;
+
     void create();
 
     void createGround();
@@ -72,8 +74,8 @@ private:
     void createTrees(int numMin, int numMax);
     void createSnake();
 
-    void addImageToTile(const Image& image, int index1d);
-    void removeImageFromTile(PixmapLayer layer, int index1d);
+    bool addImageToTile(const Image& image, int index1d);
+    bool removeImageFromTile(PixmapLayer layer, int index1d);
 
     void addStaticObject(StaticObject*, int index1d);
     void addSnake(Snake*);

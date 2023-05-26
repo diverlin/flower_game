@@ -16,8 +16,8 @@ public:
     Tile(int id): m_id(id) {}
 
     int id() const { return m_id; }
-    void addImage(const Image& image);
-    void removeImage(PixmapLayer pixmapLayer);
+    bool addImage(const Image& image);
+    bool removeImage(PixmapLayer pixmapLayer);
 
     bool isDirty() const { return m_isDirty; }
     void resetIsDirtyFlag() const { m_isDirty = false; }
@@ -29,7 +29,7 @@ private:
     std::map<int, std::string> m_data;
     mutable bool m_isDirty = false;
 
-    void addImage(const std::string& imageFilePath, PixmapLayer pixmapLayer);
+    bool addImage(const std::string& imageFilePath, PixmapLayer pixmapLayer);
 };
 
 } // namespace core
