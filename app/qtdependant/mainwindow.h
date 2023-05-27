@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
 {
 Q_OBJECT
 public:
-    MainWindow(QWidget* parent = nullptr);
+    MainWindow(int width, int height);
 
 private:
     GraphicsScene* m_scene = nullptr;

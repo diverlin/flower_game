@@ -13,6 +13,7 @@ HEADERS += \
     $$PWD/gridtest.h \
     $$PWD/fixedqueuetest.h \
 
+TARGET = flower_game_tests
 
 
 

@@ -6,10 +6,10 @@
 
 namespace view {
 
-MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(int width, int height)
+    : QMainWindow()
 {
-    m_scene = new GraphicsScene(0, 0, 700, 500, this);
+    m_scene = new GraphicsScene(0, 0, width, height, this);
 
     m_view = new GraphicsView(m_scene, this);
     setCentralWidget(m_view);

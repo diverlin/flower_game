@@ -17,6 +17,13 @@ class PixmapItem;
 class GraphicsScene : public QGraphicsScene
 {
 Q_OBJECT
+
+#ifdef Q_OS_ANDROID
+    const int TILES_IN_ROW_NUM = 18;
+#else
+    const int TILES_IN_ROW_NUM = 24;
+#endif
+
 public:
     GraphicsScene(int x, int y, int width, int height, QObject* parent = nullptr);
 

@@ -10,7 +10,12 @@ namespace view {
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
     : QGraphicsScene(x, y, width, height, parent)
-    , m_world(16, 12, core::Size(800, 600))
+#ifdef Q_OS_ANDROID
+    , m_world(TILES_IN_ROW_NUM*width/float(height), TILES_IN_ROW_NUM, core::Size(width, height))
+#else
+    , m_world(TILES_IN_ROW_NUM, TILES_IN_ROW_NUM*height/float(width), core::Size(width, height))
+#endif
+
 {
     createTilesViews();
 

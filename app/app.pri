@@ -44,3 +44,5 @@ SOURCES += \
     $$PWD/snake.cpp \
 
 RESOURCES += $$PWD/data/flower_game.qrc
+
+TARGET = flower_game

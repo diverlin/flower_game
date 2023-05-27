@@ -54,9 +54,15 @@ void GridMap::create()
 {
     createGround();
     createGrasses(10,20);
+#ifdef Q_OS_ANDROID
     createRocks(6,10);
     createWoods(1,1);
     createTrees(2,4);
+#else
+    createRocks(3,6);
+    createWoods(1,1);
+    createTrees(1,2);
+#endif
 }
 
 void GridMap::createGround()
