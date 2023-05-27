@@ -6,6 +6,7 @@ namespace core {
 class SnakeSpawner
 {
     const int DEFAULT_OCCUR_INTERVAL_MS = 5000;
+    const int DEFAULT_DECREASE_SPAWN_TIME_MS = 10000;
 
 public:
     SnakeSpawner()=default;
@@ -18,10 +19,14 @@ public:
     void update(int frameDeltaTimeMs, int flowersCounter);
 
 private:
-    int m_msSinceLastOccur = 0;
-    int m_occurIntervalMs = 0;
-
+    bool m_isFirstOccur = true;
     bool m_isQueued = false;
+
+    int m_sinceLastOccurMs = 0;
+    float m_occurIntervalMs = DEFAULT_OCCUR_INTERVAL_MS;
+
+    int m_sinceLastDecreaseSpawnTimeMs = 0;
+    int m_decreaseSpawnTimeIntervalMs = DEFAULT_DECREASE_SPAWN_TIME_MS;
 };
 
 } // namespace core

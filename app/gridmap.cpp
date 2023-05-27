@@ -379,6 +379,7 @@ void GridMap::update(int frameDeltaTimeMs)
 
     m_snakeSpawner.update(frameDeltaTimeMs, m_flowersCounter);
     if (m_snakeSpawner.isQueued()) {
+        std::cout << "spawn!!!" << std::endl;
         createSnake();
         m_snakeSpawner.releaseQueued();
     }
