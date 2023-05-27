@@ -8,6 +8,7 @@
 #include "pixmaplayer.h"
 #include "tile.h"
 #include "snakespropertymodifier.h"
+#include "snakespawner.h"
 
 #include <vector>
 
@@ -29,7 +30,6 @@ class GridMap
 public:
     static const int FLOWER_COST = 50;
     const int START_COINS_NUM = 150;
-    const int SNAKE_OCCUR_INTERVAL_MS = 5000;
 
     GridMap(int rows, int columns, const Size& size);
     ~GridMap();
@@ -68,9 +68,7 @@ private:
     std::vector<Reward> m_rewards;
 
     SnakesPropertyModifier m_snakesPropertyModifier;
-
-    int m_msSinceLastSnakesOccur = 0;
-    int m_snakeOccurIntervalMs = 0;
+    SnakeSpawner m_snakeSpawner;
 
     int m_coins = START_COINS_NUM;
 

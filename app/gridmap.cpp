@@ -49,9 +49,7 @@ int GridMap::indexFromWorldCoord(const vec2& worldCoord) const
 void GridMap::reset()
 {
     m_snakesPropertyModifier.reset();
-
-    m_msSinceLastSnakesOccur = 0;
-    m_snakeOccurIntervalMs = 0;
+    m_snakeSpawner.reset();
 
     m_coins = START_COINS_NUM;
 
@@ -379,15 +377,11 @@ void GridMap::update(int frameDeltaTimeMs)
         removeStaticObject(m_grid.getIndex1D(index2d));
     }
 
-    m_msSinceLastSnakesOccur += frameDeltaTimeMs;
-    if (m_flowersCounter > 0) {
-        if (m_msSinceLastSnakesOccur > m_snakeOccurIntervalMs) {
-            createSnake();
-            m_snakeOccurIntervalMs = SNAKE_OCCUR_INTERVAL_MS;
-            m_msSinceLastSnakesOccur = 0;
-        }
+    m_snakeSpawner.update(frameDeltaTimeMs, m_flowersCounter);
+    if (m_snakeSpawner.isQueued()) {
+        createSnake();
+        m_snakeSpawner.releaseQueued();
     }
-
     m_snakesPropertyModifier.update(frameDeltaTimeMs, m_flowersCounter, atLeastOneFlowerWasEaten);
 }
 

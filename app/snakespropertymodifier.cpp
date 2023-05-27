@@ -2,11 +2,6 @@
 
 namespace core {
 
-SnakesPropertyModifier::SnakesPropertyModifier()
-{
-
-}
-
 void SnakesPropertyModifier::reset()
 {
     m_moveSpeedRatioDurationMs = -1;

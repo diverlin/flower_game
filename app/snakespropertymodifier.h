@@ -7,7 +7,7 @@ class SnakesPropertyModifier
 {
     const int SPEED_MULTIPLIER_EXPIRATION_MS = 5000;
 public:
-    SnakesPropertyModifier();
+    SnakesPropertyModifier()=default;
     ~SnakesPropertyModifier()=default;
 
     float moveSpeedMultiplier() const { return m_moveSpeedMultiplier; }
