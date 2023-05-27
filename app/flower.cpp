@@ -20,6 +20,7 @@ Flower::~Flower()
 void Flower::update(int frameDeltaTimeMs)
 {
     if (isAlive()) {
+        StaticObject::update(frameDeltaTimeMs);
         m_msSinceLastCoinProduce += frameDeltaTimeMs;
         if (m_msSinceLastCoinProduce > PRODUCE_COIN_INTERVAL_MS) {
             m_coins += PRODUCE_COIN_AMOUNT;
