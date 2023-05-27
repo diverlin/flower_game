@@ -64,7 +64,7 @@ private:
     Size m_tileSize = Size(10, 10);
 
     std::vector<Tile> m_tiles;
-    std::vector<IBaseObject*> m_objects;
+    std::vector<IBaseObject*> m_objects; // to loop over all objects
     std::vector<Reward> m_rewards;
 
     SnakesPropertyModifier m_snakesPropertyModifier;
@@ -75,11 +75,13 @@ private:
     int m_snakesCounter = 0;
     int m_flowersCounter = 0;
 
+    // these are temprorary buffers
     std::vector<Index2D> m_oldDirtyIndexesBuffer;
     std::vector<Index2D> m_newDirtyIndexesBuffer;
     std::vector<Index2D> m_eatenFlowerIndexesBuffer;
+    //
 
-    std::map<std::size_t, StaticObject*> m_staticObjectsMap; // to get fast access to flowers
+    std::map<std::size_t, StaticObject*> m_staticObjectsMap; // to easy access staticobjects by map index
 
     void fillStaticObjects();
     void createGround();
