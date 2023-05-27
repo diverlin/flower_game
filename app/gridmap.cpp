@@ -19,13 +19,11 @@ GridMap::GridMap(int rows, int columns, const Size& size)
     for (std::size_t i=0; i<m_grid.size(); ++i) {
         m_tiles.emplace_back(Tile(i));
     }
-
-    fillStaticObjects();
 }
 
 GridMap::~GridMap()
 {
-    clear();
+    reset();
 }
 
 vec2 GridMap::worldCoordFromIndex(std::size_t index1d) const
@@ -48,7 +46,7 @@ int GridMap::indexFromWorldCoord(const vec2& worldCoord) const
     return -1;
 }
 
-void GridMap::clear()
+void GridMap::reset()
 {
     m_msSinceLastSnakesOccur = 0;
     m_snakeOccurIntervalMs = 0;
@@ -78,6 +76,8 @@ void GridMap::clear()
         delete object;
     }
     m_objects.clear();
+
+    m_grid.reset();
 }
 
 void GridMap::onStart()

@@ -11,9 +11,9 @@ public:
     GameOverObserver(GridMap* world);
     ~GameOverObserver()=default;
 
-    void onStart();
+    void restart();
 
-    bool gameOverRequested() const { return m_gameOverRequested; }
+    bool isGameOver() const { return m_isGameOver; }
 
     void update();
 
@@ -23,7 +23,7 @@ private:
     GridMap* m_world = nullptr;
 
     bool m_hadFlowerAfterRestartGame = false;
-    bool m_gameOverRequested = false;
+    bool m_isGameOver = false;
 };
 
 } // namespace core

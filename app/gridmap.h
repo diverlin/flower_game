@@ -35,7 +35,7 @@ public:
     ~GridMap();
 
     void onStart();
-    void clear();
+    void reset();
 
     int coins() const { return m_coins; }
 

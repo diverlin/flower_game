@@ -8,8 +8,13 @@ namespace view {
 class TextInformationItem : public QGraphicsTextItem
 {
 public:
-    TextInformationItem(QGraphicsItem* parent = nullptr);
+    TextInformationItem(int fontSize, QGraphicsItem* parent = nullptr);
     void setMessage(const QString& text, bool centerPosition = false);
+
+    int width() const;
+
+private:
+    QString m_text;
 };
 
 } // namespace view

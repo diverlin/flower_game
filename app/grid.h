@@ -12,6 +12,7 @@ class Grid {
 public:
     Grid(int rows, int columns);
 
+    void reset();
     void randomizeIndexes();
 
     int rows() const { return m_rows; }

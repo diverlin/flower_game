@@ -9,71 +9,118 @@
 namespace view {
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
-    : QGraphicsScene(x, y, width, height, parent)
+    :
+    QGraphicsScene(x, y, width, height, parent)
+    , m_screenWidth(width)
+    , m_screenHeight(height)
 #ifdef Q_OS_ANDROID
     , m_world(TILES_IN_ROW_NUM*width/float(height), TILES_IN_ROW_NUM, core::Size(width, height))
 #else
     , m_world(TILES_IN_ROW_NUM, TILES_IN_ROW_NUM*height/float(width), core::Size(width, height))
 #endif
+    , m_gameOverObserver(&m_world)
 
 {
+    // coin ico
+    m_coinIcoItem = new PixmapItem;
+    m_coinIcoItem->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/coin.png", core::Size(ICON_SIZE, ICON_SIZE)), core::PixmapLayer::HUD_LAYER);
+    m_coinIcoItem->setPos(5, 5);
+    addItem(m_coinIcoItem);
+
+    // coin label
+    m_coinsCounterTextItem = new TextInformationItem(FONT_SIZE);
+    m_coinsCounterTextItem->setPos(1.2*ICON_SIZE, 0);
+    addItem(m_coinsCounterTextItem);
+
+    // prompt label
+    m_promptTextItem = new TextInformationItem(PROMPT_FONT_SIZE);
+    addItem(m_promptTextItem);
+
     QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
 
     createTilesViews();
 
-    m_textInformationItem = new TextInformationItem();
-    addItem(m_textInformationItem);
-
-    const int icoSize = 20;
-    const float hudOpacity = 0.8;
-
-    // coin ico
-    m_coinIcoItem = new PixmapItem;
-    m_coinIcoItem->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/coin.png", core::Size(icoSize, icoSize)), core::PixmapLayer::HUD_LAYER);
-    m_coinIcoItem->setPos(5, 5);
-    m_coinIcoItem->setOpacity(hudOpacity);
-    addItem(m_coinIcoItem);
-
-    // coin label
-    m_textInformationItem->setPos(1.2*icoSize, 0);
-    m_textInformationItem->setOpacity(hudOpacity);
-
     m_gameLoopTimer.setInterval(20);
-    m_gameLoopTimer.start();
 
-    m_frameElapsedTimer.start();
+    showStartupScreen();
 }
 
-void GraphicsScene::clear()
+void GraphicsScene::showGamePlayScreen()
 {
-    m_world.clear();
+    m_promptTextItem->setOpacity(0.0f);
+
+    m_coinIcoItem->setOpacity(HUD_OPACITY);
+    m_coinsCounterTextItem->setOpacity(HUD_OPACITY);
+
+    restartGamePlay();
+    m_isStartUpScreen = false;
 }
 
-void GraphicsScene::stop()
+void GraphicsScene::showStartupScreen()
+{
+    // hide
+    m_coinIcoItem->setOpacity(0.0f);
+    m_coinsCounterTextItem->setOpacity(0.0f);
+
+    // show
+    m_promptTextItem->setOpacity(HUD_OPACITY);
+
+#ifdef Q_OS_ANDROID
+    QString msg = "TAP on screen to start NEW GAME";
+#else
+    QString msg = "Press MOUSE BUTTON to start NEW GAME";
+#endif
+
+    if (m_gameOverObserver.isGameOver()) {
+        msg.prepend("GAME OVER!!!");
+    }
+    m_promptTextItem->setMessage(msg);
+    m_promptTextItem->setPos(m_screenWidth/2 - m_promptTextItem->width()/2, m_screenHeight/2);
+
+    stopGamePlay();
+    m_isStartUpScreen = true;
+}
+
+void GraphicsScene::clearSession()
+{
+    m_world.reset();
+}
+
+void GraphicsScene::stopGamePlay()
 {
     m_gameLoopTimer.stop();
 }
 
-void GraphicsScene::start()
+void GraphicsScene::startGamePlay()
 {
     m_world.onStart();
+    m_gameLoopTimer.start();
     m_frameElapsedTimer.start();
+    m_gameOverObserver.restart();
 }
 
-void GraphicsScene::restart()
+void GraphicsScene::restartGamePlay()
 {
-    stop();
-    clear();
-    start();
+    stopGamePlay();
+    clearSession();
+    startGamePlay();
 }
 
 void GraphicsScene::onMousePositionChanged(const QPointF& scenePos)
 {
+    if (m_isStartUpScreen) {
+        return;
+    }
     m_tileIndexUnderCursor = m_world.indexFromWorldCoord(core::vec2(scenePos.x(), scenePos.y()));
 }
 
 void GraphicsScene::onMouseLeftButtonPress(const QPointF& /*scenePos*/)
 {
+    if (m_isStartUpScreen) {
+        showGamePlayScreen();
+        return;
+    }
+
     if (m_tileIndexUnderCursor != -1) {
         m_world.tapOnBusyTile(m_tileIndexUnderCursor);
     }
@@ -81,6 +128,11 @@ void GraphicsScene::onMouseLeftButtonPress(const QPointF& /*scenePos*/)
 
 void GraphicsScene::onMouseRightButtonPress(const QPointF& /*scenePos*/)
 {
+    if (m_isStartUpScreen) {
+        showGamePlayScreen();
+        return;
+    }
+
     if (m_tileIndexUnderCursor != -1) {
         if (m_world.grid().isIndexFree(m_tileIndexUnderCursor)) {
             m_world.createFlower(m_tileIndexUnderCursor);
@@ -94,7 +146,7 @@ void GraphicsScene::updateGameLoop()
 {
     qint64 frameDeltaTimeMs = m_frameElapsedTimer.elapsed();
 
-    m_textInformationItem->setMessage(QString("x%1").arg(m_world.coins()));
+    m_coinsCounterTextItem->setMessage(QString("x%1").arg(m_world.coins()));
 
     m_world.update(frameDeltaTimeMs);
     updateTilesViews(m_world.tiles());
@@ -102,6 +154,12 @@ void GraphicsScene::updateGameLoop()
 
     handleRewards();
     updatePopUps(frameDeltaTimeMs);
+
+    m_gameOverObserver.update();
+    if (m_gameOverObserver.isGameOver()) {
+        resetTileViews();
+        showStartupScreen();
+    }
 
     m_frameElapsedTimer.restart();
 }
@@ -147,11 +205,6 @@ void GraphicsScene::updateOverlay()
             }
         } else {
             tileView->removePixmap(core::PixmapLayer::OVERLAY_LAYER);
-            //if (m_gridMap.grid().isIndexPassable(index2d)) {
-            //tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_black_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
-            //} else {
-            //tileView->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/frame_red_blurred.png", m_gridMap.tileSize()), core::PixmapLayer::OVERLAY_LAYER);
-            //}
         }
     }
 }
@@ -165,6 +218,13 @@ void GraphicsScene::createTilesViews()
         tileView->setPos(pos.x(), pos.y());
         m_tilesViews[i] = tileView;
         addItem(tileView);
+    }
+}
+
+void GraphicsScene::resetTileViews()
+{
+    for (PixmapItem* view: m_tilesViews.values()) {
+        view->clear();
     }
 }
 

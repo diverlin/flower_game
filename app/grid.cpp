@@ -37,6 +37,15 @@ Grid::Grid(int rows, int columns)
     std::cout << "m_array.capacity=" << m_elements.capacity() << std::endl;
 }
 
+void Grid::reset()
+{
+    for (int i=0; i<m_rows*m_columns; ++i) {
+        m_elements[i] = 0;
+    }
+
+    randomizeIndexes();
+}
+
 void Grid::randomizeIndexes()
 {
     randomizeVector(m_randomIndexes);

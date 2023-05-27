@@ -2,6 +2,7 @@
 #define GRAPHICSSCENE_H
 
 #include "../gridmap.h"
+#include "../gameoverobserver.h"
 
 #include <QGraphicsScene>
 #include <QTimer>
@@ -24,18 +25,29 @@ Q_OBJECT
     const int TILES_IN_ROW_NUM = 24;
 #endif
 
+    const float HUD_OPACITY = 0.8f;
+    const int ICON_SIZE = 20;
+    const int FONT_SIZE = 14;
+    const int PROMPT_FONT_SIZE = 24;
+
 public:
     GraphicsScene(int x, int y, int width, int height, QObject* parent = nullptr);
 
-    void restart();
+    void showGamePlayScreen();
+    void showStartupScreen();
 
     void onMousePositionChanged(const QPointF&);
     void onMouseLeftButtonPress(const QPointF&);
     void onMouseRightButtonPress(const QPointF&);
 
 private:
-    TextInformationItem* m_textInformationItem;
+    bool m_isStartUpScreen = true;
+    int m_screenWidth = 0;
+    int m_screenHeight = 0;
+
     PixmapItem* m_coinIcoItem = nullptr;
+    TextInformationItem* m_coinsCounterTextItem = nullptr;
+    TextInformationItem* m_promptTextItem = nullptr;
 
     int m_tileIndexUnderCursor;
     core::GridMap m_world;
@@ -46,12 +58,16 @@ private:
 
     QElapsedTimer m_frameElapsedTimer;
 
-    void start();
-    void stop();
-    void clear();
+    core::GameOverObserver m_gameOverObserver;
+
+    void restartGamePlay();
+    void startGamePlay();
+    void stopGamePlay();
+    void clearSession();
 
     void createTilesViews();
     void updateOverlay();
+    void resetTileViews();
     void updateTilesViews(const std::vector<core::Tile>&);
     void handleRewards();
     void updatePopUps(int frameDeltaTimeMs);

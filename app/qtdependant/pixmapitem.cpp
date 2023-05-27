@@ -19,6 +19,13 @@ QRectF PixmapItem::boundingRect() const
     return QRectF(QPointF(0, 0), m_finalPixmap.size());
 }
 
+void PixmapItem::clear()
+{
+    m_pixmaps.clear();
+    m_finalPixmap.fill(Qt::transparent);
+    update();
+}
+
 void PixmapItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     if (m_isDirty) {

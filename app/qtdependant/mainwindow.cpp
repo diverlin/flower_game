@@ -15,9 +15,4 @@ MainWindow::MainWindow(int width, int height)
     setCentralWidget(m_view);
 }
 
-void MainWindow::startNewGame()
-{
-    m_scene->restart();
-}
-
 } // namespace view

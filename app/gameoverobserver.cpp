@@ -11,21 +11,22 @@ GameOverObserver::GameOverObserver(GridMap* world)
 
 }
 
-void GameOverObserver::onStart()
+void GameOverObserver::restart()
 {
     m_hadFlowerAfterRestartGame = false;
-    m_gameOverRequested = false;
+    m_isGameOver = false;
 }
 
 void GameOverObserver::update()
 {
     if (m_hadFlowerAfterRestartGame) {
         if ((m_world->flowersCounter() == 0) && (m_world->coins() < GridMap::FLOWER_COST)) {
-            m_gameOverRequested = true;
+            m_isGameOver = true;
         }
     } else {
         if (m_world->flowersCounter() > 0) {
             m_hadFlowerAfterRestartGame = true;
+            // m_isGameOver = true; // uncomment for test screen transition
         }
     }
 }
