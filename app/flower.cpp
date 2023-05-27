@@ -19,13 +19,13 @@ Flower::~Flower()
 
 void Flower::update(int frameDeltaTimeMs)
 {
-    m_msSinceLastCoinProduce += frameDeltaTimeMs;
-    if (m_msSinceLastCoinProduce > PRODUCE_COIN_INTERVAL_MS) {
-        m_coins += PRODUCE_COIN_AMOUNT;
-        m_msSinceLastCoinProduce = 0;
-        //std::cout<<"flower " << id() << " got coins" << m_coins << std::endl;
+    if (isAlive()) {
+        m_msSinceLastCoinProduce += frameDeltaTimeMs;
+        if (m_msSinceLastCoinProduce > PRODUCE_COIN_INTERVAL_MS) {
+            m_coins += PRODUCE_COIN_AMOUNT;
+            m_msSinceLastCoinProduce = 0;
+        }
     }
-    //std::cout<<"flower " << id() << " update"<<std::endl;
 }
 
 int Flower::takeCoins()

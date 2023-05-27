@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 #endif
 
     view::MainWindow window(width, height);
-    window.setFixedSize(1.01f*width, 1.01f*height);
+    window.setFixedSize(1.02f*width, 1.02f*height);
 
     window.show();
 

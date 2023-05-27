@@ -73,7 +73,7 @@ private:
     std::vector<Index2D> m_newDirtyIndexesBuffer;
     std::vector<Index2D> m_eatenFlowerIndexesBuffer;
 
-    std::map<std::size_t, StaticObject*> m_staticObjectsMap;
+    std::map<std::size_t, StaticObject*> m_staticObjectsMap; // to get fast access to flowers
 
     void create();
 

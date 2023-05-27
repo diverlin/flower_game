@@ -174,7 +174,11 @@ void GridMap::tapOnBusyTile(std::size_t index1d)
             if (snake) {
                 if (snake->contain(index2d)) {
                     std::cout << "gotcha snake=" << snake->id() << " on index=" << index1d << std::endl;
-                    snake->decreaseLength();
+#ifdef ENABLE_SNAKES_KILL
+                    snake->hit();
+#else
+                    if (snake->maxLength() > 2) { snake->hit(); }
+#endif
                     return;
                 }
             }
@@ -283,7 +287,9 @@ void GridMap::update(int frameDeltaTimeMs)
 
     m_eatenFlowerIndexesBuffer.clear();
 
-    for (IBaseObject* object: m_objects) {
+    std::vector<IBaseObject*>::iterator it = m_objects.begin();
+    for ( ; it != m_objects.end(); ) {
+        IBaseObject* object = *it;
         object->update(frameDeltaTimeMs);
 
         if (typeid(*object) == typeid(Flower)) {
@@ -297,10 +303,11 @@ void GridMap::update(int frameDeltaTimeMs)
             }
         } else if (typeid(*object) == typeid(Snake)) {
             Snake* snake = static_cast<Snake*>(object);
-            snake->setMoveSpeedMultiplier(m_snakeMoveSpeedMultiplier);
-            snake->setMaxLengthMultiplier(m_snakeMaxLengthMultiplier);
             if (snake) {
                 snakesCounter++;
+                snake->setMoveSpeedMultiplier(m_snakeMoveSpeedMultiplier);
+                snake->setMaxLengthMultiplier(m_snakeMaxLengthMultiplier);
+
                 if (snake->hasDirtyIndexes()) {
                     snake->takeDirtyMoveIndexes(m_oldDirtyIndexesBuffer, m_newDirtyIndexesBuffer);
                     for (Index2D& index2d: m_oldDirtyIndexesBuffer) {
@@ -323,27 +330,33 @@ void GridMap::update(int frameDeltaTimeMs)
                 }
             }
         }
+        if (!object->isAlive() && typeid(*object) == typeid(Snake)) { // currently we remove dynamic objects as snakes in that way, for static objects we remove them differently
+            //it = m_objects.erase(it);
+            //delete object;
+            ++it;
+        } else {
+            ++it;
+        }
     }
 
+    // remove dead flowers
     for (const Index2D& index2d: m_eatenFlowerIndexesBuffer) {
         removeStaticObject(m_grid.getIndex1D(index2d));
     }
 
     m_msSinceLastSnakesOccur += frameDeltaTimeMs;
     if (flowersCounter > 0) {
-        //if (snakesCounter < 4) {
-            if (m_msSinceLastSnakesOccur > m_snakeOccurIntervalMs) {
-                createSnake();
-                m_snakeOccurIntervalMs = SNAKE_OCCUR_INTERVAL_MS;
-                m_msSinceLastSnakesOccur = 0;
-            }
-        //}
+        if (m_msSinceLastSnakesOccur > m_snakeOccurIntervalMs) {
+            createSnake();
+            m_snakeOccurIntervalMs = SNAKE_OCCUR_INTERVAL_MS;
+            m_msSinceLastSnakesOccur = 0;
+        }
     }
 
     if (flowersCounter >= 2) {
-            m_snakeMaxLengthMultiplier = 2.0f;
+        m_snakeMaxLengthMultiplier = 2.0f;
     } else {
-            m_snakeMaxLengthMultiplier = 1.0f;
+        m_snakeMaxLengthMultiplier = 1.0f;
     }
 
     // todo move to separate class

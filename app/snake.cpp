@@ -22,9 +22,11 @@ Snake::Snake(Grid* grid, const Image& image, std::size_t maxLength, const std::v
 
 void Snake::update(int frameDeltaTimeMs)
 {
-    //std::cout<<"snake " << id() << " update"<<std::endl;
-    updateGrow(frameDeltaTimeMs);
-    updateMove(frameDeltaTimeMs);
+    if (isAlive()) {
+        //std::cout<<"snake " << id() << " update"<<std::endl;
+        updateGrow(frameDeltaTimeMs);
+        updateMove(frameDeltaTimeMs);
+    }
 }
 
 void Snake::updateGrow(int frameDeltaTimeMs)
@@ -233,6 +235,11 @@ void Snake::takeEatenFlowerIndexes(std::vector<Index2D>& eatenIndexes)
     m_eatenFlowerIndexes.clear();
 }
 
+void Snake::hit()
+{
+    decreaseLength();
+}
+
 void Snake::increaseLength()
 {
     int lengthCandidate = maxLength()+1;
@@ -244,14 +251,17 @@ void Snake::increaseLength()
 void Snake::decreaseLength()
 {
     int lengthCandidate = maxLength()-1;
+
     //std::cout<<"try snake decreaseLength to=" << lengthCandidate << std::endl;
-    if (lengthCandidate >= LENGTH_MIN) {
+    if (lengthCandidate > 0) {
         //std::cout<<"snake decreaseLength to=" << lengthCandidate << std::endl;
         if (size() >= lengthCandidate) {
             m_oldPosDirtyIndexes.push_back(tail());
             m_hasPosDirtyIndexes = true;
         }
         setMaxLength(lengthCandidate);
+    } else {
+        setDead();
     }
 }
 

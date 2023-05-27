@@ -16,7 +16,6 @@ class Snake : public FixedQueue<Index2D>, public IBaseObject
 {
     const int GROW_INTERVAL_MS = 3000;
     const int DEFAULT_MOVE_INTERVAL_MS = 500;
-    const int LENGTH_MIN = 2;
     const int LENGTH_MAX = 5;
 
     enum Direction { LEFT, RIGHT, UP, DOWN };
@@ -30,11 +29,12 @@ public:
     const Image& image() const { return m_image; }
     void update(int frameDeltaTimeMs) override final;
 
-    void decreaseLength();
+    void hit();
 
     const Index2D& head() const { return first(); }
     const Index2D& tail() const { return last(); }
 
+    // we redraw only changed segments in order to minimize the tile redraw logic
     void takeDirtyMoveIndexes(std::vector<Index2D>& oldIndexes, std::vector<Index2D>& newIndexes);
 
     bool hasEatenFlowers() const { return !m_eatenFlowerIndexes.empty(); }
@@ -65,6 +65,7 @@ private:
     // to check the eaten flowers
     std::vector<Index2D> m_eatenFlowerIndexes;
 
+    void decreaseLength();
     void increaseLength();
 
     void updateGrow(int frameDeltaTimeMs);
