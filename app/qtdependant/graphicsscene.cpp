@@ -10,7 +10,7 @@ namespace view {
 
 GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* parent)
     : QGraphicsScene(x, y, width, height, parent)
-    , m_world(16, 12, core::Size(800, 600))
+    , m_world(16, 12, core::Size(width, height))
 {
     createTilesViews();
 
