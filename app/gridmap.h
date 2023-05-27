@@ -34,6 +34,9 @@ public:
     GridMap(int rows, int columns, const Size& size);
     ~GridMap();
 
+    void onStart();
+    void clear();
+
     int coins() const { return m_coins; }
 
     const Size& tileSize() const { return m_tileSize; }
@@ -75,8 +78,7 @@ private:
 
     std::map<std::size_t, StaticObject*> m_staticObjectsMap; // to get fast access to flowers
 
-    void create();
-
+    void fillStaticObjects();
     void createGround();
     void createGrasses(int numMin, int numMax);
     void createRocks(int numMin, int numMax);

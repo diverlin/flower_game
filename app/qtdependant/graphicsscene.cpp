@@ -17,6 +17,8 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 #endif
 
 {
+    QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
+
     createTilesViews();
 
     m_textInformationItem = new TextInformationItem();
@@ -36,11 +38,33 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
     m_textInformationItem->setPos(1.2*icoSize, 0);
     m_textInformationItem->setOpacity(hudOpacity);
 
-    QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
     m_gameLoopTimer.setInterval(20);
     m_gameLoopTimer.start();
 
     m_frameElapsedTimer.start();
+}
+
+void GraphicsScene::clear()
+{
+    m_world.clear();
+}
+
+void GraphicsScene::stop()
+{
+    m_gameLoopTimer.stop();
+}
+
+void GraphicsScene::start()
+{
+    m_world.onStart();
+    m_frameElapsedTimer.start();
+}
+
+void GraphicsScene::restart()
+{
+    stop();
+    clear();
+    start();
 }
 
 void GraphicsScene::onMousePositionChanged(const QPointF& scenePos)

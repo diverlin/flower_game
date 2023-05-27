@@ -18,6 +18,8 @@ Q_OBJECT
 public:
     MainWindow(int width, int height);
 
+    void startNewGame();
+
 private:
     GraphicsScene* m_scene = nullptr;
     GraphicsView* m_view = nullptr;

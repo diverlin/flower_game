@@ -3,6 +3,12 @@
 
 namespace core {
 
+void Tile::clear()
+{
+    m_data.clear();
+    m_isDirty = true;
+}
+
 bool Tile::addImage(const Image& image)
 {
     return addImage(image.filePath(), image.layer());

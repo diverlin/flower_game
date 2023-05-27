@@ -27,6 +27,8 @@ Q_OBJECT
 public:
     GraphicsScene(int x, int y, int width, int height, QObject* parent = nullptr);
 
+    void restart();
+
     void onMousePositionChanged(const QPointF&);
     void onMouseLeftButtonPress(const QPointF&);
     void onMouseRightButtonPress(const QPointF&);
@@ -43,7 +45,11 @@ private:
     std::vector<TextInformationPopupItem*> m_popUps;
 
     QElapsedTimer m_frameElapsedTimer;
-    
+
+    void start();
+    void stop();
+    void clear();
+
     void createTilesViews();
     void updateOverlay();
     void updateTilesViews(const std::vector<core::Tile>&);

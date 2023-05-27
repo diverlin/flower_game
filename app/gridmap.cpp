@@ -20,14 +20,12 @@ GridMap::GridMap(int rows, int columns, const Size& size)
         m_tiles.emplace_back(Tile(i));
     }
 
-    create();
+    fillStaticObjects();
 }
 
 GridMap::~GridMap()
 {
-    for (IBaseObject* object: m_objects) {
-        delete object;
-    }
+    clear();
 }
 
 vec2 GridMap::worldCoordFromIndex(std::size_t index1d) const
@@ -50,7 +48,41 @@ int GridMap::indexFromWorldCoord(const vec2& worldCoord) const
     return -1;
 }
 
-void GridMap::create()
+void GridMap::clear()
+{
+    m_msSinceLastSnakesOccur = 0;
+    m_snakeOccurIntervalMs = 0;
+    m_moveSpeedRatioDurationMs = -1;
+    m_snakeMoveSpeedMultiplier = 1.0f;
+    m_snakeMaxLengthMultiplier = 1.0f;
+
+    m_coins = START_COINS_NUM;
+
+    m_oldDirtyIndexesBuffer.clear();
+    m_newDirtyIndexesBuffer.clear();
+    m_eatenFlowerIndexesBuffer.clear();
+
+    for (std::size_t i=0; i<m_grid.size(); ++i) {
+        Tile& tile = m_tiles.at(i);
+        tile.clear();
+    }
+
+    m_rewards.clear();
+
+    m_staticObjectsMap.clear();
+
+    for (IBaseObject* object: m_objects) {
+        delete object;
+    }
+    m_objects.clear();
+}
+
+void GridMap::onStart()
+{
+    fillStaticObjects();
+}
+
+void GridMap::fillStaticObjects()
 {
     createGround();
     createGrasses(10,20);
@@ -331,9 +363,8 @@ void GridMap::update(int frameDeltaTimeMs)
             }
         }
         if (!object->isAlive() && typeid(*object) == typeid(Snake)) { // currently we remove dynamic objects as snakes in that way, for static objects we remove them differently
-            //it = m_objects.erase(it);
-            //delete object;
-            ++it;
+            it = m_objects.erase(it);
+            delete object;
         } else {
             ++it;
         }

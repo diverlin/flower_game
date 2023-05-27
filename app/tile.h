@@ -15,6 +15,8 @@ class Tile
 public:
     Tile(int id): m_id(id) {}
 
+    void clear();
+
     int id() const { return m_id; }
     bool addImage(const Image& image);
     bool removeImage(PixmapLayer pixmapLayer);
