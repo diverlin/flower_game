@@ -28,7 +28,8 @@ Q_OBJECT
     const float HUD_OPACITY = 0.8f;
     const int ICON_SIZE = 20;
     const int FONT_SIZE = 14;
-    const int PROMPT_FONT_SIZE = 24;
+    const int PROMPT_LABEL_FONT_SIZE = 18;
+    const int GAMEOVER_LABEL_FONT_SIZE = 42;
 
 public:
     GraphicsScene(int x, int y, int width, int height, QObject* parent = nullptr);
@@ -48,6 +49,7 @@ private:
     PixmapItem* m_coinIcoItem = nullptr;
     TextInformationItem* m_coinsCounterTextItem = nullptr;
     TextInformationItem* m_promptTextItem = nullptr;
+    TextInformationItem* m_gameOverTextItem = nullptr;
 
     int m_tileIndexUnderCursor;
     core::GridMap m_world;

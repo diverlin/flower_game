@@ -21,6 +21,8 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
     , m_gameOverObserver(&m_world)
 
 {
+    createTilesViews();
+
     // coin ico
     m_coinIcoItem = new PixmapItem;
     m_coinIcoItem->setPixmap(PixmapProvider::instance().getPixmap(":/tiles/coin.png", core::Size(ICON_SIZE, ICON_SIZE)), core::PixmapLayer::HUD_LAYER);
@@ -33,12 +35,16 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
     addItem(m_coinsCounterTextItem);
 
     // prompt label
-    m_promptTextItem = new TextInformationItem(PROMPT_FONT_SIZE);
+    m_promptTextItem = new TextInformationItem(PROMPT_LABEL_FONT_SIZE);
     addItem(m_promptTextItem);
 
-    QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
+    // gameover label
+    m_gameOverTextItem = new TextInformationItem(GAMEOVER_LABEL_FONT_SIZE);
+    m_gameOverTextItem->setMessage("GAME OVER");
+    m_gameOverTextItem->setPos(m_screenWidth/2 - m_gameOverTextItem->width()/2, 0.33f*m_screenHeight);
+    addItem(m_gameOverTextItem);
 
-    createTilesViews();
+    QObject::connect(&m_gameLoopTimer, &QTimer::timeout, this, &GraphicsScene::updateGameLoop);
 
     m_gameLoopTimer.setInterval(20);
 
@@ -47,12 +53,18 @@ GraphicsScene::GraphicsScene(int x, int y, int width, int height, QObject* paren
 
 void GraphicsScene::showGamePlayScreen()
 {
-    m_promptTextItem->setOpacity(0.0f);
+    restartGamePlay();
 
+    // hide
+    m_promptTextItem->setOpacity(0.0f);
+    m_gameOverTextItem->setOpacity(0.0f);
+
+    // show
     m_coinIcoItem->setOpacity(HUD_OPACITY);
     m_coinsCounterTextItem->setOpacity(HUD_OPACITY);
 
-    restartGamePlay();
+    m_gameOverTextItem->setOpacity(0.0f);
+
     m_isStartUpScreen = false;
 }
 
@@ -72,7 +84,9 @@ void GraphicsScene::showStartupScreen()
 #endif
 
     if (m_gameOverObserver.isGameOver()) {
-        msg.prepend("GAME OVER!!!");
+        m_gameOverTextItem->setOpacity(HUD_OPACITY);
+    } else {
+        m_gameOverTextItem->setOpacity(0.0f);
     }
     m_promptTextItem->setMessage(msg);
     m_promptTextItem->setPos(m_screenWidth/2 - m_promptTextItem->width()/2, m_screenHeight/2);

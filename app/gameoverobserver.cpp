@@ -26,7 +26,6 @@ void GameOverObserver::update()
     } else {
         if (m_world->flowersCounter() > 0) {
             m_hadFlowerAfterRestartGame = true;
-            // m_isGameOver = true; // uncomment for test screen transition
         }
     }
 }
