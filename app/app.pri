@@ -24,6 +24,7 @@ HEADERS += \
     $$PWD/flower.h \
     $$PWD/fixedqueue.h \
     $$PWD/snake.h \
+    $$PWD/snakespropertymodifier.h \
 
 SOURCES += \
     $$PWD/qtdependant/mainwindow.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
     $$PWD/staticobject.cpp \
     $$PWD/flower.cpp \
     $$PWD/snake.cpp \
+    $$PWD/snakespropertymodifier.cpp \
 
 RESOURCES += $$PWD/data/flower_game.qrc
 

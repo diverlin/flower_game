@@ -48,11 +48,10 @@ int GridMap::indexFromWorldCoord(const vec2& worldCoord) const
 
 void GridMap::reset()
 {
+    m_snakesPropertyModifier.reset();
+
     m_msSinceLastSnakesOccur = 0;
     m_snakeOccurIntervalMs = 0;
-    m_moveSpeedRatioDurationMs = -1;
-    m_snakeMoveSpeedMultiplier = 1.0f;
-    m_snakeMaxLengthMultiplier = 1.0f;
 
     m_coins = START_COINS_NUM;
 
@@ -320,6 +319,8 @@ void GridMap::update(int frameDeltaTimeMs)
     m_snakesCounter = 0;
     m_flowersCounter = 0;
 
+    bool atLeastOneFlowerWasEaten = false;
+
     m_eatenFlowerIndexesBuffer.clear();
 
     std::vector<IBaseObject*>::iterator it = m_objects.begin();
@@ -340,8 +341,8 @@ void GridMap::update(int frameDeltaTimeMs)
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
                 m_snakesCounter++;
-                snake->setMoveSpeedMultiplier(m_snakeMoveSpeedMultiplier);
-                snake->setMaxLengthMultiplier(m_snakeMaxLengthMultiplier);
+                snake->setMoveSpeedMultiplier(m_snakesPropertyModifier.moveSpeedMultiplier());
+                snake->setMaxLengthMultiplier(m_snakesPropertyModifier.maxLengthMultiplier());
 
                 if (snake->hasDirtyIndexes()) {
                     snake->takeDirtyMoveIndexes(m_oldDirtyIndexesBuffer, m_newDirtyIndexesBuffer);
@@ -361,7 +362,7 @@ void GridMap::update(int frameDeltaTimeMs)
 
                 if (snake->hasEatenFlowers()) {
                     snake->takeEatenFlowerIndexes(m_eatenFlowerIndexesBuffer);
-                    m_moveSpeedRatioDurationMs = SNAKE_SPEED_MULTIPLIER_EXPIRATION_MS; // start speed multiplicator
+                    atLeastOneFlowerWasEaten = true;
                 }
             }
         }
@@ -387,20 +388,7 @@ void GridMap::update(int frameDeltaTimeMs)
         }
     }
 
-    if (m_flowersCounter >= 2) {
-        m_snakeMaxLengthMultiplier = 2.0f;
-    } else {
-        m_snakeMaxLengthMultiplier = 1.0f;
-    }
-
-    // todo move to separate class
-    // count down move speed multiplicator
-    if (m_moveSpeedRatioDurationMs > 0) {
-        m_moveSpeedRatioDurationMs -= frameDeltaTimeMs;
-        m_snakeMoveSpeedMultiplier = 2.0f;
-    } else {
-        m_snakeMoveSpeedMultiplier = 1.0f;
-    }
+    m_snakesPropertyModifier.update(frameDeltaTimeMs, m_flowersCounter, atLeastOneFlowerWasEaten);
 }
 
 } // namespace core
