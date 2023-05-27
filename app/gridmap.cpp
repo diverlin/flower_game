@@ -234,6 +234,7 @@ void GridMap::createFlower(std::size_t index1d)
         std::string imageFilePath1 = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flowerVariant));
         Image imageTopLeft1(imageFilePath1, PixmapLayer::FLOWER_LAYER);
         flower->addAnimationFrame(std::vector<Image>{imageTopLeft1}, 2000);
+        flower->enableAnimationPingPongMode();
 
         addStaticObject(flower, index1d);
     }

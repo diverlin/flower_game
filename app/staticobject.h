@@ -18,6 +18,7 @@ public:
     StaticObject(const std::vector<Image>& images, int delaysMs = 1000);
     ~StaticObject() override = default;
 
+    void enableAnimationPingPongMode() { m_isAnimationPingPongModeEnabled = true; }
     void acceptNewImages() { m_isImagesChanged = false; }
 
     bool isImagesChanged() const { return m_isImagesChanged; }
@@ -33,7 +34,12 @@ public:
 
 private:
     bool m_isImagesChanged = false;
-    long long m_existanceTimeMs = 0;
+    int m_sinceLastAnimationMs = 0;
+
+    // ping pong mode
+    bool m_isAnimationPingPongModeEnabled = false;
+    bool m_animationPingPongUpDirection = true;
+    //
 
     std::map<int, std::vector<Image>> m_images;
     std::map<int, int> m_animationDelays;

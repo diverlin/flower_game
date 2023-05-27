@@ -39,11 +39,32 @@ void StaticObject::update(int frameDeltaTimeMs)
 
 void StaticObject::updateAnimation(int frameDeltaTimeMs)
 {
-    m_existanceTimeMs += frameDeltaTimeMs;
-    if (m_existanceTimeMs > m_animationDelays[m_currentImagesIndex]) {
-        if (m_currentImagesIndex < m_images.size()-1) {
-            m_currentImagesIndex++;
-            m_isImagesChanged = true;
+    m_sinceLastAnimationMs += frameDeltaTimeMs;
+    if (m_sinceLastAnimationMs > m_animationDelays[m_currentImagesIndex]) {
+        if (m_isAnimationPingPongModeEnabled) {
+            if (m_animationPingPongUpDirection) {
+                if (m_currentImagesIndex < m_images.size()-1) {
+                    m_currentImagesIndex++;
+                    m_sinceLastAnimationMs = 0;
+                    m_isImagesChanged = true;
+                } else {
+                    m_animationPingPongUpDirection = false;
+                }
+            } else {
+                if (m_currentImagesIndex > 0) {
+                    m_currentImagesIndex--;
+                    m_sinceLastAnimationMs = 0;
+                    m_isImagesChanged = true;
+                } else {
+                    m_animationPingPongUpDirection = true;
+                }
+            }
+        } else {
+            if (m_currentImagesIndex < m_images.size()-1) {
+                m_currentImagesIndex++;
+                m_sinceLastAnimationMs = 0;
+                m_isImagesChanged = true;
+            }
         }
     }
 }
