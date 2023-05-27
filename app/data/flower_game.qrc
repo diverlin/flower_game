@@ -38,5 +38,13 @@
         <file>tiles/flower_3_a1.png</file>
         <file>tiles/flower_3_a2.png</file>
         <file>tiles/flower_3_a3.png</file>
+        <file>tiles/tree_0_bl_shiftleft.png</file>
+        <file>tiles/tree_0_bl_shiftright.png</file>
+        <file>tiles/tree_0_br_shiftleft.png</file>
+        <file>tiles/tree_0_br_shiftright.png</file>
+        <file>tiles/tree_0_tl_shiftleft.png</file>
+        <file>tiles/tree_0_tl_shiftright.png</file>
+        <file>tiles/tree_0_tr_shiftleft.png</file>
+        <file>tiles/tree_0_tr_shiftright.png</file>
     </qresource>
 </RCC>

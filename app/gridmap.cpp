@@ -172,11 +172,25 @@ void GridMap::createTrees(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
-        Image imageTopLeft(":/tiles/tree_0_tl.png", PixmapLayer::TREE_TOP_LAYER);
-        Image imageTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
-        Image imageBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
-        Image imageBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
-        StaticObject* object = new StaticObject(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight});
+        Image imageTopLeft(":/tiles/tree_0_tl_shiftleft.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRight(":/tiles/tree_0_tr_shiftleft.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeft(":/tiles/tree_0_bl_shiftleft.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRight(":/tiles/tree_0_br_shiftleft.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
+        StaticObject* object = new StaticObject(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight}, 1000);
+
+        Image imageTopLeftA1(":/tiles/tree_0_tl.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRightA1(":/tiles/tree_0_tr.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeftA1(":/tiles/tree_0_bl.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRightA1(":/tiles/tree_0_br.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
+        object->addAnimationFrame(std::vector<Image>{imageTopLeftA1, imageTopRightA1, imageBottomLeftA1, imageBottomRightA1}, 1000);
+
+        Image imageTopLeftA2(":/tiles/tree_0_tl_shiftright.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRightA2(":/tiles/tree_0_tr_shiftright.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeftA2(":/tiles/tree_0_bl_shiftright.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRightA2(":/tiles/tree_0_br_shiftright.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
+        object->addAnimationFrame(std::vector<Image>{imageTopLeftA2, imageTopRightA2, imageBottomLeftA2, imageBottomRightA2}, 1000);
+        object->enableAnimationPingPongMode();
+
         int randMapIndex = m_grid.getFreeRandomIndex(object->localOffsets());
         if (randMapIndex != -1) {
             addStaticObject(object, randMapIndex);
