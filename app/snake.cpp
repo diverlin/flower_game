@@ -23,9 +23,24 @@ Snake::Snake(Grid* grid, const Image& image, std::size_t maxLength, const std::v
 void Snake::update(int frameDeltaTimeMs)
 {
     if (isAlive()) {
-        //std::cout<<"snake " << id() << " update"<<std::endl;
+        updateRandomMoveSwitch(frameDeltaTimeMs);
         updateGrow(frameDeltaTimeMs);
         updateMove(frameDeltaTimeMs);
+    }
+}
+
+void Snake::updateRandomMoveSwitch(int frameDeltaTimeMs)
+{
+    m_sinceLastRandomDirectionChangeMs += frameDeltaTimeMs;
+    if (m_sinceLastRandomDirectionChangeMs > m_moveRandomDirectionIntervalMs) {
+        switch(m_direction) {
+        case UP:
+        case DOWN: m_direction = getRandomBool()? LEFT : RIGHT; break;
+        case LEFT:
+        case RIGHT: m_direction = getRandomBool()? UP : DOWN; break;
+        }
+        m_moveRandomDirectionIntervalMs = getRandomInt(0.5*DEFAULT_MOVE_RANDOM_DIRECTION_CHANGE_MS, 1.5*DEFAULT_MOVE_RANDOM_DIRECTION_CHANGE_MS);
+        m_sinceLastRandomDirectionChangeMs = 0;
     }
 }
 

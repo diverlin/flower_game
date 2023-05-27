@@ -16,6 +16,7 @@ class Snake : public FixedQueue<Index2D>, public IBaseObject
 {
     const int GROW_INTERVAL_MS = 3000;
     const int DEFAULT_MOVE_INTERVAL_MS = 500;
+    const int DEFAULT_MOVE_RANDOM_DIRECTION_CHANGE_MS = 5000;
     const int LENGTH_MAX = 5;
 
     enum Direction { LEFT, RIGHT, UP, DOWN };
@@ -49,6 +50,9 @@ private:
     float m_moveSpeedMultiplier = 1.0f;
     float m_maxLengthMultiplier = 1.0f;
 
+    int m_sinceLastRandomDirectionChangeMs = 0;
+    int m_moveRandomDirectionIntervalMs = DEFAULT_MOVE_RANDOM_DIRECTION_CHANGE_MS;
+
     Image m_image;
     int m_msSinceLastGrow = 0;
     int m_msSinceLastMove = 0;
@@ -68,6 +72,7 @@ private:
     void decreaseLength();
     void increaseLength();
 
+    void updateRandomMoveSwitch(int frameDeltaTimeMs);
     void updateGrow(int frameDeltaTimeMs);
     void updateMove(int frameDeltaTimeMs);
     void handleMove();
