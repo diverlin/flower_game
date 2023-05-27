@@ -231,10 +231,26 @@ void GridMap::createFlower(std::size_t index1d)
         static std::map<int, std::string> colorMap = {{1,"#8A6000"}, {2,"#0042F2"}, {3,"#AF2D00"}};
         Flower* flower = new Flower(std::vector<Image>{imageTopLeft0}, colorMap[flowerVariant]);
 
-        std::string imageFilePath1 = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flowerVariant));
-        Image imageTopLeft1(imageFilePath1, PixmapLayer::FLOWER_LAYER);
-        flower->addAnimationFrame(std::vector<Image>{imageTopLeft1}, 2000);
-        flower->enableAnimationPingPongMode();
+        switch(flowerVariant) {
+        case 1:
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a0.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a1.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a2.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a3.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            break;
+        case 2:
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a0.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a1.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a2.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a3.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            break;
+        case 3:
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a0.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a1.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a2.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a3.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            break;
+        }
 
         addStaticObject(flower, index1d);
     }

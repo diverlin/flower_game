@@ -26,5 +26,17 @@
         <file>tiles/snake_segment_1.png</file>
         <file>tiles/snake_segment_2.png</file>
         <file>tiles/seed.png</file>
+        <file>tiles/flower_1_a0.png</file>
+        <file>tiles/flower_1_a1.png</file>
+        <file>tiles/flower_1_a2.png</file>
+        <file>tiles/flower_1_a3.png</file>
+        <file>tiles/flower_2_a0.png</file>
+        <file>tiles/flower_2_a1.png</file>
+        <file>tiles/flower_2_a2.png</file>
+        <file>tiles/flower_2_a3.png</file>
+        <file>tiles/flower_3_a0.png</file>
+        <file>tiles/flower_3_a1.png</file>
+        <file>tiles/flower_3_a2.png</file>
+        <file>tiles/flower_3_a3.png</file>
     </qresource>
 </RCC>
