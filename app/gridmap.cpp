@@ -58,6 +58,9 @@ void GridMap::clear()
 
     m_coins = START_COINS_NUM;
 
+    m_snakesCounter = 0;
+    m_flowersCounter = 0;
+
     m_oldDirtyIndexesBuffer.clear();
     m_newDirtyIndexesBuffer.clear();
     m_eatenFlowerIndexesBuffer.clear();
@@ -314,8 +317,8 @@ void GridMap::takeRewards(std::vector<Reward>& rewards)
 
 void GridMap::update(int frameDeltaTimeMs)
 {
-    int snakesCounter = 0;
-    int flowersCounter = 0;
+    m_snakesCounter = 0;
+    m_flowersCounter = 0;
 
     m_eatenFlowerIndexesBuffer.clear();
 
@@ -327,7 +330,7 @@ void GridMap::update(int frameDeltaTimeMs)
         if (typeid(*object) == typeid(Flower)) {
             Flower* flower = static_cast<Flower*>(object);
             if (flower) {
-                flowersCounter++;
+                m_flowersCounter++;
                 int coins = flower->takeCoins();
                 if (coins > 0) {
                     m_rewards.emplace_back(Reward{flower->mapTileIndex(), coins, flower->colorCode()});
@@ -336,7 +339,7 @@ void GridMap::update(int frameDeltaTimeMs)
         } else if (typeid(*object) == typeid(Snake)) {
             Snake* snake = static_cast<Snake*>(object);
             if (snake) {
-                snakesCounter++;
+                m_snakesCounter++;
                 snake->setMoveSpeedMultiplier(m_snakeMoveSpeedMultiplier);
                 snake->setMaxLengthMultiplier(m_snakeMaxLengthMultiplier);
 
@@ -376,7 +379,7 @@ void GridMap::update(int frameDeltaTimeMs)
     }
 
     m_msSinceLastSnakesOccur += frameDeltaTimeMs;
-    if (flowersCounter > 0) {
+    if (m_flowersCounter > 0) {
         if (m_msSinceLastSnakesOccur > m_snakeOccurIntervalMs) {
             createSnake();
             m_snakeOccurIntervalMs = SNAKE_OCCUR_INTERVAL_MS;
@@ -384,7 +387,7 @@ void GridMap::update(int frameDeltaTimeMs)
         }
     }
 
-    if (flowersCounter >= 2) {
+    if (m_flowersCounter >= 2) {
         m_snakeMaxLengthMultiplier = 2.0f;
     } else {
         m_snakeMaxLengthMultiplier = 1.0f;

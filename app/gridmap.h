@@ -26,7 +26,7 @@ struct Reward {
 class GridMap
 {
 public:
-    const int FLOWER_COST = 50;
+    static const int FLOWER_COST = 50;
     const int START_COINS_NUM = 150;
     const int SNAKE_OCCUR_INTERVAL_MS = 5000;
     const int SNAKE_SPEED_MULTIPLIER_EXPIRATION_MS = 5000;
@@ -56,6 +56,9 @@ public:
 
     const std::vector<Tile>& tiles() const { return m_tiles; }
 
+    int snakesCounter() const { return m_snakesCounter; }
+    int flowersCounter() const { return m_flowersCounter; }
+
 private:
     Grid m_grid;
     Size m_tileSize = Size(10, 10);
@@ -71,6 +74,10 @@ private:
     float m_snakeMaxLengthMultiplier = 1.0f;
 
     int m_coins = START_COINS_NUM;
+
+
+    int m_snakesCounter = 0;
+    int m_flowersCounter = 0;
 
     std::vector<Index2D> m_oldDirtyIndexesBuffer;
     std::vector<Index2D> m_newDirtyIndexesBuffer;

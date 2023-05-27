@@ -10,6 +10,7 @@ HEADERS += \
     $$PWD/qtdependant/textinformationpopupitem.h \
     $$PWD/pixmaplayer.h \
     $$PWD/grid.h \
+    $$PWD/gameoverobserverobserver.h \
     $$PWD/index2d.h \
     $$PWD/vec2.h \
     $$PWD/size.h \
@@ -32,6 +33,7 @@ SOURCES += \
     $$PWD/qtdependant/graphicsview.cpp \
     $$PWD/qtdependant/textinformationitem.cpp \
     $$PWD/qtdependant/textinformationpopupitem.cpp \
+    $$PWD/gameoverobserver.cpp \
     $$PWD/grid.cpp \
     $$PWD/gridmap.cpp \
     $$PWD/randutils.cpp \
