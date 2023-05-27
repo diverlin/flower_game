@@ -25,5 +25,6 @@
         <file>tiles/coin.png</file>
         <file>tiles/snake_segment_1.png</file>
         <file>tiles/snake_segment_2.png</file>
+        <file>tiles/seed.png</file>
     </qresource>
 </RCC>

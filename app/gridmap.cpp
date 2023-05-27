@@ -226,10 +226,15 @@ void GridMap::createFlower(std::size_t index1d)
     if (m_coins >= FLOWER_COST) {
         m_coins -= FLOWER_COST;
         int flowerVariant = getRandomInt(1, 3);
-        std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flowerVariant));
-        Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
+
+        Image imageTopLeft0(std::string(":/tiles/seed.png"), PixmapLayer::FLOWER_LAYER);
         static std::map<int, std::string> colorMap = {{1,"#8A6000"}, {2,"#0042F2"}, {3,"#AF2D00"}};
-        Flower* flower = new Flower(std::vector<Image>{imageTopLeft}, colorMap[flowerVariant]);
+        Flower* flower = new Flower(std::vector<Image>{imageTopLeft0}, colorMap[flowerVariant]);
+
+        std::string imageFilePath1 = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flowerVariant));
+        Image imageTopLeft1(imageFilePath1, PixmapLayer::FLOWER_LAYER);
+        flower->addAnimationFrame(std::vector<Image>{imageTopLeft1}, 2000);
+
         addStaticObject(flower, index1d);
     }
 }
@@ -266,6 +271,22 @@ void GridMap::addStaticObject(StaticObject* object, int index1d)
         }
     }
     m_objects.push_back(object);
+}
+
+void GridMap::updateImagesForStaticObject(StaticObject* object)
+{
+    std::size_t topLeftIndex1d = object->mapTileIndex();
+    Index2D topLeftIndex2d = m_grid.getIndex2D(topLeftIndex1d);
+
+    for (const Image& image: object->images()) {
+        Index2D imageIndex2d = topLeftIndex2d;
+        imageIndex2d += image.indexOffsetFromLeftTopCorner();
+        int index1d = m_grid.getIndex1D(imageIndex2d);
+        Tile& tile = m_tiles[index1d];
+        tile.addImage(image);
+    }
+
+    object->acceptNewImages();
 }
 
 void GridMap::removeStaticObject(std::size_t index1d)
@@ -371,6 +392,16 @@ void GridMap::update(int frameDeltaTimeMs)
             ++it;
         }
     }
+
+    // update animations for staticobject
+    for (auto it: m_staticObjectsMap) {
+        StaticObject* object = it.second;
+        if (object->isImagesChanged()) {
+            updateImagesForStaticObject(object);
+        }
+    }
+    //
+
 
     // remove dead flowers
     for (const Index2D& index2d: m_eatenFlowerIndexesBuffer) {

@@ -18,6 +18,8 @@ public:
     StaticObject(const std::vector<Image>& images, int delaysMs = 1000);
     ~StaticObject() override = default;
 
+    void acceptNewImages() { m_isImagesChanged = false; }
+
     bool isImagesChanged() const { return m_isImagesChanged; }
     void addAnimationFrame(const std::vector<Image>& images, int delayMs);
 

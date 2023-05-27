@@ -41,7 +41,7 @@ void StaticObject::updateAnimation(int frameDeltaTimeMs)
 {
     m_existanceTimeMs += frameDeltaTimeMs;
     if (m_existanceTimeMs > m_animationDelays[m_currentImagesIndex]) {
-        if (m_currentImagesIndex < m_images.size()) {
+        if (m_currentImagesIndex < m_images.size()-1) {
             m_currentImagesIndex++;
             m_isImagesChanged = true;
         }

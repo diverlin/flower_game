@@ -97,6 +97,8 @@ private:
     void addStaticObject(StaticObject*, int index1d);
     void removeStaticObject(std::size_t index1d);
     void addSnake(Snake*);
+
+    void updateImagesForStaticObject(StaticObject*);
 };
 
 } // namespace core
