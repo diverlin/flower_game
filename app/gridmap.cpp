@@ -172,11 +172,25 @@ void GridMap::createTrees(int numMin, int numMax)
 {
     int num = getRandomInt(numMin, numMax);
     for (int i=0; i<num; ++i) {
-        Image imageTopLeft(":/tiles/tree_0_tl.png", PixmapLayer::TREE_TOP_LAYER);
-        Image imageTopRight(":/tiles/tree_0_tr.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
-        Image imageBottomLeft(":/tiles/tree_0_bl.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
-        Image imageBottomRight(":/tiles/tree_0_br.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
-        StaticObject* object = new StaticObject(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight});
+        Image imageTopLeft(":/tiles/tree_0_tl_shiftleft.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRight(":/tiles/tree_0_tr_shiftleft.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeft(":/tiles/tree_0_bl_shiftleft.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRight(":/tiles/tree_0_br_shiftleft.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
+        StaticObject* object = new StaticObject(std::vector<Image>{imageTopLeft, imageTopRight, imageBottomLeft, imageBottomRight}, 1000);
+
+        Image imageTopLeftA1(":/tiles/tree_0_tl.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRightA1(":/tiles/tree_0_tr.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeftA1(":/tiles/tree_0_bl.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRightA1(":/tiles/tree_0_br.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
+        object->addAnimationFrame(std::vector<Image>{imageTopLeftA1, imageTopRightA1, imageBottomLeftA1, imageBottomRightA1}, 1000);
+
+        Image imageTopLeftA2(":/tiles/tree_0_tl_shiftright.png", PixmapLayer::TREE_TOP_LAYER);
+        Image imageTopRightA2(":/tiles/tree_0_tr_shiftright.png", PixmapLayer::TREE_TOP_LAYER, Index2D(1,0));
+        Image imageBottomLeftA2(":/tiles/tree_0_bl_shiftright.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(0,1));
+        Image imageBottomRightA2(":/tiles/tree_0_br_shiftright.png", PixmapLayer::TREE_BOTTOM_LAYER, Index2D(1,1));
+        object->addAnimationFrame(std::vector<Image>{imageTopLeftA2, imageTopRightA2, imageBottomLeftA2, imageBottomRightA2}, 1000);
+        object->enableAnimationPingPongMode();
+
         int randMapIndex = m_grid.getFreeRandomIndex(object->localOffsets());
         if (randMapIndex != -1) {
             addStaticObject(object, randMapIndex);
@@ -226,10 +240,32 @@ void GridMap::createFlower(std::size_t index1d)
     if (m_coins >= FLOWER_COST) {
         m_coins -= FLOWER_COST;
         int flowerVariant = getRandomInt(1, 3);
-        std::string imageFilePath = core::stringutils::replace(std::string(":/tiles/flower_%1.png"), "%1", std::to_string(flowerVariant));
-        Image imageTopLeft(imageFilePath, PixmapLayer::FLOWER_LAYER);
+
+        Image imageTopLeft0(std::string(":/tiles/seed.png"), PixmapLayer::FLOWER_LAYER);
         static std::map<int, std::string> colorMap = {{1,"#8A6000"}, {2,"#0042F2"}, {3,"#AF2D00"}};
-        Flower* flower = new Flower(std::vector<Image>{imageTopLeft}, colorMap[flowerVariant]);
+        Flower* flower = new Flower(std::vector<Image>{imageTopLeft0}, colorMap[flowerVariant]);
+
+        switch(flowerVariant) {
+        case 1:
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a0.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a1.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a2.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_1_a3.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            break;
+        case 2:
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a0.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a1.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a2.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_2_a3.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            break;
+        case 3:
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a0.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a1.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a2.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            flower->addAnimationFrame(std::vector<Image>{Image(":/tiles/flower_3_a3.png", PixmapLayer::FLOWER_LAYER)}, 100);
+            break;
+        }
+
         addStaticObject(flower, index1d);
     }
 }
@@ -266,6 +302,22 @@ void GridMap::addStaticObject(StaticObject* object, int index1d)
         }
     }
     m_objects.push_back(object);
+}
+
+void GridMap::updateImagesForStaticObject(StaticObject* object)
+{
+    std::size_t topLeftIndex1d = object->mapTileIndex();
+    Index2D topLeftIndex2d = m_grid.getIndex2D(topLeftIndex1d);
+
+    for (const Image& image: object->images()) {
+        Index2D imageIndex2d = topLeftIndex2d;
+        imageIndex2d += image.indexOffsetFromLeftTopCorner();
+        int index1d = m_grid.getIndex1D(imageIndex2d);
+        Tile& tile = m_tiles[index1d];
+        tile.addImage(image);
+    }
+
+    object->acceptNewImages();
 }
 
 void GridMap::removeStaticObject(std::size_t index1d)
@@ -371,6 +423,16 @@ void GridMap::update(int frameDeltaTimeMs)
             ++it;
         }
     }
+
+    // update animations for staticobject
+    for (auto it: m_staticObjectsMap) {
+        StaticObject* object = it.second;
+        if (object->isImagesChanged()) {
+            updateImagesForStaticObject(object);
+        }
+    }
+    //
+
 
     // remove dead flowers
     for (const Index2D& index2d: m_eatenFlowerIndexesBuffer) {
